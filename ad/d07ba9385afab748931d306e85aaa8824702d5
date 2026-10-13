@@ -1,0 +1,23 @@
+README.md
+  s_8cb2ae3aaeefff::t_ed72e81b741f1b 95-96
+docs/development/changesets.md
+  s_8cb2ae3aaeefff::t_ed72e81b741f1b 7-13
+docs/README.md
+  s_8cb2ae3aaeefff::t_cb29df2eb3aa70 29-30
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "add07ba9385afab748931d306e85aaa8824702d5",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
