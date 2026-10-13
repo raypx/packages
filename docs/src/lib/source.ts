@@ -16,6 +16,7 @@ export const docs = defineDocs({
       "docs/development/*.md",
       "packages/drizzle/README.md",
       "packages/drizzle/NOTICE.md",
+      "packages/env/README.md",
       "packages/intl/README.md",
       "README.md",
     ],

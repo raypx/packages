@@ -8,6 +8,7 @@ and release history for every public package.
 | Package                                      | Purpose                                                                               |
 | -------------------------------------------- | ------------------------------------------------------------------------------------- |
 | [@raypx/drizzle](packages/drizzle/README.md) | PostgreSQL extensions for postgres.js, JSON helpers and query diagnostics             |
+| [@raypx/env](packages/env/README.md)         | Typed environment validation, nested presets, defaults and guarded client access      |
 | [@raypx/intl](packages/intl/README.md)       | Configurable locale negotiation, ICU translation, Intl formatting and React providers |
 
 The Drizzle package includes a complete upstream capability inventory and a
@@ -25,6 +26,12 @@ light and dark themes, and local full-text search.
 React is a required peer, including for root and server consumers. The package
 adds configurable locale negotiation, persistence, asynchronous catalog loading
 and isolated client factories around that runtime.
+
+`@raypx/env` validates application-supplied schemas with Zod, combines nested
+presets and guards server-only variables in client mode. Its `/runtime` entry
+provides the reusable `NODE_ENV` preset; application variables and secrets stay
+with their owning product. Zod is a required peer and remains external so consumers
+and presets use the same schema classes.
 
 ## Development
 
@@ -85,11 +92,11 @@ still require a compatible dependent release. Each package owns its changelog
 and gets a tag containing its manifest version, such as `@raypx/drizzle@0.0.0`.
 The current version always comes from that package's `package.json`.
 
-The first Drizzle and Intl releases use **0.0.0**, with the unpublished
-capability drafts consolidated into each initial changelog. Publish those manifest
-versions directly after verification; **do not run `bun run version-packages`
-before the first publication**, because it consumes changesets and advances the
-versions. Creating the repository or preparing a version does not publish to npm.
+Drizzle and Intl were first published at **0.0.0**. Env's migration is prepared at
+**0.0.6**, continuing its existing package history. A new package's initial work
+belongs in its initial changelog. Publish its manifest version directly after
+verification; **do not run `bun run version-packages` before its first publication**, because it consumes
+changesets and advances versions. Preparing a package does not publish it to npm.
 
 For subsequent releases:
 

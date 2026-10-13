@@ -9,8 +9,9 @@ and focused documentation before modifying it.
 
 ## Repository shape
 
-`packages/drizzle` owns Drizzle extensions; `packages/intl` owns generic
-internationalization. Root `docs/` is a private Fumadocs application and owns
+`packages/drizzle` owns Drizzle extensions; `packages/env` owns typed environment
+validation and reusable presets; `packages/intl` owns generic internationalization.
+Root `docs/` is a private Fumadocs application and owns
 the documentation site alongside canonical reference Markdown. New libraries live under `packages/`
 and have explicit ESM exports, a README, license, independent version and tests.
 Shared build and test configuration lives at the root; it is not a published
@@ -49,6 +50,9 @@ properties, and public API type declarations. Runtime dependencies must resolve
 outside this repository. Drizzle remains a peer dependency and must never be
 bundled or prototype-patched globally. Its extension package supports PostgreSQL
 through postgres.js only; keep node-postgres and other drivers outside its scope.
+Env keeps Zod as a peer dependency and never bundles it. Callers own variable names,
+secrets, application presets and validation policy; keep generic runtime detection
+independent of frameworks and product configuration.
 
 Changesets versions every public package independently: leave `fixed` and
 `linked` empty. New packages start at `0.0.0`; first publication uses that manifest

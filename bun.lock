@@ -56,6 +56,17 @@
         "postgres",
       ],
     },
+    "packages/env": {
+      "name": "@raypx/env",
+      "version": "0.0.6",
+      "devDependencies": {
+        "@vitest/coverage-v8": "5.0.3",
+        "zod": "4.6.7",
+      },
+      "peerDependencies": {
+        "zod": "4.6.7",
+      },
+    },
     "packages/intl": {
       "name": "@raypx/intl",
       "version": "0.0.0",
@@ -438,6 +449,8 @@
     "@radix-ui/rect": ["@radix-ui/rect@1.1.3", "", {}, "sha512-JtyZR+mqgBibTo8xea3B6ZRmzZiM/YeVBtUkas6zMuXjAlfIFIW2FgqeM9eLyvEaYX66vr6DJMK+4U6LV0KhNw=="],
 
     "@raypx/drizzle": ["@raypx/drizzle@workspace:packages/drizzle"],
+
+    "@raypx/env": ["@raypx/env@workspace:packages/env"],
 
     "@raypx/intl": ["@raypx/intl@workspace:packages/intl"],
 

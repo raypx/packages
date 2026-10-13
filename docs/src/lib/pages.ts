@@ -37,6 +37,13 @@ export const documentationPages = [
     description: "Pinned source revisions, adaptation notices and retained upstream licenses.",
   },
   {
+    slug: "env/index",
+    sourcePath: "packages/env/README.md",
+    title: "Env",
+    description:
+      "Typed environment validation, nested presets, defaults and guarded client access.",
+  },
+  {
     slug: "intl/index",
     sourcePath: "packages/intl/README.md",
     title: "Intl",
@@ -60,12 +67,13 @@ export const documentationPages = [
 export const navigationMetadata = {
   "meta.json": {
     title: "Raypx Packages",
-    pages: ["index", "drizzle", "intl", "development"],
+    pages: ["index", "drizzle", "env", "intl", "development"],
   },
   "drizzle/meta.json": {
     title: "Drizzle",
     pages: ["index", "drizzle-plus", "better-drizzle", "merge-plan", "provenance"],
   },
+  "env/meta.json": { title: "Env", pages: ["index"] },
   "intl/meta.json": { title: "Intl", pages: ["index"] },
   "development/meta.json": { title: "Development", pages: ["index", "changesets"] },
 };

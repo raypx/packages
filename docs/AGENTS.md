@@ -7,7 +7,7 @@ publish to npm or change the independent versions of the libraries.
 
 ## Interface
 
-`/docs` contains the overview, Drizzle and Intl API guides, complete capability
+`/docs` contains the overview, Drizzle, Env and Intl API guides, complete capability
 inventories, extension designs and maintainer documentation. Search is generated
 from the same content and operates without a third-party service.
 

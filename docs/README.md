@@ -20,6 +20,15 @@ navigation, full-text search, source links and light/dark themes.
 The implementation targets PostgreSQL through postgres.js. The inventories
 retain all upstream capabilities, including features outside that scope.
 
+## Env
+
+- [Current API, nested presets and client access](../packages/env/README.md)
+
+Applications supply their own variable names, schemas and runtime values. The
+package contains no product secrets, service configuration or application presets.
+Its **0.0.6** migration continues the existing package's release history and is
+prepared for publication.
+
 ## Intl
 
 - [Current API and locale integration](../packages/intl/README.md)
