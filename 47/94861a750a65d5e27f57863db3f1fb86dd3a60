@@ -1,0 +1,33 @@
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_12eb301a537fbd 3
+AGENTS.md
+  s_8cb2ae3aaeefff::t_12eb301a537fbd 39-42
+README.md
+  s_8cb2ae3aaeefff::t_b189363f5b6642 46-56,61-63,67-71,86-95
+packages/intl/package.json
+  s_8cb2ae3aaeefff::t_12eb301a537fbd 3
+.changeset/README.md
+  s_8cb2ae3aaeefff::t_2abc89a18d184b 7-12
+packages/drizzle/CHANGELOG.md
+  s_8cb2ae3aaeefff::t_344ca44f9152b3 3,5-12,16-20
+packages/intl/CHANGELOG.md
+  s_8cb2ae3aaeefff::t_cf1723da76f702 3,5-6,17-19
+packages/intl/README.md
+  s_8cb2ae3aaeefff::t_604554b68cdd0b 5-8
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4794861a750a65d5e27f57863db3f1fb86dd3a60",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
