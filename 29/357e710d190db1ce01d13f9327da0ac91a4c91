@@ -1,0 +1,54 @@
+packages/drizzle/src/columns.test.ts
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 2,16,20
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 4,28-30,61-62,65-71
+packages/drizzle/README.md
+  s_8cb2ae3aaeefff::t_1b18e85c0a396a 3-4,12-18,21-23,26-33,36-37,39-42,96-98
+.changeset/drizzle-postgres-only.md
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 1-9
+packages/drizzle/docs/better-drizzle-capabilities.md
+  s_8cb2ae3aaeefff::t_2865e95ae355bf 11-18,23-24,43-44,63-66,73,90,96-98,108-123,135-143,157-178,225-232,242-249,262,329,338-340
+packages/drizzle/vite.config.ts
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 8,16
+README.md
+  s_8cb2ae3aaeefff::t_75f31170fb8eef 10
+packages/drizzle/src/errors.ts
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 5-6,19
+packages/drizzle/src/errors.test.ts
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 7-10,12-17
+  s_8cb2ae3aaeefff::t_2ede7453282c9b 18
+packages/drizzle/src/columns.ts
+  s_8cb2ae3aaeefff::t_40b98239ac7b81 7-8,10,12
+packages/drizzle/src/postgres/json.test.ts
+  s_8cb2ae3aaeefff::t_1b18e85c0a396a 1-121
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_1b18e85c0a396a 5-7,14-15,37-41,51-52
+AGENTS.md
+  s_8cb2ae3aaeefff::t_49d0000d9eda0e 35-36
+bun.lock
+  s_8cb2ae3aaeefff::t_9786649542c24d 21,25,27-29,567-568
+packages/drizzle/NOTICE.md
+  s_8cb2ae3aaeefff::t_e12feabd63f2f9 15,30
+packages/drizzle/docs/drizzle-plus-capabilities.md
+  s_8cb2ae3aaeefff::t_4c089ebc1eadbb 14-20,29-31,63-64,68,86,113-114,118-137,142-166,211-212,249,255,269-270,273,281,286,293-296,298-299
+packages/drizzle/docs/merge-plan.md
+  s_8cb2ae3aaeefff::t_d7faaa479d2b85 3,9,13-14,35-44,49-50,56,63-72,86,91,96,99-100,102,113-116,119-122,130-132,147-152,154,158-159,176-183,185-191,195-198,209-219,225,235,240,243
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_3de6b55aebbf37 62-67,152,154-156,171-177,278,282-283,293-301
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "29357e710d190db1ce01d13f9327da0ac91a4c91",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
