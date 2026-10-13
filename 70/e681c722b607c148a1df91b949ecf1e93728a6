@@ -1,0 +1,35 @@
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 20
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 50
+docs/README.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 1-29
+packages/drizzle/README.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 5,102-104,109-110,114,121-122
+AGENTS.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 18-22
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 18
+README.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 18-21
+packages/drizzle/NOTICE.md
+  s_8cb2ae3aaeefff::t_fd1e6c171e988d 48-49
+docs/drizzle/merge-plan.md
+  s_8cb2ae3aaeefff::t_63686b7f5abb52 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "70e681c722b607c148a1df91b949ecf1e93728a6",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
