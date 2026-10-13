@@ -1,0 +1,21 @@
+README.md
+  s_8cb2ae3aaeefff::t_2805bde2578a78 76-87
+.github/workflows/release.yml
+  s_8cb2ae3aaeefff::t_2805bde2578a78 36-40,100-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "bfea9990fb020d06d7f2e695f95b72540d6ba141",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
