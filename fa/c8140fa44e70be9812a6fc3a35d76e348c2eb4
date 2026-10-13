@@ -1,0 +1,21 @@
+package.json
+  s_8cb2ae3aaeefff::t_d572fbb1134148 37
+README.md
+  s_8cb2ae3aaeefff::t_d572fbb1134148 82-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "fac8140fa44e70be9812a6fc3a35d76e348c2eb4",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
