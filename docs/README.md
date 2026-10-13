@@ -26,8 +26,8 @@ retain all upstream capabilities, including features outside that scope.
 
 Applications supply their own variable names, schemas and runtime values. The
 package contains no product secrets, service configuration or application presets.
-Its **0.0.6** migration continues the existing package's release history and is
-prepared for publication.
+Its **0.0.6** release is published on npm, continuing the existing package's
+release history.
 
 ## Intl
 

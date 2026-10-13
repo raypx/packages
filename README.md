@@ -92,8 +92,8 @@ still require a compatible dependent release. Each package owns its changelog
 and gets a tag containing its manifest version, such as `@raypx/drizzle@0.0.0`.
 The current version always comes from that package's `package.json`.
 
-Drizzle and Intl were first published at **0.0.0**. Env's migration is prepared at
-**0.0.6**, continuing its existing package history. A new package's initial work
+Drizzle and Intl were first published at **0.0.0**. Env was published from this
+repository at **0.0.6**, continuing its existing package history. A new package's initial work
 belongs in its initial changelog. Publish its manifest version directly after
 verification; **do not run `bun run version-packages` before its first publication**, because it consumes
 changesets and advances versions. Preparing a package does not publish it to npm.

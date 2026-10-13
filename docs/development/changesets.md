@@ -4,10 +4,13 @@ Every public package owns its version and changelog. `fixed` and `linked` are
 empty: changing one package never forces unrelated packages to share its version.
 Dependency compatibility can still require a dependent package to receive a bump.
 
-The first Drizzle and Intl releases use `0.0.0` directly from their package
-manifests. Their unpublished capability drafts are consolidated into the initial
-changelogs. After verification, publish those manifest versions without running
-`bun run version-packages` first; that command would bump the versions.
+Drizzle and Intl were first published at `0.0.0` directly from their package
+manifests, with capability drafts consolidated into their initial changelogs.
+Env was published from this repository at `0.0.6`, continuing its existing npm
+release history rather than starting a new package at `0.0.0`.
+
+For a new package, publish its initial manifest version after verification without
+running `bun run version-packages` first; that command would bump the version.
 
 After the initial publication, for a user-visible change, run `bun run changeset`, select the affected packages,
 choose a SemVer bump, and describe the resulting behavior. Commit the generated
