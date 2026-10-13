@@ -1,0 +1,143 @@
+packages/drizzle/src/pg/upsert.ts
+  s_8cb2ae3aaeefff::t_d51e2f3931a7fd 1-30
+README.md
+  s_8cb2ae3aaeefff::t_04dcc141c349d0 8-10
+  s_8cb2ae3aaeefff::t_d344c828f4346c 1-7,11-95
+packages/drizzle/docs/better-drizzle-capabilities.md
+  s_8cb2ae3aaeefff::t_14cc067ab0880f 1-91,93-117,119-178,183-237,239-319
+  s_8cb2ae3aaeefff::t_66250f692f75ba 92,118,179-182,238,320-417
+  s_8cb2ae3aaeefff::t_b5fb2b51e97229 418-427
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_9dc3a2dd8082d7 1-193
+  s_8cb2ae3aaeefff::t_eb116f37d03cf8 194-199
+packages/drizzle/vite.config.ts
+  s_8cb2ae3aaeefff::t_9dc3a2dd8082d7 1-18
+scripts/check-releases.mjs
+  s_8cb2ae3aaeefff::t_815a1786a6856f 1-70
+packages/drizzle/tsconfig.build.json
+  s_8cb2ae3aaeefff::t_9dc3a2dd8082d7 1-5
+.github/workflows/release.yml
+  s_8cb2ae3aaeefff::t_d344c828f4346c 1-94
+packages/drizzle/src/columns.test.ts
+  s_8cb2ae3aaeefff::t_d51e2f3931a7fd 1-55
+.github/workflows/ci.yml
+  s_8cb2ae3aaeefff::t_d344c828f4346c 1-33
+.changeset/README.md
+  s_500b9b4bd4679b::t_5173caa6c8ac81 1-16
+.changeset/config.json
+  s_500b9b4bd4679b::t_8cb154264fe2e8 1-13
+.gitignore
+  s_500b9b4bd4679b::t_51b0bd5921b56c 1-12
+AGENTS.md
+  s_500b9b4bd4679b::t_80b800da87912c 1-54
+LICENSE
+  s_8cb2ae3aaeefff::t_5a6b2b01c92e7b 1-201
+bun.lock
+  s_8cb2ae3aaeefff::t_7504de5cad713b 1-525
+package.json
+  s_500b9b4bd4679b::t_5507466ccee032 1-62
+packages/drizzle/.gitignore
+  s_8cb2ae3aaeefff::t_23e503a874cf4c 1
+packages/drizzle/.turbo/turbo-build.log
+  s_8cb2ae3aaeefff::t_8fcf3fbafdfe48 1-25
+packages/drizzle/.turbo/turbo-check.log
+  s_8cb2ae3aaeefff::t_a162f7b798910e 1
+packages/drizzle/.turbo/turbo-test.log
+  s_8cb2ae3aaeefff::t_cc802656ee0d2d 1-16
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_13d6c56ae86956 1-55
+packages/drizzle/CHANGELOG.md
+  s_f0589c9f45456d::t_a711f56aa557f8 1-10
+packages/drizzle/LICENSE
+  s_8cb2ae3aaeefff::t_33e6aedc72d487 1-201
+packages/drizzle/README.md
+  s_8cb2ae3aaeefff::t_793259f6245da1 1-104
+packages/drizzle/docs/drizzle-plus-capabilities.md
+  s_8cb2ae3aaeefff::t_eac93216b700be 1-285
+packages/drizzle/docs/merge-plan.md
+  s_8cb2ae3aaeefff::t_e62ad4f13d4ac1 1-205
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_2947dbfc060114 1-68
+packages/drizzle/src/columns.ts
+  s_8cb2ae3aaeefff::t_a0a60209a02034 1-18
+packages/drizzle/src/diagnostics/explain.test.ts
+  s_500b9b4bd4679b::t_852b35130b4e25 1-28
+packages/drizzle/src/diagnostics/explain.ts
+  s_500b9b4bd4679b::t_3dbddf69514ffd 1-29
+packages/drizzle/src/diagnostics/index.ts
+  s_500b9b4bd4679b::t_f40fda628fcaea 1-4
+packages/drizzle/src/diagnostics/summary.test.ts
+  s_8cb2ae3aaeefff::t_19af1ef0525667 1-104
+packages/drizzle/src/diagnostics/summary.ts
+  s_8cb2ae3aaeefff::t_7fa9b649096460 1-135
+packages/drizzle/src/diagnostics/types.ts
+  s_8cb2ae3aaeefff::t_de1b35290f53e9 1-39
+packages/drizzle/src/errors.test.ts
+  s_8cb2ae3aaeefff::t_08038c1e0a27f0 1-59
+packages/drizzle/src/errors.ts
+  s_8cb2ae3aaeefff::t_459b91440d4d3e 1-25
+packages/drizzle/src/index.ts
+  s_8cb2ae3aaeefff::t_9dfb07f638c7e0 1
+packages/drizzle/src/pg/index.ts
+  s_8cb2ae3aaeefff::t_7f7c3636aeb583 1-10
+packages/drizzle/src/pg/json.test.ts
+  s_8cb2ae3aaeefff::t_b6ddcb6bd0bda4 1-108
+packages/drizzle/src/pg/json.ts
+  s_8cb2ae3aaeefff::t_c5bc0822c53385 1-75
+packages/drizzle/src/results.test.ts
+  s_500b9b4bd4679b::t_c56580eec5b1a3 1-17
+packages/drizzle/src/results.ts
+  s_8cb2ae3aaeefff::t_d285414b80800c 1-10
+packages/drizzle/third-party/NOTICE.md
+  s_8cb2ae3aaeefff::t_3a4e8b9ae452ad 1-48
+packages/drizzle/third-party/better-drizzle.LICENSE
+  s_8cb2ae3aaeefff::t_0559984827882d 1-201
+packages/drizzle/third-party/drizzle-plus.LICENSE
+  s_8cb2ae3aaeefff::t_983775fcdc4970 1-21
+packages/drizzle/tsconfig.json
+  s_8cb2ae3aaeefff::t_e8c8f9374224f5 1-4
+packages/drizzle/vitest.config.ts
+  s_8cb2ae3aaeefff::t_d4ef020fdaa047 1-3
+test.config.ts
+  s_500b9b4bd4679b::t_f738612cdd3c0d 1-14
+tsconfig.base.json
+  s_500b9b4bd4679b::t_bc9e80c10f13ff 1-24
+tsconfig.json
+  s_500b9b4bd4679b::t_176289f03a0016 1-4
+turbo.json
+  s_500b9b4bd4679b::t_fa637a233a2c4f 1-9
+vite.config.ts
+  s_500b9b4bd4679b::t_3926bdbf861a3a 1-11
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5e4ef4e21d40f494856be23362d870e1ef1cab96",
+  "prompts": {},
+  "sessions": {
+    "s_500b9b4bd4679b": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11f54-aa0f-7721-91c3-2df9966926ff",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_f0589c9f45456d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11baa-cac5-7421-84b8-9739c7d8db00",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
