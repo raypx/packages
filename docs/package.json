@@ -6,7 +6,6 @@
   "scripts": {
     "content:sync": "bun scripts/sync-content.mjs",
     "check": "bun run content:sync && bun --bun tsc --noEmit",
-    "test": "bun --bun vp test --run",
     "build": "bun run content:sync && bun --bun vp build",
     "dev": "bun run content:sync && bun --bun vp dev --host 127.0.0.1 --port 3100",
     "preview": "bun --bun vp preview --host 127.0.0.1 --port 3100"

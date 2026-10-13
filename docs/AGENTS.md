@@ -33,7 +33,6 @@ from the same content and operates without a third-party service.
 ## Verification
 
 ```sh
-bun run --cwd docs test
 bun run docs:check
 bun run docs:build
 bun run verify
