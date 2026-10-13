@@ -1,0 +1,35 @@
+README.md
+  s_8cb2ae3aaeefff::t_dbf45c51d60340 53-57
+AGENTS.md
+  s_8cb2ae3aaeefff::t_dbf45c51d60340 35-37
+docs/drizzle/merge-plan.md
+  s_8cb2ae3aaeefff::t_dbf45c51d60340 313-314
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_84a048e70a7984 104,110-111,124
+bun.lock
+  s_8cb2ae3aaeefff::t_a1b66cb6cddf1f 8-12,19-27,30-40,47-49,63-64,67-73
+docs/package.json
+  s_8cb2ae3aaeefff::t_a86103f0fbe5c8 15-23,26-36
+package.json
+  s_8cb2ae3aaeefff::t_7fba73aa804fce 5-8,29-33
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_6d6ab50f8bf5a9 59-61
+packages/intl/package.json
+  s_8cb2ae3aaeefff::t_f2f1118701ecce 57-58,61-67
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5eb0acbe1fcbdd145281a33f7015f5ac94ccdf51",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
