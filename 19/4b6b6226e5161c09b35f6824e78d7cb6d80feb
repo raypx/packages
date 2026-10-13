@@ -1,0 +1,30 @@
+AGENTS.md
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 18-19
+README.md
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 159
+  s_8cb2ae3aaeefff::t_ce47eb63bb244f 160-161
+packages/drizzle/src/postgres.ts
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 9-10
+packages/drizzle/vite.config.ts
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 8,11
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 21-22
+packages/drizzle/src/diagnostics.ts
+  s_8cb2ae3aaeefff::t_9d4de57030d3bc 1-4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "194b6b6226e5161c09b35f6824e78d7cb6d80feb",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
