@@ -1,0 +1,73 @@
+docs/src/lib/pages.ts
+  s_8cb2ae3aaeefff::t_c20c4e61f5184c 40-45,70,76
+  s_8cb2ae3aaeefff::t_08e0ed40a8887f 39
+packages/env/package.json
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-2,4-11,18-54
+  s_8cb2ae3aaeefff::t_4f8087a5c6dda0 3,12-17
+packages/env/tsconfig.build.json
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-5
+docs/AGENTS.md
+  s_8cb2ae3aaeefff::t_29e3bc7342255e 10
+packages/env/tsconfig.json
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-4
+README.md
+  s_8cb2ae3aaeefff::t_7d5e68c1806d42 96
+  s_8cb2ae3aaeefff::t_c941841e9163cd 95
+  s_8cb2ae3aaeefff::t_c20c4e61f5184c 11,30-35,99
+  s_8cb2ae3aaeefff::t_6a1643ce3c0237 97-98
+packages/env/AGENTS.md
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-49
+packages/env/README.md
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-4,10-99,108-138
+  s_8cb2ae3aaeefff::t_4f8087a5c6dda0 5-9,100-107
+packages/env/src/types.ts
+  s_8cb2ae3aaeefff::t_6365cb8cee0b74 1-9,19-86
+  s_8cb2ae3aaeefff::t_4c2068ccf72b58 10-18
+packages/env/CHANGELOG.md
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-2,4,7-10,12-14
+  s_8cb2ae3aaeefff::t_4f8087a5c6dda0 3,5-6,11
+packages/env/src/index.test.ts
+  s_8cb2ae3aaeefff::t_4f8087a5c6dda0 1-200
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_a932ccba2dfac8 62-67,224-269,417-452,454-478
+  s_8cb2ae3aaeefff::t_034fb15cc9d3ca 453
+  s_8cb2ae3aaeefff::t_5eb04456ce9e05 527
+  s_8cb2ae3aaeefff::t_66de791cfad284 485-526,528-562,564
+  s_8cb2ae3aaeefff::t_eca347fb1fc35b 563
+AGENTS.md
+  s_8cb2ae3aaeefff::t_c20c4e61f5184c 12-14,53-55
+docs/src/lib/source.ts
+  s_8cb2ae3aaeefff::t_c20c4e61f5184c 19
+docs/README.md
+  s_8cb2ae3aaeefff::t_c20c4e61f5184c 23-28
+  s_8cb2ae3aaeefff::t_034fb15cc9d3ca 31
+  s_8cb2ae3aaeefff::t_c941841e9163cd 29-30
+packages/env/vite.config.ts
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-12
+packages/env/vitest.config.ts
+  s_8cb2ae3aaeefff::t_534f286cfdeae8 1-3
+bun.lock
+  s_8cb2ae3aaeefff::t_28521a3a3beace 59-69,453-454
+packages/env/LICENSE
+  s_8cb2ae3aaeefff::t_a9009189321139 1-201
+packages/env/src/index.ts
+  s_8cb2ae3aaeefff::t_dc12e8fd451ee3 1-247
+packages/env/src/runtime.ts
+  s_8cb2ae3aaeefff::t_ab265d7e92506c 1-10
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dad756900fa9977b02689a1da6c1e731758b727b",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
