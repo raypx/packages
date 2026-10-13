@@ -1,0 +1,32 @@
+turbo.json
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 29
+.changeset/consolidate-drizzle-licenses.md
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 1-6
+README.md
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 167
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 63,72-77
+docs/scripts/sync-content.test.mjs
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 18,77-78,103,116
+packages/drizzle/NOTICE.md
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 12,26
+  s_8cb2ae3aaeefff::t_48586aed5fd0ff 50-75
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_04a27165ecc30b 28-29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "4903d45e47fe7f09262e3cb7718668fd5e16bba7",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "heixing <heixing@xiaohongshu.com>"
+    }
+  }
+}
