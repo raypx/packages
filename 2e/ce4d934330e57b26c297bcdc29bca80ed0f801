@@ -1,0 +1,146 @@
+packages/intl/src/client/client.test.tsx
+  s_8cb2ae3aaeefff::t_3cdb4a48b4b81f 1-368
+  s_8cb2ae3aaeefff::t_584c85cbbaffd1 369-416
+packages/intl/src/types.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-37,39-64
+  s_8cb2ae3aaeefff::t_4d0df5f7089b1e 38
+packages/intl/tsconfig.build.json
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-5
+packages/intl/src/server.test.ts
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-42
+  s_8cb2ae3aaeefff::t_b3bb7916993045 43-52
+packages/intl/src/cache.ts
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 1-12
+packages/intl/src/index.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-6
+packages/intl/src/client/async-provider.ts
+  s_8cb2ae3aaeefff::t_bfccba992d77ed 1-108
+  s_8cb2ae3aaeefff::t_7364da7e329150 109-129
+packages/intl/vite.config.ts
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 17
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-16,18-20
+scripts/check-packages.mjs
+  s_8cb2ae3aaeefff::t_8b3bd4190a2ea5 24-36,61-70,105-113,121,125,163-193,220-256,280-316,323-327,332
+  s_8cb2ae3aaeefff::t_dd5c8a0c316b23 71-77
+  s_8cb2ae3aaeefff::t_ae161726c5bd7e 328-331
+packages/intl/src/formatter.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 2-36,41,79-87
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 1,37-40,42-78
+  s_8cb2ae3aaeefff::t_371fa226340d1d 88-95
+packages/intl/src/locale.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-20,24-29,31-95,97-101,103-111
+  s_8cb2ae3aaeefff::t_4d0df5f7089b1e 21-23
+  s_8cb2ae3aaeefff::t_e5e31869a212df 30,96,102
+  s_8cb2ae3aaeefff::t_cd2883328f6943 112-117
+packages/intl/src/formatter.test.ts
+  s_8cb2ae3aaeefff::t_e97ee0bed63016 41-49
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-40,50-62
+packages/intl/src/client/runtime.ts
+  s_8cb2ae3aaeefff::t_bfccba992d77ed 1-62
+  s_8cb2ae3aaeefff::t_b6a42a6a02adb7 63-69
+packages/intl/tsconfig.json
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-8
+packages/intl/AGENTS.md
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 25-27
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-24,28-46
+packages/intl/src/client/storage.test.ts
+  s_8cb2ae3aaeefff::t_72b39dc00e93a8 1-67
+packages/intl/src/translator.test.ts
+  s_8cb2ae3aaeefff::t_e97ee0bed63016 1-3,5-85,98-117
+  s_8cb2ae3aaeefff::t_94fd3ae85d3c71 4,86-97
+  s_8cb2ae3aaeefff::t_079343ea5c989b 118-142
+packages/intl/src/formats.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-19
+packages/intl/src/server.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-32
+packages/intl/README.md
+  s_8cb2ae3aaeefff::t_f54707c9e025aa 1-76,80-121,127-129,131-161,163-166,170-173,180-184
+  s_8cb2ae3aaeefff::t_e97ee0bed63016 77-79
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 122-126,162,167-169,174-179
+  s_8cb2ae3aaeefff::t_65db9f1cf1a1c4 130
+packages/intl/src/types-entry.ts
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 1-3
+packages/intl/src/client.ts
+  s_8cb2ae3aaeefff::t_bfccba992d77ed 1-148
+  s_8cb2ae3aaeefff::t_5c657699442821 149-181
+packages/intl/src/client/storage.ts
+  s_8cb2ae3aaeefff::t_bfccba992d77ed 1-46
+  s_8cb2ae3aaeefff::t_4bb74b89663a40 47-48
+packages/intl/src/locale.test.ts
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-85
+packages/intl/package.json
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-11,18-20,41,45-57,59-66,75,79
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 12-17,21-40,42-44,58,67-74,76-78
+packages/intl/CHANGELOG.md
+  s_8cb2ae3aaeefff::t_25e218452008c5 1-10,13-15
+  s_8cb2ae3aaeefff::t_e97ee0bed63016 11-12
+packages/intl/vitest.config.ts
+  s_8cb2ae3aaeefff::t_72b39dc00e93a8 1-11,14-39
+  s_8cb2ae3aaeefff::t_0b7ba1583bd136 12-13
+scripts/testing/jsdom-preload.ts
+  s_8cb2ae3aaeefff::t_72b39dc00e93a8 1-35
+  s_8cb2ae3aaeefff::t_dfb6cde23025c4 36-37
+packages/intl/src/translator.ts
+  s_8cb2ae3aaeefff::t_94fd3ae85d3c71 16-24,30,78-79
+  s_8cb2ae3aaeefff::t_27d7eeea838d24 1,3,15,25-29,31-39,48-77,80-95
+  s_8cb2ae3aaeefff::t_62c4fe43fe9397 2,4-14,40-47,96
+  s_8cb2ae3aaeefff::t_6e0f5e727f4a6d 97-111
+.changeset/intl-extraction.md
+  s_8cb2ae3aaeefff::t_17f0bdc3369fd2 1-9
+AGENTS.md
+  s_8cb2ae3aaeefff::t_9ffccf397b0c96 12-13
+README.md
+  s_8cb2ae3aaeefff::t_2f995239375f47 8-11,55,108
+bun.lock
+  s_8cb2ae3aaeefff::t_88de596ea0f014 26-47,57-64,67,69-70,72,79-82,99-100,135-154,267-268,271-272,297-298,437-438,445-452,461-462,483-484,489-492,497-498,527-528,535-536,551-552,565-570,573-578,601-604,607-610,615-616,625-632,637-640,650-653
+package.json
+  s_8cb2ae3aaeefff::t_127b30ea385fdf 20-32
+packages/drizzle/AGENTS.md
+  s_8cb2ae3aaeefff::t_e7bc0fbfd1b7ef 26-27
+packages/drizzle/NOTICE.md
+  s_8cb2ae3aaeefff::t_9ceb11dd1fe8a5 12,15,26,30-31,48
+packages/drizzle/README.md
+  s_8cb2ae3aaeefff::t_49270c7877fabe 88
+packages/drizzle/THIRD_PARTY_LICENSES
+  s_8cb2ae3aaeefff::t_6451cfdc8107b0 1-6,28-233
+packages/drizzle/docs/merge-plan.md
+  s_8cb2ae3aaeefff::t_85d3ee926f9b4f 28
+packages/drizzle/package.json
+  s_8cb2ae3aaeefff::t_d62012392467a5 15-16
+packages/drizzle/src/columns.ts
+  s_8cb2ae3aaeefff::t_3d6f4b63db9570 5
+packages/drizzle/src/diagnostics/explain.ts
+  s_8cb2ae3aaeefff::t_2b107b87266d35 7
+packages/drizzle/src/errors.ts
+  s_8cb2ae3aaeefff::t_c4926ade56ca4f 7
+packages/drizzle/src/pg/json.ts
+  s_8cb2ae3aaeefff::t_aef38a861ca8ff 7
+packages/drizzle/src/pg/upsert.ts
+  s_8cb2ae3aaeefff::t_588462b5c7a8a0 6
+packages/intl/src/accept-language.ts
+  s_8cb2ae3aaeefff::t_b1ea7a0d1c8e16 1-21
+packages/intl/src/testing.test.ts
+  s_8cb2ae3aaeefff::t_ae03ee39c8c58f 1-47
+packages/intl/src/testing.ts
+  s_8cb2ae3aaeefff::t_2290bfbcb7c756 1-97
+tsconfig.json
+  s_8cb2ae3aaeefff::t_2094ead6708b33 3
+turbo.json
+  s_8cb2ae3aaeefff::t_d1d37048649fd2 4-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "2ece4d934330e57b26c297bcdc29bca80ed0f801",
+  "prompts": {},
+  "sessions": {
+    "s_8cb2ae3aaeefff": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a133df-8bb9-71c1-aea2-a27b54c4744e",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
