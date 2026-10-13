@@ -24,7 +24,7 @@ const loadPage = createServerFn({ method: "GET" })
     if (!page) throw notFound();
 
     return {
-      path: page.path,
+      path: page.data.info.path,
       title: page.data.title,
       description: page.data.description ?? "",
       sourceUrl: getSourceUrl(page.data.sourcePath),

@@ -21,8 +21,8 @@ implementation modules in subdirectories when useful.
 Maintain capability inventories and extension designs in root `docs/<package>/`,
 with navigation in `docs/README.md`. Package READMEs document shipped APIs and
 link to repository design documents; research inventories are not npm payloads.
-The documentation site generates ignored `docs/content/` views from canonical
-Markdown. Keep the site private and outside library release versions and archives.
+The documentation site compiles canonical Markdown directly through Fumadocs.
+Keep the site private and outside library release versions and archives.
 Keep license texts and source notices alongside the package that ships adapted code.
 Write repository and package documentation in English. Keep localized message
 examples in their intended languages and preserve code identifiers and source links.

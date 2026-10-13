@@ -64,15 +64,15 @@ bun run docs:build
 bun run docs:preview
 ```
 
-The site uses Fumadocs with TanStack Start, Tailwind CSS and Vite+. Its content
-generator reads the root documentation, package READMEs and source notices;
-`docs/content/` is a build-only view, not another source to maintain. Edit the
-canonical Markdown shown by each page's source link. The generator converts
-registered documentation links to site routes and checks every local file target.
-Unregistered repository files, including complete license texts, link to GitHub.
+The site uses Fumadocs with TanStack Start, Tailwind CSS and Vite+. Fumadocs compiles
+the root documentation, package READMEs and source notices directly, without a
+content synchronization script or generated Markdown copies. Edit the canonical
+Markdown shown by each page's source link. Page routes and navigation live in
+`docs/src/lib/pages.ts`. Markdown compilation converts registered documentation
+links to site routes; other repository files, including complete license texts,
+link to GitHub.
 
-`docs:dev` and `docs:build` refresh content first. Restart the development server
-after editing a canonical source to regenerate its view. The build prerenders
+The development server watches the source Markdown. The build prerenders
 documentation and search for static hosting; the private `docs` workspace has
 no npm release and does not change library versions. See
 [site ownership](docs/AGENTS.md) and [template provenance](docs/NOTICE.md).

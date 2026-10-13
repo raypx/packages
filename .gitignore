@@ -5,7 +5,6 @@ node_modules/
 /packages/*node_modules/
 /packages/*/dist/
 /packages/*/coverage/
-/docs/content/
 /docs/.source/
 /docs/.output/
 /docs/.tanstack/

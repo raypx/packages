@@ -6,7 +6,7 @@ not imply that those features are implemented.
 
 This directory also owns the Fumadocs site. Run `bun run docs:dev` at the repository
 root to browse this material at `http://localhost:3100/docs`. The site renders
-generated views of these canonical Markdown files and the package guides, with
+these canonical Markdown files and the package guides directly, with
 navigation, full-text search, source links and light/dark themes.
 
 ## Drizzle
@@ -27,7 +27,7 @@ retain all upstream capabilities, including features outside that scope.
 ## Development and releases
 
 - [Repository setup and independent releases](../README.md)
-- [Changesets workflow](../.changeset/README.md)
+- [Changesets workflow](development/changesets.md)
 
 Design documents are repository references and are excluded from npm archives.
 Package archives retain their API README, changelog, license and applicable

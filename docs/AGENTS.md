@@ -15,16 +15,16 @@ from the same content and operates without a third-party service.
 
 - Render the canonical root and package Markdown through Fumadocs.
 - Keep navigation, table of contents, source links, search and theme controls usable.
-- Generate build-only content through `scripts/sync-content.mjs`; do not edit its
-  output under `content/` or commit generated content and build artifacts.
+- Compile canonical Markdown directly through Fumadocs; keep page routes and
+  navigation in `src/lib/pages.ts`. Do not commit generated build artifacts.
 - Keep all library source, package versions and npm payloads outside this app.
 
 ## Constraints
 
 - Use TanStack Start, Fumadocs and the repository Bun/Vite+/Turbo toolchain.
 - Preserve current versus proposed API status, source provenance and all inventory rows.
-- Resolve relative Markdown links against their canonical source. Local targets
-  must exist; unregistered repository files link to GitHub rather than broken routes.
+- Resolve Markdown links against their canonical source during compilation;
+  registered pages use site routes and other repository files link to GitHub.
 - Use lazy content loading and a static search index, with no production database,
   authentication, external search provider or application environment dependency.
 - Keep the UI in English and retain localized message examples in their intended languages.
