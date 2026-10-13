@@ -1,0 +1,135 @@
+@import "tailwindcss";
+@import "fumadocs-ui/css/neutral.css";
+@import "fumadocs-ui/css/preset.css";
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: ui-monospace, "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  --color-fd-primary: oklch(0.533 0.125 294.3);
+  --color-fd-primary-foreground: oklch(0.99 0 0);
+  --color-fd-ring: oklch(0.533 0.125 294.3);
+  --color-fd-muted-foreground: oklch(0.46 0 0);
+}
+
+.dark {
+  --color-fd-primary: oklch(0.78 0.115 294.3);
+  --color-fd-primary-foreground: oklch(0.17 0.015 294.3);
+  --color-fd-ring: oklch(0.78 0.115 294.3);
+  --color-fd-muted-foreground: oklch(0.75 0 0);
+}
+
+html {
+  scrollbar-gutter: stable;
+  scroll-padding-top: 6rem;
+}
+
+body {
+  min-width: 0;
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+html > body[data-scroll-locked] {
+  margin-right: 0 !important;
+  --removed-body-scroll-bar-size: 0 !important;
+}
+
+:is(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-fd-ring);
+  outline-offset: 3px;
+}
+
+#nd-page {
+  min-width: 0;
+}
+
+#nd-page .prose {
+  width: 100%;
+  min-width: 0;
+  max-width: 70ch;
+  line-height: 1.75;
+}
+
+#nd-page :is(h1, h2, h3) {
+  text-wrap: balance;
+  overflow-wrap: anywhere;
+}
+
+#nd-page .prose h2 {
+  margin-block: 2.5rem 1rem;
+  line-height: 1.3;
+}
+
+#nd-page .prose h3 {
+  margin-block: 1.75rem 0.75rem;
+  line-height: 1.4;
+}
+
+#nd-page .prose :where(p, li, a) {
+  overflow-wrap: anywhere;
+}
+
+#nd-page .prose :where(p, li) {
+  text-wrap: pretty;
+}
+
+#nd-page .prose :where(pre, figure, img) {
+  max-width: 100%;
+}
+
+.docs-table-scroll {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  margin-block: 1.75rem;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  border: 1px solid var(--color-fd-border);
+  border-radius: 0.5rem;
+}
+
+.docs-table-scroll > table {
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+}
+
+.docs-table-scroll :is(th, td) {
+  min-width: 9rem;
+  max-width: 32rem;
+  padding: 0.75rem 1rem;
+  vertical-align: top;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.docs-table-scroll :is(th, td) code {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.docs-search input:focus-visible {
+  outline-offset: 4px;
+}
+
+.docs-not-found {
+  display: flex;
+  min-height: 70svh;
+  max-width: 70ch;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  margin-inline: auto;
+  padding: 3rem 1.5rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

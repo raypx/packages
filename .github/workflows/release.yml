@@ -1,0 +1,113 @@
+name: Release
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions: {}
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  plan:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    outputs:
+      mode: ${{ steps.mode.outputs.mode }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - uses: changesets/action/select-mode@v2.0.0
+        id: mode
+        env:
+          # npm is only the registry transport; repository tooling stays on Bun.
+          # Its devEngines check otherwise rejects the strict Bun runtime pin.
+          NPM_CONFIG_FORCE: "true"
+      - name: Explain pending version PR setup
+        if: steps.mode.outputs.mode == 'version' && vars.VERSION_PR_ENABLED != 'true'
+        run: |
+          echo '::notice::Version PR automation is disabled. Enable Actions pull-request creation in repository settings, then set VERSION_PR_ENABLED=true.'
+          cat >> "$GITHUB_STEP_SUMMARY" <<'SUMMARY'
+          Version changes are pending. Automatic version PR creation is disabled.
+
+          Enable **Allow GitHub Actions to create and approve pull requests** under
+          **Settings → Actions → General → Workflow permissions**, then set the
+          repository Actions variable `VERSION_PR_ENABLED` to `true`.
+          Run this workflow again to create the version PR. Package publishing is
+          configured separately through `NPM_PUBLISH_ENABLED`.
+          SUMMARY
+
+  version:
+    needs: plan
+    if: needs.plan.outputs.mode == 'version' && vars.VERSION_PR_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - uses: changesets/action/version@v2.0.0
+        with:
+          script: bun run version-packages
+          commit-message: "chore: version packages"
+          pr-title: "chore: version packages"
+
+  publish:
+    needs: plan
+    # Initial repository pushes never publish or fail for missing npm setup.
+    # Enable only after configuring npm scope access and CI authentication.
+    if: needs.plan.outputs.mode == 'publish' && vars.NPM_PUBLISH_ENABLED == 'true'
+    runs-on: ubuntu-latest
+    environment: npm
+    permissions:
+      contents: write
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+          fetch-depth: 0
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+          registry-url: https://registry.npmjs.org/
+          package-manager-cache: false
+      - uses: oven-sh/setup-bun@v2
+        with:
+          bun-version: 1.4.0
+      - run: bun install --frozen-lockfile --ignore-scripts
+      - name: Verify before publication
+        run: bun run verify
+      - uses: changesets/action/publish@v2.0.0
+        with:
+          script: bun run changeset publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+          NPM_CONFIG_PROVENANCE: "true"
+          # Limit the npm transport override to this publication step.
+          NPM_CONFIG_FORCE: "true"

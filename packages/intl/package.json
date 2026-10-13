@@ -1,0 +1,75 @@
+{
+  "name": "@raypx/intl",
+  "version": "0.0.0",
+  "description": "Configurable locale negotiation, ICU translation, Intl formatting and isolated React providers.",
+  "homepage": "https://github.com/raypx/packages/tree/main/packages/intl",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raypx/packages.git",
+    "directory": "packages/intl"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.mts",
+      "import": "./dist/index.mjs"
+    },
+    "./client": {
+      "types": "./dist/client.d.mts",
+      "import": "./dist/client.mjs"
+    },
+    "./server": {
+      "types": "./dist/server.d.mts",
+      "import": "./dist/server.mjs"
+    },
+    "./types": {
+      "types": "./dist/types-entry.d.mts",
+      "import": "./dist/types-entry.mjs"
+    },
+    "./testing": {
+      "types": "./dist/testing.d.mts",
+      "import": "./dist/testing.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "bun --bun tsc --noEmit -p tsconfig.json",
+    "test": "bun --bun vp test --run",
+    "test:unit": "bun --bun vp test --run --passWithNoTests --exclude '**/component.test.{ts,tsx}' --exclude '**/*.component.test.{ts,tsx}' --exclude '**/*.integration.test.{ts,tsx}'",
+    "test:integration": "bun --bun vp test --run --passWithNoTests integration.test",
+    "test:component": "bun --bun vp test --run --passWithNoTests component.test",
+    "test:coverage": "bun --bun vp test --run --passWithNoTests --coverage --coverage.reporter=text --coverage.reporter=json --coverage.reporter=lcov",
+    "build": "bun --bun vp pack",
+    "dev": "bun --bun vp pack --watch",
+    "pack:check": "bun pm pack --dry-run --ignore-scripts"
+  },
+  "dependencies": {
+    "@formatjs/icu-messageformat-parser": "3.5.21",
+    "use-intl": "4.14.9"
+  },
+  "devDependencies": {
+    "@testing-library/react": "16.3.3",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitest/coverage-v8": "5.0.3",
+    "jsdom": "30.1.2",
+    "react": "19.3.0",
+    "react-dom": "19.3.0"
+  },
+  "peerDependencies": {
+    "react": "^19.0.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

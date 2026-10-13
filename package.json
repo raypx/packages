@@ -1,0 +1,51 @@
+{
+  "name": "raypx-packages",
+  "private": true,
+  "license": "Apache-2.0",
+  "workspaces": [
+    "docs",
+    "packages/*"
+  ],
+  "type": "module",
+  "scripts": {
+    "build": "bun --bun turbo run build",
+    "check": "bun --bun tsc --noEmit -p tsconfig.json && bun --bun turbo run check",
+    "test": "bun --bun turbo run test",
+    "lint": "bun --bun vp lint",
+    "format": "bun --bun vp fmt --check",
+    "format:fix": "bun --bun vp fmt",
+    "verify": "bun run format && bun run lint && bun run check && bun run test && bun run build && bun run pack:check && bun run release:check",
+    "pack:check": "bun scripts/check-packages.mjs",
+    "release:check": "bun scripts/check-releases.mjs",
+    "changeset": "bun --bun ./node_modules/@changesets/cli/bin.js",
+    "version-packages": "bun run changeset version && bun install --ignore-scripts && bun run format:fix",
+    "release": "bun run verify && NPM_CONFIG_FORCE=true bun run changeset publish",
+    "docs:dev": "bun --bun turbo run dev --filter=docs",
+    "docs:build": "bun --bun turbo run build --filter=docs",
+    "docs:preview": "bun run --cwd docs preview",
+    "docs:check": "bun run --cwd docs check"
+  },
+  "devDependencies": {
+    "@changesets/cli": "3.0.3",
+    "@types/node": "26.6.5",
+    "turbo": "2.11.7",
+    "typescript": "7.0.2",
+    "vite-plus": "1.1.0"
+  },
+  "overrides": {
+    "vite": "npm:@voidzero-dev/vite-plus-core@1.1.0"
+  },
+  "devEngines": {
+    "packageManager": {
+      "name": "bun",
+      "version": "1.4.0",
+      "onFail": "error"
+    },
+    "runtime": {
+      "name": "bun",
+      "version": "1.4.0",
+      "onFail": "error"
+    }
+  },
+  "packageManager": "bun@1.4.0"
+}
