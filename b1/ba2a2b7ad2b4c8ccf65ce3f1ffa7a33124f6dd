@@ -1,0 +1,33 @@
+packages/drizzle/README.md
+  s_927a787f99ed8d::t_344722c979dcec 114
+.github/workflows/ci.yml
+  s_927a787f99ed8d::t_344722c979dcec 29
+package.json
+  s_927a787f99ed8d::t_344722c979dcec 43,48,52
+AGENTS.md
+  s_927a787f99ed8d::t_344722c979dcec 39
+README.md
+  s_927a787f99ed8d::t_344722c979dcec 43
+scripts/check-releases.ts
+  s_927a787f99ed8d::t_344722c979dcec 36
+docs/development/publishing.md
+  s_927a787f99ed8d::t_344722c979dcec 19
+.github/workflows/release.yml
+  s_927a787f99ed8d::t_344722c979dcec 32,72,102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "b1ba2a2b7ad2b4c8ccf65ce3f1ffa7a33124f6dd",
+  "prompts": {},
+  "sessions": {
+    "s_927a787f99ed8d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13aa1-6438-7621-8030-6bbbadb02497",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
