@@ -16,8 +16,8 @@ Root `docs/` is a private Fumadocs application and owns
 the documentation site alongside canonical reference Markdown. New libraries live under `packages/`
 and have explicit ESM exports, a README, license, independent version and tests.
 Configuration packages export their package-root files directly instead of `dist/`.
-Every public package registers its archive and consumer checks in
-`scripts/package-checks/`; `pack:check` fails for an unregistered package.
+`pack:check` installs every public archive in isolated Bun and Node consumers and
+loads each export; package behavior and public types belong in unit tests.
 Every workspace's TypeScript configuration extends an `@voidmix/tsconfig` preset,
 declared once by the private root through `workspace:*`; Turbo's global
 dependencies include the presets. Shared test configuration lives at the root; it

@@ -25,6 +25,8 @@ describe("typed column helpers", () => {
     expectTypeOf(projection).toEqualTypeOf<
       Omit<(typeof members)["_"]["columns"], "id" | "createdAt" | "updatedAt">
     >();
+    // @ts-expect-error Unknown column keys are rejected.
+    withoutColumns(members, "missing");
   });
 
   it("maps only the chosen update keys to physical PostgreSQL column names", () => {

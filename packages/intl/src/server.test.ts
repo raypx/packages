@@ -35,6 +35,8 @@ describe("server locale factory", () => {
     expect(server.resolveConfiguredLocale("en-US")).toBe("en");
     expect(server.resolveConfiguredLocale(undefined)).toBe("zh");
     expect(server.resolveConfiguredLocale("fr", "de-DE")).toBe("de-DE");
+    // @ts-expect-error The fallback must be a configured locale.
+    expect(() => server.resolveConfiguredLocale(undefined, "fr")).toThrow(TypeError);
   });
 
   it("is isolated across applications with different cookies and locales", () => {

@@ -16,6 +16,9 @@ describe("postgres.js unique violations", () => {
 
   it("does not accept node-postgres constraint metadata", () => {
     expect(isUniqueViolation({ code: "23505", constraint }, constraint)).toBe(false);
+    expect(
+      isUniqueViolation({ code: "23505", constraint_name: null, constraint }, constraint),
+    ).toBe(false);
   });
 
   it("unwraps Drizzle query and transaction causes without reading query data", () => {

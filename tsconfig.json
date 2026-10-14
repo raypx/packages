@@ -1,5 +1,4 @@
 {
   "extends": "@voidmix/tsconfig/node.json",
-  "include": ["vite.config.ts", "test.config.ts", "scripts/**/*.ts"],
-  "exclude": ["scripts/package-checks/fixtures/**"]
+  "include": ["vite.config.ts", "test.config.ts", "scripts/**/*.ts"]
 }

@@ -52,10 +52,10 @@ bun run verify
 tarball consumers, plus independent versioning and pre-mode prerelease rules in
 disposable Changesets fixtures. It also checks and builds the documentation
 site. `build` runs workspace type checks first through Turbo. The tarball check
-verifies every export and declaration, licenses and dependency resolution, then
-installs each package outside the workspace and loads it with both Bun and Node.
-Preset archives are compiled against strictness probes for every exported preset
-and resolved through package exports by Bun and Node. Set `TOOLKIT_NODE_BINARY`
+verifies archive contents, licenses and dependency resolution, then installs each
+package outside the workspace, loads every export with both Bun and Node and
+resolves declarations for every JavaScript export. Behavior and public types are
+covered by each package's unit tests. Set `TOOLKIT_NODE_BINARY`
 to a Node executable when it is not on PATH. `TOOLKIT_KEEP_PACK_CHECK=1` retains
 disposable consumer directories for diagnosis.
 
@@ -191,12 +191,9 @@ explicit exports; configuration packages export package-root files directly.
 Keep reusable code independent of product workspaces, declare framework and ORM
 integrations as peers where appropriate, and retain provenance for adapted
 source. Prefer public TypeScript entry files directly under `src/`, with
-supporting implementation modules in subdirectories. Register its archive
-assertions in `scripts/package-checks/<name>.ts` and
-`scripts/package-checks/index.ts`, and add consumer probes as real files under
-`scripts/package-checks/fixtures/<name>/`: top-level `.ts` files compile against
-the installed archive and `.mjs` files run with Bun and Node. Add the package to
-the table above; do not create a fixed or linked Changesets group.
+supporting implementation modules in subdirectories. `pack:check` picks up
+every public package automatically. Add the package to the table above; do not
+create a fixed or linked Changesets group.
 
 ## License
 

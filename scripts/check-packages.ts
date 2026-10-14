@@ -1,21 +1,23 @@
 import assert from "node:assert/strict";
-import { existsSync } from "node:fs";
-import { copyFile, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { execFileSync } from "node:child_process";
+import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 
-import { packageChecks } from "./package-checks/index.js";
-import {
-  fixtures,
-  node,
-  readArchived,
-  root,
-  rootManifest,
-  run,
-  runModules,
-  type ArchiveContext,
-  type Manifest,
-} from "./package-checks/shared.js";
+type Dependencies = Record<string, string>;
+
+interface Manifest {
+  name: string;
+  version: string;
+  private?: boolean;
+  files?: string[];
+  exports: Record<string, unknown>;
+  dependencies?: Dependencies;
+  devDependencies?: Dependencies;
+  optionalDependencies?: Dependencies;
+  peerDependencies?: Dependencies;
+}
 
 interface PlanEntry {
   kind: string;
@@ -23,6 +25,9 @@ interface PlanEntry {
   tarball: { path: string };
 }
 
+const root = fileURLToPath(new URL("../", import.meta.url));
+const node = process.env.TOOLKIT_NODE_BINARY || "node";
+const rootManifest = JSON.parse(await readFile(join(root, "package.json"), "utf8")) as Manifest;
 const temporary = await mkdtemp(join(tmpdir(), "voidmix-pack-"));
 // Release packing checks the exact archives it will publish instead of packing again.
 const releasePlan = process.env.TOOLKIT_RELEASE_PLAN;
@@ -35,6 +40,14 @@ const releaseArchives = releasePlan
     )
   : undefined;
 
+function run(binary: string, args: string[], cwd: string): string {
+  return execFileSync(binary, args, { cwd, encoding: "utf8", stdio: "pipe" });
+}
+
+function readArchived(archive: string, path: string): string {
+  return execFileSync("tar", ["-xOf", archive, `package/${path}`], { encoding: "utf8" });
+}
+
 function exportTargets(value: unknown): string[] {
   if (typeof value === "string") return [value];
   if (Array.isArray(value)) return value.flatMap(exportTargets);
@@ -42,30 +55,30 @@ function exportTargets(value: unknown): string[] {
   return [];
 }
 
-/** Rules every public archive follows, whatever its package-specific checks. */
-async function assertSharedArchiveRules({
-  archive,
-  entries,
-  manifest,
-  packed,
-  packageDirectory,
-}: ArchiveContext): Promise<void> {
+/** Rules every public archive follows; package behavior belongs in unit tests. */
+async function assertArchive(
+  archive: string,
+  manifest: Manifest,
+  packageDirectory: string,
+): Promise<Manifest> {
+  const entries = new Set(run("tar", ["-tzf", archive], temporary).trim().split("\n"));
+  const packed = JSON.parse(readArchived(archive, "package.json")) as Manifest;
   assert.equal(packed.name, manifest.name);
   assert.equal(packed.version, manifest.version);
-  assert.ok(entries.has("package/LICENSE"), `${packed.name}: missing LICENSE`);
-  assert.ok(entries.has("package/README.md"), `${packed.name}: missing README.md`);
-  assert.ok(![...entries].some((entry) => entry.startsWith("package/node_modules/")));
-  assert.ok(![...entries].some((entry) => entry.startsWith("package/third-party/")));
+  for (const file of ["LICENSE", "README.md"])
+    assert.ok(entries.has(`package/${file}`), `${packed.name}: missing ${file}`);
+  for (const directory of ["node_modules", "third-party"])
+    assert.ok(![...entries].some((entry) => entry.startsWith(`package/${directory}/`)));
   if (manifest.files?.includes("NOTICE.md")) {
-    for (const filename of ["NOTICE.md", "LICENSE"]) {
-      assert.ok(entries.has(`package/${filename}`), `${packed.name}: missing ${filename}`);
+    for (const file of ["NOTICE.md", "LICENSE"])
       assert.equal(
-        readArchived(archive, filename),
-        await readFile(join(packageDirectory, filename), "utf8"),
-        `${packed.name}: incomplete ${filename}`,
+        readArchived(archive, file),
+        await readFile(join(packageDirectory, file), "utf8"),
+        `${packed.name}: incomplete ${file}`,
       );
-    }
   }
+  for (const target of exportTargets(packed.exports))
+    assert.ok(entries.has(`package/${target.slice(2)}`), `${packed.name}: missing ${target}`);
   // Releases pack with Bun, as here; npm would publish these protocols verbatim.
   for (const dependencies of [
     packed.dependencies,
@@ -73,22 +86,72 @@ async function assertSharedArchiveRules({
     packed.optionalDependencies,
     packed.peerDependencies,
   ]) {
-    for (const [name, version] of Object.entries(dependencies || {})) {
+    for (const [name, version] of Object.entries(dependencies ?? {}))
       assert.ok(
         !/^(?:workspace:|catalog:|file:|link:)/.test(version),
         `${packed.name}: local dependency ${name}`,
       );
-    }
   }
+  return packed;
+}
+
+/** Installs the archive outside the workspace and loads every export with Bun and Node. */
+async function checkConsumer(archive: string, packed: Manifest, consumer: string): Promise<void> {
+  await mkdir(consumer);
+  await writeFile(
+    join(consumer, "package.json"),
+    JSON.stringify({
+      name: "toolkit-artifact-consumer",
+      private: true,
+      type: "module",
+      dependencies: { [packed.name]: archive, ...packed.peerDependencies },
+      devDependencies: {
+        typescript: rootManifest.devDependencies?.typescript,
+        "@types/node": rootManifest.devDependencies?.["@types/node"],
+      },
+    }),
+  );
+  run(process.execPath, ["install", "--ignore-scripts"], consumer);
+
+  const specifiers = Object.keys(packed.exports).map((key) => packed.name + key.slice(1));
+  const modules = specifiers.filter((specifier) => !specifier.endsWith(".json"));
+  // Configuration presets are JSON exports; they load with an import attribute.
+  const imports = specifiers.map((specifier) =>
+    specifier.endsWith(".json")
+      ? `import ${JSON.stringify(specifier)} with { type: "json" };`
+      : `import ${JSON.stringify(specifier)};`,
+  );
+  await writeFile(join(consumer, "exports.mjs"), imports.join("\n"));
+  run(process.execPath, ["exports.mjs"], consumer);
+  run(node, ["exports.mjs"], consumer);
+  if (modules.length === 0) return;
+
+  // Every JavaScript export must ship declarations a NodeNext consumer resolves.
+  const reexports = modules.map(
+    (specifier, index) => `export * as module${index} from ${JSON.stringify(specifier)};`,
+  );
+  await writeFile(join(consumer, "exports.ts"), reexports.join("\n"));
+  await writeFile(
+    join(consumer, "tsconfig.json"),
+    JSON.stringify({
+      compilerOptions: {
+        module: "NodeNext",
+        strict: true,
+        noEmit: true,
+        // Peer declarations, such as Drizzle's optional drivers, are not installed.
+        skipLibCheck: true,
+      },
+      files: ["exports.ts"],
+    }),
+  );
+  run(process.execPath, ["--bun", "./node_modules/typescript/bin/tsc"], consumer);
 }
 
 try {
-  // Require the second runtime before doing network work. This checks a real
-  // consumer rather than loading source files or workspace aliases.
+  // Require the second runtime before doing network work.
   run(node, ["--version"], temporary);
-  const directories = await readdir(join(root, "packages"), { withFileTypes: true });
   let checked = 0;
-  for (const directory of directories) {
+  for (const directory of await readdir(join(root, "packages"), { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;
     const packageDirectory = join(root, "packages", directory.name);
     const manifest = JSON.parse(
@@ -103,73 +166,9 @@ try {
         ["pm", "pack", "--ignore-scripts", "--filename", archive],
         packageDirectory,
       );
-    const entries = new Set(run("tar", ["-tzf", archive], temporary).trim().split("\n"));
-    const packed = JSON.parse(readArchived(archive, "package.json")) as Manifest;
-    const check = packageChecks[packed.name];
-    assert.ok(check, `${packed.name}: register its checks in scripts/package-checks/index.ts`);
-    const context: ArchiveContext = { archive, entries, manifest, packed, packageDirectory };
-    await assertSharedArchiveRules(context);
-    await check.assertArchive?.(context);
-
-    const consumer = join(temporary, directory.name);
-    await mkdir(consumer);
-    const probes = join(fixtures, directory.name);
-    if (existsSync(probes)) await cp(probes, consumer, { recursive: true });
-    if (check.checkConsumer) {
-      await check.checkConsumer({ ...context, consumer });
-      checked += 1;
-      continue;
-    }
-    for (const target of exportTargets(packed.exports)) {
-      assert.ok(target.startsWith("./dist/"), `${packed.name}: export must point to build output`);
-      assert.ok(
-        entries.has(`package/${target.slice(2)}`),
-        `${packed.name}: missing export ${target}`,
-      );
-    }
-
-    // A peer can be explicitly optional. Install it for the export smoke check
-    // so all advertised subpaths are exercised, independent of workspace deps.
-    await writeFile(
-      join(consumer, "package.json"),
-      JSON.stringify(
-        {
-          name: "toolkit-artifact-consumer",
-          private: true,
-          type: "module",
-          dependencies: {
-            [packed.name]: archive,
-            ...packed.peerDependencies,
-            ...check.consumerDependencies?.(context),
-          },
-          devDependencies: {
-            typescript: rootManifest.devDependencies.typescript,
-            "@types/node": rootManifest.devDependencies["@types/node"],
-            ...check.consumerDevDependencies?.(context),
-          },
-        },
-        null,
-        2,
-      ),
-    );
-    run(process.execPath, ["install", "--ignore-scripts"], consumer);
-    // Load every advertised subpath; the package fixtures probe behavior beyond loading.
-    const reexports = Object.keys(packed.exports)
-      .map((key, index) => `export * as module${index} from "${packed.name}${key.slice(1)}";\n`)
-      .join("");
-    await writeFile(join(consumer, "exports.ts"), reexports);
-    await writeFile(join(consumer, "exports.mjs"), reexports);
-    await copyFile(join(fixtures, "consumer.tsconfig.json"), join(consumer, "tsconfig.json"));
-    run(
-      process.execPath,
-      ["--bun", "./node_modules/typescript/bin/tsc", "-p", "tsconfig.json"],
-      consumer,
-    );
-    await runModules(consumer);
-    await check.afterRuntime?.({ ...context, consumer });
-    console.log(
-      `${packed.name}@${packed.version}: tarball, declarations, Bun and Node consumers passed`,
-    );
+    const packed = await assertArchive(archive, manifest, packageDirectory);
+    await checkConsumer(archive, packed, join(temporary, directory.name));
+    console.log(`${packed.name}@${packed.version}: tarball, Bun and Node consumers passed`);
     checked += 1;
   }
   if (releaseArchives)

@@ -181,6 +181,19 @@ describe("env", () => {
     expect(() => env.SECRET).toThrow(EnvError);
   });
 
+  it("skips validation without exposing server values to the client", () => {
+    const env = defineEnv({
+      clientPrefix: "PUBLIC_",
+      client: { PUBLIC_PORT: z.coerce.number() },
+      server: { SECRET: z.string() },
+      isServer: false,
+      skip: true,
+      runtimeEnv: { PUBLIC_PORT: "not-a-number", SECRET: "private" },
+    });
+    expect(env.PUBLIC_PORT).toBe("not-a-number");
+    expect(() => env.SECRET).toThrow(EnvError);
+  });
+
   it("enforces public prefixes in types and rejects invalid access at runtime", () => {
     const env = createEnv({
       isServer: false,

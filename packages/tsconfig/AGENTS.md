@@ -32,8 +32,8 @@ README documents every preset and compiler guarantee.
 - Keep Bun, Deno, Vite and other runtime-specific types in consuming projects.
   `node.json` describes Node-compatible resolution and standard API types.
 - Treat any option that can add consumer type errors as a breaking change.
-- Source tests read the preset files directly; packaged consumer checks run the
-  TypeScript compiler against each exported preset.
+- Source tests read the preset files directly; the packaged consumer check loads
+  each exported preset through package exports.
 
 ## Verification
 

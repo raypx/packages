@@ -1,6 +1,10 @@
 import { describe, expect, it } from "vite-plus/test";
 
-import { assertMessageCatalogParity, extractIcuArguments } from "./testing.js";
+import {
+  assertMessageCatalogParity,
+  compareMessageCatalogs,
+  extractIcuArguments,
+} from "./testing.js";
 
 describe("message catalog testing helpers", () => {
   it.each([
@@ -17,6 +21,15 @@ describe("message catalog testing helpers", () => {
     ["ordinary apostrophes", "Today's {date}", ["date"]],
   ] as const)("extracts %s", (_name, message, expected) => {
     expect(extractIcuArguments(message)).toEqual(expected);
+  });
+
+  it("returns catalog issues instead of throwing", () => {
+    expect(compareMessageCatalogs({ greeting: "Hi {name}" }, { greeting: "Hallo {name}" })).toEqual(
+      [],
+    );
+    expect(
+      compareMessageCatalogs({ greeting: "Hi {name}" }, { greeting: "Hallo {other}" }),
+    ).not.toEqual([]);
   });
 
   it("reports missing keys, type changes, and ICU argument drift with paths", () => {

@@ -67,6 +67,8 @@ describe("configurable locale runtime", () => {
   });
 
   it("guards runtime values that bypass the supported locale union", () => {
+    // @ts-expect-error Only configured locales are accepted.
+    expect(() => runtime.serializeLocaleCookie("fr")).toThrow(TypeError);
     const looseRuntime = runtime as ReturnType<typeof createLocaleRuntime<string>>;
     expect(() => looseRuntime.serializeLocaleCookie("fr")).toThrow(TypeError);
     expect(() => looseRuntime.resolveLocale({ fallbackLocale: "fr" })).toThrow(TypeError);
