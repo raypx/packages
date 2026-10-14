@@ -111,7 +111,7 @@ root `docs/` directory and are not included in the npm archive.
 
 ## Development
 
-From the repository root, using Bun 1.4.0:
+From the repository root, using Bun 1.4.3:
 
 ```bash
 bun install --frozen-lockfile

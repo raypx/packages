@@ -16,7 +16,7 @@ and tag those exact archives. Never run plain `changeset publish`.
    reviewers if desired.
 2. Create the npm organization `voidmix` and give maintainers publish access to
    the `@voidmix` scope. GitHub organization access does not grant npm access.
-3. On the publishing machine, use Bun 1.4.0 and Node 24, then run `npm login`.
+3. On the publishing machine, use Bun 1.4.3 and Node 24, then run `npm login`.
    npm normally requires a one-time password for publication.
 
 ## Manual alpha release

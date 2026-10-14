@@ -40,7 +40,7 @@ layout, path aliases, project references and runtime-specific ambient types.
 
 ## Development
 
-Use Bun **1.4.0**. Node **24** is also required for isolated consumer checks and
+Use Bun **1.4.3**. Node **24** is also required for isolated consumer checks and
 npm transport. Neither runtime is bundled in published libraries.
 
 ```sh

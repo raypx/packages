@@ -33,7 +33,7 @@ async function fixture(versions: Readonly<Record<string, string>>, pre?: { tag: 
     JSON.stringify({
       name: "toolkit-release-fixture",
       private: true,
-      packageManager: "bun@1.4.0",
+      packageManager: "bun@1.4.3",
       workspaces: { packages: ["docs", "packages/*"] },
     }),
   );

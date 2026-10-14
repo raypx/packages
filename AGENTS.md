@@ -36,7 +36,7 @@ examples in their intended languages and preserve code identifiers and source li
 
 ## Toolchain
 
-Use Bun 1.4.0 for installation and repository scripts. Turbo owns task
+Use Bun 1.4.3 for installation and repository scripts. Turbo owns task
 orchestration; Vite+ owns packing, formatting, linting and tests. JavaScript tool
 CLIs run with `bun --bun`. Node 24 and npm 10.9+ are also needed for packaged
 consumer checks and registry publication; source tooling runs on Bun.
