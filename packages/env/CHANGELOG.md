@@ -1,5 +1,11 @@
 # @voidmix/env
 
+## 0.0.0-alpha.2
+
+### Patch Changes
+
+- Export InferEnv type helper for explicit type inference
+
 ## 0.0.0-alpha.1
 
 ### Patch Changes

@@ -1,6 +1,6 @@
 {
   "name": "@voidmix/env",
-  "version": "0.0.0-alpha.1",
+  "version": "0.0.0-alpha.2",
   "description": "Typed Zod environment validation with composable presets and browser access guards.",
   "homepage": "https://github.com/raypx/voidmix/tree/main/packages/env",
   "license": "Apache-2.0",
