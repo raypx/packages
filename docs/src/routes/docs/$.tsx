@@ -43,9 +43,9 @@ export const Route = createFileRoute("/docs/$")({
   head: ({ loaderData }) => ({
     meta: loaderData
       ? [
-          { title: `${loaderData.title} | Raypx Packages` },
+          { title: `${loaderData.title} | Voidmix` },
           { name: "description", content: loaderData.description },
-          { property: "og:title", content: `${loaderData.title} | Raypx Packages` },
+          { property: "og:title", content: `${loaderData.title} | Voidmix` },
           { property: "og:description", content: loaderData.description },
           { property: "og:type", content: "article" },
         ]

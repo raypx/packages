@@ -1,4 +1,4 @@
-# Raypx Packages Documentation
+# Voidmix Documentation
 
 ## Register
 
@@ -6,7 +6,7 @@ product
 
 ## Users
 
-TypeScript developers evaluating and using the independently released Raypx
+TypeScript developers evaluating and using the independently released Voidmix
 libraries, and maintainers reviewing their source provenance and release process.
 Readers need to find an API, understand its compatibility, and distinguish
 available behavior from future extension work.

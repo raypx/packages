@@ -4,10 +4,16 @@ Every public package owns its version and changelog. `fixed` and `linked` are
 empty: changing one package never forces unrelated packages to share its version.
 Dependency compatibility can still require a dependent package to receive a bump.
 
-Drizzle and Intl were first published at `0.0.0` directly from their package
-manifests, with capability drafts consolidated into their initial changelogs.
-Env was published from this repository at `0.0.6`, continuing its existing npm
-release history rather than starting a new package at `0.0.0`.
+The repository is in pre mode with the `alpha` tag, recorded in
+`.changeset/pre.json`. Every package starts at `0.0.0-alpha.0`, with its initial
+work recorded in its initial changelog. In pre mode, versioning produces the
+next `alpha.N` prerelease for changed packages only. Until a package has a
+stable release, `latest` follows its newest prerelease: npm assigns `latest` at
+the first publication, and Changesets publishes later prereleases there too.
+After the first stable release, prereleases use only `alpha`. Exiting pre mode
+graduates every package to stable `0.0.0`; do so only for an explicitly approved
+first stable release. `bun run release:check` exercises these rules in a
+disposable fixture, so a Changesets upgrade that changes them fails verification.
 
 For a new package, publish its initial manifest version after verification without
 running `bun run version-packages` first; that command would bump the version.
@@ -22,4 +28,4 @@ changelogs, refreshes `bun.lock`, and formats the result. With
 `VERSION_PR_ENABLED=true` and Actions PR creation permitted, CI creates a version
 PR from this command. Merge that PR when the versions are ready for publication.
 
-See the root [README](../../README.md) for initial publication and CI setup.
+See the [publishing runbook](publishing.md) for manual and CI publication.

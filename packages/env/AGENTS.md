@@ -1,4 +1,4 @@
-# @raypx/env
+# @voidmix/env
 
 ## Purpose
 
@@ -31,7 +31,7 @@ declarations under `dist/`. The README documents the complete shipped API.
 
 ## Constraints
 
-- Do not import other Raypx packages, product variables or Bun APIs.
+- Do not import other Voidmix packages, Raypx product packages, product variables or Bun APIs.
 - Do not load `.env` files, add CLI commands or perform filesystem operations.
 - `createEnv` uses `VITE_` as its public prefix; `defineEnv` allows a custom prefix.
 - Preserve explicit `runtimeEnv`, `isServer`, validation skip and callback behavior.
@@ -44,6 +44,6 @@ declarations under `dist/`. The README documents the complete shipped API.
 ```bash
 bun run --cwd packages/env test
 bun run --cwd packages/env check
-bun run build --filter=@raypx/env
+bun run build --filter=@voidmix/env
 bun run --cwd packages/env pack:check
 ```

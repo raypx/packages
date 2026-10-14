@@ -2,7 +2,7 @@
  * Adapted from better-drizzle src/shared/query/compiler.ts at
  * f93f1b7aa528fe2db4cddc92a047e7a0ae710a0d.
  * @license Apache-2.0, Copyright 2026 Hiago Almeida.
- * Modified for @raypx/drizzle: explicit path segments, public SQL wrappers, CASE-guarded
+ * Modified for @voidmix/drizzle: explicit path segments, public SQL wrappers, CASE-guarded
  * scalar casts and finite-number decoding; no filter compiler or dotted paths.
  * Full license and source references: ../../NOTICE.md.
  */

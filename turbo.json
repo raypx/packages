@@ -26,6 +26,7 @@
     "PRODUCT.md",
     "packages/*/README.md",
     "packages/*/NOTICE.md",
-    "packages/*/LICENSE"
+    "packages/*/LICENSE",
+    "packages/tsconfig/*.json"
   ]
 }

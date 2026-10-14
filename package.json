@@ -1,5 +1,5 @@
 {
-  "name": "raypx-packages",
+  "name": "voidmix",
   "private": true,
   "license": "Apache-2.0",
   "workspaces": [
@@ -15,11 +15,14 @@
     "format": "bun --bun vp fmt --check",
     "format:fix": "bun --bun vp fmt",
     "verify": "bun run format && bun run lint && bun run check && bun run test && bun run build && bun run pack:check && bun run release:check",
-    "pack:check": "bun scripts/check-packages.mjs",
-    "release:check": "bun scripts/check-releases.mjs",
+    "pack:check": "bun scripts/check-packages.ts",
+    "release:check": "bun scripts/check-releases.ts",
     "changeset": "bun --bun ./node_modules/@changesets/cli/bin.js",
     "version-packages": "bun run changeset version && bun install --ignore-scripts && bun run format:fix",
-    "release": "bun run verify && NPM_CONFIG_FORCE=true bun run changeset publish",
+    "release:plan": "bun scripts/release.ts plan",
+    "release:pack": "bun scripts/release.ts pack",
+    "release:publish": "bun scripts/release.ts publish",
+    "release": "bun run verify && bun run release:pack && bun run release:publish",
     "docs:dev": "bun --bun turbo run dev --filter=docs",
     "docs:build": "bun --bun turbo run build --filter=docs",
     "docs:preview": "bun run --cwd docs preview",
@@ -28,6 +31,7 @@
   "devDependencies": {
     "@changesets/cli": "3.0.3",
     "@types/node": "26.6.5",
+    "@voidmix/tsconfig": "workspace:*",
     "turbo": "2.11.7",
     "typescript": "7.0.2",
     "vite-plus": "1.1.0"

@@ -1,8 +1,8 @@
-# @raypx/intl
+# @voidmix/intl
 
-## 0.0.0
+## 0.0.0-alpha.0
 
-Initial independent release.
+Initial prerelease.
 
 - Configurable, immutable locale runtimes with weighted language negotiation,
   regional lookup, custom cookies and request resolution.

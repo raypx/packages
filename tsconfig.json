@@ -1,4 +1,4 @@
 {
-  "extends": "./tsconfig.base.json",
-  "include": ["vite.config.ts", "test.config.ts", "scripts/testing/**/*.ts"]
+  "extends": "@voidmix/tsconfig/node.json",
+  "include": ["vite.config.ts", "test.config.ts", "scripts/**/*.ts"]
 }

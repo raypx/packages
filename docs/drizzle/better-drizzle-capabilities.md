@@ -6,7 +6,7 @@ The review covers the publication manifest, public entrypoints, every model/clie
 query and mutation compilers, relation executors, transactions, error handling and all plugins.
 Capabilities remain in the design even without a current Raypx consumer. Upstream uses Apache-2.0; adapted code must retain provenance, copyright and the full license.
 
-Status definitions: **Implemented** means an actual current `@raypx/drizzle` export;
+Status definitions: **Implemented** means an actual current `@voidmix/drizzle` export;
 **Planned** records extension work and does not make an API importable; **Native reuse** uses public Drizzle interfaces;
 **Declared upstream only** means the pinned source has a type or preset without a corresponding complete implementation;
 **Retained in inventory, outside the current implementation scope** preserves the source and semantics without scheduling a compatibility implementation.

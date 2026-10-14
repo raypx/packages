@@ -1,4 +1,4 @@
-# @raypx/drizzle
+# @voidmix/drizzle
 
 ## Purpose
 
@@ -33,7 +33,7 @@ to flat ESM entry files and declarations under `dist/`.
 
 ## Constraints
 
-- Runtime code must not import any other Raypx workspace or Bun-specific APIs.
+- Runtime code must not import any other Voidmix package, Raypx product workspace or Bun-specific APIs.
 - Use public Drizzle APIs. No global prototype patching or private query fields.
 - PostgreSQL is the only supported dialect, and postgres.js through
   `drizzle-orm/postgres-js` is the only supported driver. Do not add npm `pg`,
@@ -55,7 +55,7 @@ to flat ESM entry files and declarations under `dist/`.
 ## Verification
 
 ```bash
-bun run build --filter=@raypx/drizzle
+bun run build --filter=@voidmix/drizzle
 bun run --cwd packages/drizzle check
 bun run --cwd packages/drizzle test
 bun run --cwd packages/drizzle pack:check

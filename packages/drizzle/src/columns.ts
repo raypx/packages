@@ -1,7 +1,7 @@
 /**
  * @license MIT, Copyright (c) Alec Larson.
  * Adapted from alloc/drizzle-plus at 5840bdb4c5b3c7526b7db132f0b14cbe8a89eae9.
- * Modified for @raypx/drizzle: explicit functions and update keys, without prototype extensions.
+ * Modified for @voidmix/drizzle: explicit functions and update keys, without prototype extensions.
  * Full license and source references: ../NOTICE.md.
  */
 import { getColumns } from "drizzle-orm";

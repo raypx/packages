@@ -1,4 +1,4 @@
-# @raypx/intl
+# @voidmix/intl
 
 ## Purpose
 
@@ -8,11 +8,11 @@ React providers and catalog testing helpers without product dependencies.
 ## Interface
 
 ```text
-@raypx/intl         createLocaleRuntime, formatter, translator, presets and types
-@raypx/intl/client  createIntlClient, providers, hooks and storage factories
-@raypx/intl/server  createIntlServer and synchronous translator factory
-@raypx/intl/types   type-only runtime contracts
-@raypx/intl/testing recursive catalog parity and ICU argument helpers
+@voidmix/intl         createLocaleRuntime, formatter, translator, presets and types
+@voidmix/intl/client  createIntlClient, providers, hooks and storage factories
+@voidmix/intl/server  createIntlServer and synchronous translator factory
+@voidmix/intl/types   type-only runtime contracts
+@voidmix/intl/testing recursive catalog parity and ICU argument helpers
 ```
 
 ## Ownership

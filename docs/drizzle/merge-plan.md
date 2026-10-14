@@ -8,7 +8,7 @@ whether or not Raypx currently uses it.
 
 ## Goals and ownership
 
-The repository is `raypx/packages`, with `@raypx/drizzle` as its first package.
+The repository is `raypx/voidmix`, with `@voidmix/drizzle` as its first package.
 Packages maintains shared build, test, documentation and release tooling. Each
 package has its own version, CHANGELOG and npm artifact. All Drizzle subpaths
 belong to one package and use that package's version.
@@ -94,7 +94,7 @@ exports listed above, they are not yet exported.
 The first release remains one npm package, with subpaths separating capabilities.
 A separate npm package is justified only when a plugin has a different
 maintenance cycle, substantial independent dependencies or its own consumers;
-`@raypx/drizzle-cache` is one possible example. Every new package must define its
+`@voidmix/drizzle-cache` is one possible example. Every new package must define its
 independent version and dependency constraints.
 
 ## Decisions for overlapping capabilities

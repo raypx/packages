@@ -1,7 +1,7 @@
-# @raypx/drizzle
+# @voidmix/drizzle
 
 Drizzle extensions for PostgreSQL with postgres.js, maintained in
-[Raypx Packages](https://github.com/raypx/packages).
+[Voidmix](https://github.com/raypx/voidmix).
 Each package has its own version and changelog.
 
 This initial package implements a small, tested base. The complete inventories
@@ -9,13 +9,13 @@ below include every upstream capability, including features not yet implemented.
 
 ## Current API
 
-| Import                       | Exports                                                                                               | Dialect                    |
-| ---------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------------- |
-| `@raypx/drizzle`             | `withoutColumns`                                                                                      | PostgreSQL tables          |
-| `@raypx/drizzle/postgres`    | `excludedColumn`, `excludedColumns`, `jsonValue`, `jsonText`, `jsonType`, `jsonNumber`, `jsonBoolean` | PostgreSQL                 |
-| `@raypx/drizzle/errors`      | `isUniqueViolation`                                                                                   | postgres.js error metadata |
-| `@raypx/drizzle/results`     | `first`, `inserted`                                                                                   | Promise-like row arrays    |
-| `@raypx/drizzle/diagnostics` | `buildExplain`, `summarizePlan`, `DrizzleDiagnosticError`                                             | PostgreSQL                 |
+| Import                         | Exports                                                                                               | Dialect                    |
+| ------------------------------ | ----------------------------------------------------------------------------------------------------- | -------------------------- |
+| `@voidmix/drizzle`             | `withoutColumns`                                                                                      | PostgreSQL tables          |
+| `@voidmix/drizzle/postgres`    | `excludedColumn`, `excludedColumns`, `jsonValue`, `jsonText`, `jsonType`, `jsonNumber`, `jsonBoolean` | PostgreSQL                 |
+| `@voidmix/drizzle/errors`      | `isUniqueViolation`                                                                                   | postgres.js error metadata |
+| `@voidmix/drizzle/results`     | `first`, `inserted`                                                                                   | Promise-like row arrays    |
+| `@voidmix/drizzle/diagnostics` | `buildExplain`, `summarizePlan`, `DrizzleDiagnosticError`                                             | PostgreSQL                 |
 
 Compatibility is currently the exact tested Drizzle version
 `1.0.0-rc.5-5935859`, with `postgres@3.4.9` and `drizzle-orm/postgres-js`.
@@ -29,14 +29,14 @@ Drizzle's `pg-core`, `pgTable`, `PgTable` and `PgDialect` refer to the PostgreSQ
 dialect; these names are independent of the npm `pg` driver.
 
 ```bash
-bun add @raypx/drizzle drizzle-orm@1.0.0-rc.5-5935859 postgres@3.4.9
+bun add @voidmix/drizzle drizzle-orm@1.0.0-rc.5-5935859 postgres@3.4.9
 ```
 
 ```ts
 import { drizzle } from "drizzle-orm/postgres-js";
 import postgres from "postgres";
-import { withoutColumns } from "@raypx/drizzle";
-import { excludedColumns, jsonNumber } from "@raypx/drizzle/postgres";
+import { withoutColumns } from "@voidmix/drizzle";
+import { excludedColumns, jsonNumber } from "@voidmix/drizzle/postgres";
 
 const client = postgres(databaseUrl);
 const db = drizzle({ client });
@@ -79,7 +79,7 @@ authorize ignoring it.
 ## Diagnostics
 
 ```ts
-import { buildExplain, summarizePlan } from "@raypx/drizzle/diagnostics";
+import { buildExplain, summarizePlan } from "@voidmix/drizzle/diagnostics";
 
 const result = await db.execute(buildExplain(statement));
 const summary = summarizePlan(result[0]?.["QUERY PLAN"]);
@@ -99,9 +99,9 @@ It neither parses messages nor maps to an application's business errors.
 
 ## Complete upstream inventory and merge plan
 
-- [drizzle-plus capabilities](https://github.com/raypx/packages/blob/main/docs/drizzle/drizzle-plus-capabilities.md)
-- [better-drizzle capabilities](https://github.com/raypx/packages/blob/main/docs/drizzle/better-drizzle-capabilities.md)
-- [Combined extension design](https://github.com/raypx/packages/blob/main/docs/drizzle/merge-plan.md)
+- [drizzle-plus capabilities](https://github.com/raypx/voidmix/blob/main/docs/drizzle/drizzle-plus-capabilities.md)
+- [better-drizzle capabilities](https://github.com/raypx/voidmix/blob/main/docs/drizzle/better-drizzle-capabilities.md)
+- [Combined extension design](https://github.com/raypx/voidmix/blob/main/docs/drizzle/merge-plan.md)
 - [Source provenance and licenses](NOTICE.md)
 
 The package adapts selected MIT and Apache-2.0 sources. Full source licenses,
@@ -119,4 +119,4 @@ bun run verify
 ```
 
 Releases use independent Changesets. See the repository's
-[release guide](https://github.com/raypx/packages/blob/main/README.md#independent-releases).
+[release guide](https://github.com/raypx/voidmix/blob/main/README.md#independent-releases).

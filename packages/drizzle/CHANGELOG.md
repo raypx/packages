@@ -1,8 +1,8 @@
-# @raypx/drizzle
+# @voidmix/drizzle
 
-## 0.0.0
+## 0.0.0-alpha.0
 
-Initial independent release.
+Initial prerelease.
 
 - Extract typed PostgreSQL column projections, explicit UPSERT mappings and
   postgres.js uniqueness classification into a standalone library.
@@ -17,3 +17,5 @@ Initial independent release.
   implemented.
 - Preserve adapted-source provenance, original commits, full licenses and
   notices at the package root, without a `third-party` directory.
+- Consolidate upstream licensing into `NOTICE.md` and `LICENSE`, reducing the
+  archive's licensing files while preserving complete terms and attribution.

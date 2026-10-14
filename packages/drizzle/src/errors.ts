@@ -2,7 +2,7 @@
  * Adapted from better-drizzle src/shared/errors.ts at
  * f93f1b7aa528fe2db4cddc92a047e7a0ae710a0d.
  * @license Apache-2.0, Copyright 2026 Hiago Almeida.
- * Modified for @raypx/drizzle: postgres.js-only constraint_name matching and
+ * Modified for @voidmix/drizzle: postgres.js-only constraint_name matching and
  * cycle-safe cause traversal; no message parsing or node-postgres metadata.
  * Full license and source references: ../NOTICE.md.
  */

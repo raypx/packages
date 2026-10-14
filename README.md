@@ -1,15 +1,16 @@
-# Raypx Packages
+# Voidmix
 
 Reusable libraries maintained by [Raypx](https://github.com/raypx). This
 repository follows the multi-package structure of
 [TanStack Config](https://github.com/TanStack/config), with an independent version
 and release history for every public package.
 
-| Package                                      | Purpose                                                                               |
-| -------------------------------------------- | ------------------------------------------------------------------------------------- |
-| [@raypx/drizzle](packages/drizzle/README.md) | PostgreSQL extensions for postgres.js, JSON helpers and query diagnostics             |
-| [@raypx/env](packages/env/README.md)         | Typed environment validation, nested presets, defaults and guarded client access      |
-| [@raypx/intl](packages/intl/README.md)       | Configurable locale negotiation, ICU translation, Intl formatting and React providers |
+| Package                                          | Purpose                                                                               |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| [@voidmix/drizzle](packages/drizzle/README.md)   | PostgreSQL extensions for postgres.js, JSON helpers and query diagnostics             |
+| [@voidmix/env](packages/env/README.md)           | Typed environment validation, nested presets, defaults and guarded client access      |
+| [@voidmix/intl](packages/intl/README.md)         | Configurable locale negotiation, ICU translation, Intl formatting and React providers |
+| [@voidmix/tsconfig](packages/tsconfig/README.md) | Strict TypeScript presets for ESM libraries, browser applications and Node runtimes   |
 
 The Drizzle package includes a complete upstream capability inventory and a
 staged merge plan for drizzle-plus and better-drizzle. Its documented shipping
@@ -22,16 +23,20 @@ and each package's current API guide. A private Fumadocs application lives in
 that same directory, with package navigation, table of contents, code highlighting,
 light and dark themes, and local full-text search.
 
-`@raypx/intl` uses `use-intl` 4.14.9 for translation, formatting and `IntlProvider`.
+`@voidmix/intl` uses `use-intl` 4.14.9 for translation, formatting and `IntlProvider`.
 React is a required peer, including for root and server consumers. The package
 adds configurable locale negotiation, persistence, asynchronous catalog loading
 and isolated client factories around that runtime.
 
-`@raypx/env` validates application-supplied schemas with Zod, combines nested
+`@voidmix/env` validates application-supplied schemas with Zod, combines nested
 presets and guards server-only variables in client mode. Its `/runtime` entry
 provides the reusable `NODE_ENV` preset; application variables and secrets stay
 with their owning product. Zod is a required peer and remains external so consumers
 and presets use the same schema classes.
+
+`@voidmix/tsconfig` publishes the strict compiler presets every workspace in this
+repository extends. Presets set compiler behavior only; consumers own file
+layout, path aliases, project references and runtime-specific ambient types.
 
 ## Development
 
@@ -44,18 +49,20 @@ bun run verify
 ```
 
 `verify` checks formatting, lint, strict types, package tests, builds and actual
-tarball consumers, plus independent versioning in a disposable Changesets
-fixture. It also checks and builds the documentation site. `build` runs workspace
-type checks first through Turbo. The
-tarball check verifies every export and declaration, licenses and dependency
-resolution, then installs each package outside the workspace and loads it with
-both Bun and Node. Set `TOOLKIT_NODE_BINARY` to a Node executable when it is not
-on PATH. `TOOLKIT_KEEP_PACK_CHECK=1` retains disposable consumer directories for
-diagnosis.
+tarball consumers, plus independent versioning and pre-mode prerelease rules in
+disposable Changesets fixtures. It also checks and builds the documentation
+site. `build` runs workspace type checks first through Turbo. The tarball check
+verifies every export and declaration, licenses and dependency resolution, then
+installs each package outside the workspace and loads it with both Bun and Node.
+Preset archives are compiled against strictness probes for every exported preset
+and resolved through package exports by Bun and Node. Set `TOOLKIT_NODE_BINARY`
+to a Node executable when it is not on PATH. `TOOLKIT_KEEP_PACK_CHECK=1` retains
+disposable consumer directories for diagnosis.
 
 Use `bun run --cwd packages/drizzle test` to iterate on its narrow test suite.
-Vite+ owns leaf tools and Turbo owns task orchestration. No Raypx product scripts,
-shared configuration package or application test preloads are required.
+Vite+ owns leaf tools and Turbo owns task orchestration. No Raypx product scripts
+or application test preloads are required; TypeScript presets come from the
+`@voidmix/tsconfig` workspace.
 
 Each workspace declares its tested dependency versions directly in its own
 `package.json`. The root owns shared development tools and the Vite override
@@ -89,14 +96,28 @@ no npm release and does not change library versions. See
 Changesets **3.0.3** and `changesets/action@v2.0.0` manage releases. `fixed` and
 `linked` are empty, so packages do not share a version. Dependency changes may
 still require a compatible dependent release. Each package owns its changelog
-and gets a tag containing its manifest version, such as `@raypx/drizzle@0.0.0`.
+and gets a tag containing its manifest version, such as `@voidmix/drizzle@0.0.0-alpha.0`.
 The current version always comes from that package's `package.json`.
 
-Drizzle and Intl were first published at **0.0.0**. Env was published from this
-repository at **0.0.6**, continuing its existing package history. A new package's initial work
-belongs in its initial changelog. Publish its manifest version directly after
-verification; **do not run `bun run version-packages` before its first publication**, because it consumes
+### Alpha prereleases
+
+The repository is in Changesets pre mode with the `alpha` tag
+(`.changeset/pre.json`) until the first stable release. Every package starts at
+**0.0.0-alpha.0**. Consumers pin exact prerelease versions.
+
+A new package's initial work belongs in its initial changelog. Publish its
+manifest version directly after verification; **do not run
+`bun run version-packages` before its first publication**, because it consumes
 changesets and advances versions. Preparing a package does not publish it to npm.
+
+In pre mode, `bun run version-packages` releases only the packages with
+changesets as their next prerelease, such as `0.0.0-alpha.1`. Until a package
+has a stable release, `latest` follows its newest prerelease: npm assigns
+`latest` at the first publication, and Changesets publishes later prereleases
+there too. After the first stable release, prereleases use only `alpha`. `bun
+run changeset pre exit` followed by `bun run version-packages` graduates every
+package to stable **0.0.0** at once. Exit pre mode only for an explicitly
+approved first stable release.
 
 For subsequent releases:
 
@@ -117,10 +138,10 @@ is exactly `true`.
 
 Before enabling it:
 
-- Grant maintainers publish access to the npm `@raypx` scope and confirm that the
+- Grant maintainers publish access to the npm `@voidmix` scope and confirm that the
   package name is available. GitHub organization access does not grant npm scope
   access.
-- Configure npm trusted publishing for repository `raypx/packages`, workflow
+- Configure npm trusted publishing for repository `raypx/voidmix`, workflow
   `release.yml` and environment `npm`. A new package needs its first publication
   by an authorized maintainer before this npm setting can be configured. For a
   registry requiring tokens, set the `NPM_TOKEN` secret instead. Credentials are
@@ -136,14 +157,18 @@ or organization policy. With the default GitHub token, version PRs do not trigge
 another PR workflow automatically; run CI manually before merging, or configure a
 GitHub App token for the version action.
 
-An authorized maintainer can publish the first manifest versions directly after
-`bun run verify`, with npm authentication configured:
+An authorized maintainer publishes manually with npm authentication configured.
+The [publishing runbook](docs/development/publishing.md) covers setup, recovery
+and the first stable release:
 
 ```sh
-NPM_CONFIG_FORCE=true bun run changeset publish
+bun run verify
+bun run release:plan      # read-only: versions missing from npm and their dist-tag
+bun run release:pack      # clean main only: builds, packs with Bun, checks the archives
+bun run release:publish   # publishes the packed commit; append --otp <code> if asked
 ```
 
-`bun run release` runs verification before the same scoped publication command.
+`bun run release` runs verification, packing and publication in sequence.
 
 Changesets uses npm for registry queries and publication. npm otherwise rejects
 the repository's strict Bun `devEngines` configuration with `EBADDEVENGINES`.
@@ -162,13 +187,16 @@ References: [Changesets configuration](https://changesets.dev/guide/config),
 
 Add `packages/<name>` with its own manifest, README, license, strict type check,
 test configuration and checked build. Publish compiled ESM and declarations with
-explicit exports. Keep reusable code independent of product workspaces, declare
-framework and ORM integrations as peers where appropriate, and retain provenance
-for adapted source. Prefer public TypeScript entry files directly under `src/`,
-with supporting implementation modules in subdirectories. Add the package to the
-table above; do not create a fixed or linked Changesets group.
+explicit exports; configuration packages export package-root files directly.
+Keep reusable code independent of product workspaces, declare framework and ORM
+integrations as peers where appropriate, and retain provenance for adapted
+source. Prefer public TypeScript entry files directly under `src/`, with
+supporting implementation modules in subdirectories. Register its archive
+assertions and consumer probes in `scripts/package-checks/<name>.ts` and
+`scripts/package-checks/index.ts`. Add the package to the table above; do not
+create a fixed or linked Changesets group.
 
 ## License
 
-Raypx Packages is Apache-2.0. Adapted upstream code retains its original copyright
+Voidmix is Apache-2.0. Adapted upstream code retains its original copyright
 and license; see package-root `NOTICE.md` and `LICENSE` where adapted code is used.

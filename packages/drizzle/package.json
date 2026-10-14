@@ -1,12 +1,12 @@
 {
-  "name": "@raypx/drizzle",
-  "version": "0.0.0",
+  "name": "@voidmix/drizzle",
+  "version": "0.0.0-alpha.0",
   "description": "Drizzle extensions for PostgreSQL with postgres.js: explicit SQL, JSONB and diagnostics helpers.",
-  "homepage": "https://github.com/raypx/packages/tree/main/packages/drizzle",
+  "homepage": "https://github.com/raypx/voidmix/tree/main/packages/drizzle",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/raypx/packages.git",
+    "url": "git+https://github.com/raypx/voidmix.git",
     "directory": "packages/drizzle"
   },
   "files": [

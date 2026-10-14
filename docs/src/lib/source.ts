@@ -18,6 +18,7 @@ export const docs = defineDocs({
       "packages/drizzle/NOTICE.md",
       "packages/env/README.md",
       "packages/intl/README.md",
+      "packages/tsconfig/README.md",
       "README.md",
     ],
     schema: ({ path }) =>

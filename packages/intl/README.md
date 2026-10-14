@@ -1,4 +1,4 @@
-# @raypx/intl
+# @voidmix/intl
 
 Configurable locale negotiation, ICU translation, Intl formatting, isolated
 React providers and catalog testing helpers. Each application supplies its
@@ -12,7 +12,7 @@ loading and client factory isolation around the upstream runtime.
 ## Configure a locale runtime
 
 ```ts
-import { createLocaleRuntime } from "@raypx/intl";
+import { createLocaleRuntime } from "@voidmix/intl";
 
 export const localeRuntime = createLocaleRuntime({
   locales: ["en", "zh", "de-DE"] as const,
@@ -45,7 +45,7 @@ and optional `Secure`; a cookie name must be a valid HTTP token.
 ## Translate and format
 
 ```ts
-import { createFormatter, createTranslator } from "@raypx/intl";
+import { createFormatter, createTranslator } from "@voidmix/intl";
 
 const translate = createTranslator({
   locale: "en",
@@ -92,7 +92,7 @@ adapter so configured numeric/rounding behavior is preserved.
 ## Resolve server locales
 
 ```ts
-import { createIntlServer } from "@raypx/intl/server";
+import { createIntlServer } from "@voidmix/intl/server";
 import { localeRuntime } from "./locale-runtime.js";
 
 const server = createIntlServer(localeRuntime);
@@ -112,7 +112,7 @@ import {
   createIntlClient,
   createBrowserLocaleStorage,
   createLocalStorageLocaleStorage,
-} from "@raypx/intl/client";
+} from "@voidmix/intl/client";
 import { localeRuntime } from "./locale-runtime.js";
 
 export const {
@@ -171,7 +171,7 @@ envelopes belong to the application.
 ## Check catalog parity
 
 ```ts
-import { assertMessageCatalogParity, extractIcuArguments } from "@raypx/intl/testing";
+import { assertMessageCatalogParity, extractIcuArguments } from "@voidmix/intl/testing";
 
 assertMessageCatalogParity({ greeting: "Hi {name}" }, { greeting: "你好，{name}" }, "en", "zh");
 extractIcuArguments("{count, plural, one {# item} other {# items}}"); // ["count"]

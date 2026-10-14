@@ -105,7 +105,9 @@ jobs:
         run: bun run verify
       - uses: changesets/action/publish@v2.0.0
         with:
-          script: bun run changeset publish
+          # Bun packs the archives so workspace: and catalog: dependencies resolve;
+          # plain changeset publish would pack this Bun workspace with npm.
+          script: bun run release:pack && bun run release:publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"

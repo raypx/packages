@@ -1,14 +1,13 @@
-# @raypx/env
+# @voidmix/env
 
 Typed environment validation with Zod schemas, composable presets and browser access guards.
 
-Version `0.0.6` moves the existing `@raypx/env` package from `raypx-kit` into
-[`raypx/packages`](https://github.com/raypx/packages). Upgrade the package in
-place and install the tested Zod peer. The exports and examples below describe
-this release; application presets and environment loading stay with consumers.
+Install the package with its tested Zod peer. The exports and examples below
+describe this release; application presets and environment loading stay with
+consumers.
 
 ```bash
-bun add @raypx/env zod@4.6.7
+bun add @voidmix/env zod@4.6.7
 ```
 
 The package is ESM-only. Zod is a required external peer, so consumer schemas and
@@ -18,8 +17,8 @@ without Vite; browser builds can supply runtime values explicitly.
 ## Create an environment
 
 ```ts
-import { createEnv, z } from "@raypx/env";
-import { runtimeEnv } from "@raypx/env/runtime";
+import { createEnv, z } from "@voidmix/env";
+import { runtimeEnv } from "@voidmix/env/runtime";
 
 const env = createEnv({
   extends: [runtimeEnv],
@@ -42,7 +41,7 @@ when they are omitted. It does not merge `import.meta.env` and supports a custom
 `clientPrefix`:
 
 ```ts
-import { defineEnv, z } from "@raypx/env";
+import { defineEnv, z } from "@voidmix/env";
 
 const env = defineEnv({
   isServer: false,
@@ -65,7 +64,7 @@ properties are rejected. `_schema` exposes the final Zod schema.
 ## Compose presets
 
 ```ts
-import { createEnv, type Preset, z } from "@raypx/env";
+import { createEnv, type Preset, z } from "@voidmix/env";
 
 const connection = {
   id: "connection",
@@ -107,7 +106,7 @@ types. Input objects are never mutated.
 | `onInvalidAccess(variable)`  | Replace the default browser access failure handler; must throw                        |
 
 ```ts
-import { defineEnv, z } from "@raypx/env";
+import { defineEnv, z } from "@voidmix/env";
 
 const env = defineEnv({
   server: { PORT: z.string() },
@@ -129,7 +128,7 @@ normal validated path; runtime values may remain untransformed.
 The root exports `createEnv`, `defineEnv`, `EnvError` and `z`, plus
 `CreateEnvOptions`, `ClientFormat`, `DefineEnv`, `EnvOptions`, `ExtendsFormat`,
 `FinalSchema`, `Preset`, `Schema`, `ServerFormat` and `SharedFormat` types.
-`@raypx/env/runtime` exports `runtimeEnv`, whose `NODE_ENV` schema defaults to
+`@voidmix/env/runtime` exports `runtimeEnv`, whose `NODE_ENV` schema defaults to
 `development` and accepts `development`, `production` or `test`.
 
 The library performs no `.env` loading, filesystem access or CLI work. Consumers

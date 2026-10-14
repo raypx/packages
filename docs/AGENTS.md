@@ -2,12 +2,12 @@
 
 ## Purpose
 
-An English Fumadocs site for Raypx Packages. This private application does not
+An English Fumadocs site for Voidmix. This private application does not
 publish to npm or change the independent versions of the libraries.
 
 ## Interface
 
-`/docs` contains the overview, Drizzle, Env and Intl API guides, complete capability
+`/docs` contains the overview, Drizzle, Env, Intl and TSConfig guides, complete capability
 inventories, extension designs and maintainer documentation. Search is generated
 from the same content and operates without a third-party service.
 

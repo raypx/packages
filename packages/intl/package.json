@@ -1,12 +1,12 @@
 {
-  "name": "@raypx/intl",
-  "version": "0.0.0",
+  "name": "@voidmix/intl",
+  "version": "0.0.0-alpha.0",
   "description": "Configurable locale negotiation, ICU translation, Intl formatting and isolated React providers.",
-  "homepage": "https://github.com/raypx/packages/tree/main/packages/intl",
+  "homepage": "https://github.com/raypx/voidmix/tree/main/packages/intl",
   "license": "Apache-2.0",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/raypx/packages.git",
+    "url": "git+https://github.com/raypx/voidmix.git",
     "directory": "packages/intl"
   },
   "files": [

@@ -1,0 +1,45 @@
+{
+  "name": "@voidmix/tsconfig",
+  "version": "0.0.0-alpha.0",
+  "description": "Strict TypeScript presets for ESM libraries, browser applications and Node-compatible runtimes.",
+  "homepage": "https://github.com/raypx/voidmix/tree/main/packages/tsconfig",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raypx/voidmix.git",
+    "directory": "packages/tsconfig"
+  },
+  "files": [
+    "base.json",
+    "browser.json",
+    "library.json",
+    "node.json",
+    "react-library.json",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "type": "module",
+  "exports": {
+    "./base.json": "./base.json",
+    "./browser.json": "./browser.json",
+    "./node.json": "./node.json",
+    "./library.json": "./library.json",
+    "./react-library.json": "./react-library.json"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "bun --bun tsc --noEmit -p tsconfig.json",
+    "test": "bun --bun vp test --run",
+    "test:unit": "bun --bun vp test --run --passWithNoTests --exclude '**/component.test.{ts,tsx}' --exclude '**/*.component.test.{ts,tsx}' --exclude '**/*.integration.test.{ts,tsx}'",
+    "test:integration": "bun --bun vp test --run --passWithNoTests integration.test",
+    "test:component": "bun --bun vp test --run --passWithNoTests component.test",
+    "test:coverage": "bun --bun vp test --run --passWithNoTests --coverage --coverage.reporter=text --coverage.reporter=json --coverage.reporter=lcov",
+    "pack:check": "bun pm pack --dry-run --ignore-scripts"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "5.0.3"
+  }
+}
