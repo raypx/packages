@@ -1,0 +1,23 @@
+.changeset/pre/export-infer-env.md
+  s_de2d79b0b75518::t_453d20108adfdf 1-5
+packages/env/CHANGELOG.md
+  s_de2d79b0b75518::t_23e2387abd1e7b 3-8
+packages/env/package.json
+  s_de2d79b0b75518::t_7e354650bca98c 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "54f57cb5c01b226fed64f17b38ea2b9a14286c67",
+  "prompts": {},
+  "sessions": {
+    "s_de2d79b0b75518": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a124a7-0652-7013-8865-d328de672376",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
