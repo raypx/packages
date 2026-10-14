@@ -1,0 +1,19 @@
+bun.lock
+  s_4b2e4cc1fc9312::t_b0e32e233531b3 6,63
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5bb5ff108aaa41b64ade08a6539de32ac818c091",
+  "prompts": {},
+  "sessions": {
+    "s_4b2e4cc1fc9312": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "59bd0d0b-06e5-4154-8a25-2a54249a0f19",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
