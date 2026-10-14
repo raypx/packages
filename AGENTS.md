@@ -41,6 +41,11 @@ orchestration; Vite+ owns packing, formatting, linting and tests. JavaScript too
 CLIs run with `bun --bun`. Node 24 and npm 10.9+ are also needed for packaged
 consumer checks and registry publication; source tooling runs on Bun.
 
+Use `bun --check --tsconfig-override tsconfig.json` for workspace type checks.
+The flag invokes Bun's native checker without resolving the `check` package script;
+keep it free of source entrypoints so it only checks types. Vite+ still generates
+library declarations, and isolated package consumers retain their `tsc` check.
+
 Declare third-party dependency versions directly in the owning `package.json`.
 Internal dependencies use `workspace:*`. Releases pack every archive with
 `bun pm pack`, which resolves `workspace:` and `catalog:` protocols; never publish

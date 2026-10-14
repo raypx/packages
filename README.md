@@ -48,6 +48,12 @@ bun install --frozen-lockfile --ignore-scripts
 bun run verify
 ```
 
+Workspace `check` scripts use Bun's native TypeScript checker through
+`bun --check --tsconfig-override tsconfig.json`. With no source entrypoint, this
+only checks types; `--check` also avoids resolving the same-named package script.
+Vite+ still generates library declarations, and tarball consumers keep a separate
+TypeScript `tsc` check against the published declarations and NodeNext resolution.
+
 `verify` checks formatting, lint, strict types, package tests, builds and actual
 tarball consumers, plus independent versioning and pre-mode prerelease rules in
 disposable Changesets fixtures. It also checks and builds the documentation

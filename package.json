@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "build": "bun --bun turbo run build",
-    "check": "bun --bun tsc --noEmit -p tsconfig.json && bun --bun turbo run check",
+    "check": "bun --check --tsconfig-override tsconfig.json && bun --bun turbo run check",
     "test": "bun --bun turbo run test",
     "lint": "bun --bun vp check",
     "format": "bun --bun vp fmt",
