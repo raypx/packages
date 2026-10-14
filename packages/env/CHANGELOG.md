@@ -1,5 +1,11 @@
 # @voidmix/env
 
+## 0.0.0-alpha.1
+
+### Patch Changes
+
+- Add `InferEnv` helper type to work around TypeScript's type inference limits with deeply nested preset chains
+
 ## 0.0.0-alpha.0
 
 Initial prerelease.

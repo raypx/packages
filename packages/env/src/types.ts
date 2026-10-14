@@ -84,3 +84,22 @@ export type EnvOptions<
 export type DefineEnv<Final extends Schema = Schema> = Readonly<
   z.output<Final> & { _schema: Final }
 >;
+
+/**
+ * Helper to infer the output type of a createEnv call.
+ * Use this when TypeScript cannot infer the type from deeply nested extends chains.
+ *
+ * @example
+ * ```ts
+ * const env = createEnv(myPreset);
+ * export type Env = InferEnv<typeof myPreset>;
+ * ```
+ */
+export type InferEnv<T> = T extends {
+  extends?: infer E extends ExtendsFormat;
+  shared?: infer S extends SharedFormat;
+  server?: infer Server extends ServerFormat;
+  client?: infer C extends ClientFormat;
+}
+  ? DefineEnv<FinalSchema<S, Server, C, E>>
+  : never;
