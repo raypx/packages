@@ -1,0 +1,89 @@
+.changeset/pre.json
+  s_f0589c9f45456d::t_98f88dd5f90123 1-4
+.github/workflows/release.yml
+  s_f0589c9f45456d::t_b4cba8a8f005d4 108-110
+PRODUCT.md
+  s_f0589c9f45456d::t_9aed60a19fd061 1,9
+README.md
+  s_de2d79b0b75518::t_94e0b104e663e8 1,8-13,26,31,37-40,52-60,63-65,99,102-110,113-121,141,144,160-162,165-168,171,190-197,201
+docs/development/publishing.md
+  s_de2d79b0b75518::t_3a1f5498361c2a 1-105
+docs/drizzle/drizzle-plus-capabilities.md
+  s_f0589c9f45456d::t_ca721a153f404a 11,35
+docs/drizzle/merge-plan.md
+  s_f0589c9f45456d::t_437315bb698f9c 11,97
+docs/package.json
+  s_f0589c9f45456d::t_e9966ff15ab91c 30
+docs/src/lib/pages.ts
+  s_f0589c9f45456d::t_6998c6ebe522a8 6,53-59,72-77,82-83,91-92,99,111
+package.json
+  s_de2d79b0b75518::t_b347aee82948e2 2,18-19,22-25,34
+packages/drizzle/AGENTS.md
+  s_f0589c9f45456d::t_a3cd28c10078da 1,36,58
+packages/drizzle/CHANGELOG.md
+  s_f0589c9f45456d::t_d36fd32f19739b 1,3,5,20-21
+packages/drizzle/NOTICE.md
+  s_f0589c9f45456d::t_6b2b72bacb2fa7 3,15,30-31,42,49
+packages/drizzle/README.md
+  s_f0589c9f45456d::t_f786a69c5db059 1,4,12-18,32,38-39,82,102-104,122
+packages/env/AGENTS.md
+  s_f0589c9f45456d::t_9ccefc15f84e31 1,34,47
+packages/env/CHANGELOG.md
+  s_f0589c9f45456d::t_c4b0a6bee31631 1,3,5,12
+packages/env/README.md
+  s_f0589c9f45456d::t_d9f11ed9cc87bc 1,5-7,10,20-21,44,67,109,131
+packages/intl/CHANGELOG.md
+  s_f0589c9f45456d::t_582a29bb50c8db 1,3,5
+packages/tsconfig/CHANGELOG.md
+  s_f0589c9f45456d::t_d2d76fc9a22162 1-12
+packages/tsconfig/README.md
+  s_f0589c9f45456d::t_fd19f95d9407a3 1-84
+packages/tsconfig/package.json
+  s_f0589c9f45456d::t_af2130a1815973 1-45
+scripts/check-packages.ts
+  s_6036953c7012dd::t_f4eb0f09195614 1-211
+scripts/package-checks/drizzle.ts
+  s_6036953c7012dd::t_ea69ddafef3167 1-81
+scripts/package-checks/env.ts
+  s_6036953c7012dd::t_c865050abe9ce7 1-198
+scripts/package-checks/intl.ts
+  s_6036953c7012dd::t_55526468bd7cd8 3,5,7-9,52-114,118,154
+scripts/package-checks/shared.ts
+  s_6036953c7012dd::t_12b776c9ee56cc 1-64
+scripts/package-checks/tsconfig.ts
+  s_6036953c7012dd::t_4b4c8bb10348cd 1-158
+tsconfig.json
+  s_6036953c7012dd::t_831c1bbd270c09 2-3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "dc258827e978afc33220069037f81ef6839babbb",
+  "prompts": {},
+  "sessions": {
+    "s_6036953c7012dd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d879ce-be54-4eb6-9b1a-d04c926345c1",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_de2d79b0b75518": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a124a7-0652-7013-8865-d328de672376",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_f0589c9f45456d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a11baa-cac5-7421-84b8-9739c7d8db00",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
