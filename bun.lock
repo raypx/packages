@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "raypx-toolkit",
+      "name": "voidmix",
       "devDependencies": {
         "@changesets/cli": "3.0.3",
         "@types/node": "26.6.5",
@@ -60,7 +60,7 @@
     },
     "packages/env": {
       "name": "@voidmix/env",
-      "version": "0.0.0-alpha.1",
+      "version": "0.0.0-alpha.2",
       "devDependencies": {
         "@vitest/coverage-v8": "5.0.3",
         "zod": "4.6.7",
