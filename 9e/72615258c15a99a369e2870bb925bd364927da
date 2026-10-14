@@ -1,0 +1,33 @@
+packages/tsconfig/package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 34
+packages/drizzle/package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 47
+package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 12
+packages/env/package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 34
+AGENTS.md
+  s_927a787f99ed8d::t_7c0e3571969dba 44-48
+packages/intl/package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 46
+README.md
+  s_927a787f99ed8d::t_316d455e43d2b1 51-56
+docs/package.json
+  s_927a787f99ed8d::t_7c0e3571969dba 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "9e72615258c15a99a369e2870bb925bd364927da",
+  "prompts": {},
+  "sessions": {
+    "s_927a787f99ed8d": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13aa1-6438-7621-8030-6bbbadb02497",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
