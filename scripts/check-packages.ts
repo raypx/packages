@@ -1,15 +1,18 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { copyFile, cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 
 import { packageChecks } from "./package-checks/index.js";
 import {
+  fixtures,
   node,
   readArchived,
   root,
   rootManifest,
   run,
+  runModules,
   type ArchiveContext,
   type Manifest,
 } from "./package-checks/shared.js";
@@ -109,6 +112,9 @@ try {
     await check.assertArchive?.(context);
 
     const consumer = join(temporary, directory.name);
+    await mkdir(consumer);
+    const probes = join(fixtures, directory.name);
+    if (existsSync(probes)) await cp(probes, consumer, { recursive: true });
     if (check.checkConsumer) {
       await check.checkConsumer({ ...context, consumer });
       checked += 1;
@@ -122,7 +128,6 @@ try {
       );
     }
 
-    await mkdir(consumer);
     // A peer can be explicitly optional. Install it for the export smoke check
     // so all advertised subpaths are exercised, independent of workspace deps.
     await writeFile(
@@ -148,50 +153,19 @@ try {
       ),
     );
     run(process.execPath, ["install", "--ignore-scripts"], consumer);
-    const specifiers = Object.keys(packed.exports).map((key) =>
-      key === "." ? packed.name : `${packed.name}${key.slice(1)}`,
-    );
-    const imports = specifiers
-      .map(
-        (specifier, index) =>
-          `import * as module${index} from ${JSON.stringify(specifier)};\nvoid module${index};`,
-      )
-      .join("\n");
-    await writeFile(
-      join(consumer, "consumer.ts"),
-      `${imports}\n${check.typeProbe ?? ""}\nexport {};\n`,
-    );
-    await writeFile(
-      join(consumer, "tsconfig.json"),
-      JSON.stringify(
-        {
-          compilerOptions: {
-            target: "ES2022",
-            module: "NodeNext",
-            moduleResolution: "NodeNext",
-            strict: true,
-            noEmit: true,
-            // Drizzle's shared declarations reference optional drivers for all
-            // dialects. Check consumer API inference without installing them.
-            skipLibCheck: true,
-          },
-          files: ["consumer.ts"],
-        },
-        null,
-        2,
-      ),
-    );
+    // Load every advertised subpath; the package fixtures probe behavior beyond loading.
+    const reexports = Object.keys(packed.exports)
+      .map((key, index) => `export * as module${index} from "${packed.name}${key.slice(1)}";\n`)
+      .join("");
+    await writeFile(join(consumer, "exports.ts"), reexports);
+    await writeFile(join(consumer, "exports.mjs"), reexports);
+    await copyFile(join(fixtures, "consumer.tsconfig.json"), join(consumer, "tsconfig.json"));
     run(
       process.execPath,
       ["--bun", "./node_modules/typescript/bin/tsc", "-p", "tsconfig.json"],
       consumer,
     );
-    await writeFile(
-      join(consumer, "consumer.mjs"),
-      `${imports}\n${check.runtimeProbe ?? ""}\nconsole.log(${JSON.stringify(`${packed.name}@${packed.version}: exports loaded and runtime behavior passed`)});\n`,
-    );
-    run(process.execPath, ["consumer.mjs"], consumer);
-    run(node, ["consumer.mjs"], consumer);
+    await runModules(consumer);
     await check.afterRuntime?.({ ...context, consumer });
     console.log(
       `${packed.name}@${packed.version}: tarball, declarations, Bun and Node consumers passed`,

@@ -168,14 +168,14 @@ bun run release:pack      # clean main only: builds, packs with Bun, checks the 
 bun run release:publish   # publishes the packed commit; append --otp <code> if asked
 ```
 
-`bun run release` runs verification, packing and publication in sequence.
-
 Changesets uses npm for registry queries and publication. npm otherwise rejects
 the repository's strict Bun `devEngines` configuration with `EBADDEVENGINES`.
 The workflow scopes `force` to registry transport steps. Changesets selects the
 packages and passes each package or tarball directly to npm. Do not set
 `NPM_CONFIG_WORKSPACES=false`: npm can infer the current workspace and reject
 that conflicting configuration.
+Inside the repository, pass `--force` to npm account commands such as
+`npm whoami --force`.
 Installation, versioning, verification and builds retain the Bun runtime checks.
 No publish command is part of installation, normal build or artifact checking.
 
@@ -192,9 +192,11 @@ Keep reusable code independent of product workspaces, declare framework and ORM
 integrations as peers where appropriate, and retain provenance for adapted
 source. Prefer public TypeScript entry files directly under `src/`, with
 supporting implementation modules in subdirectories. Register its archive
-assertions and consumer probes in `scripts/package-checks/<name>.ts` and
-`scripts/package-checks/index.ts`. Add the package to the table above; do not
-create a fixed or linked Changesets group.
+assertions in `scripts/package-checks/<name>.ts` and
+`scripts/package-checks/index.ts`, and add consumer probes as real files under
+`scripts/package-checks/fixtures/<name>/`: top-level `.ts` files compile against
+the installed archive and `.mjs` files run with Bun and Node. Add the package to
+the table above; do not create a fixed or linked Changesets group.
 
 ## License
 

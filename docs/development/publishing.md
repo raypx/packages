@@ -58,9 +58,8 @@ Run every step on an up-to-date `main` with a clean working tree.
    the lockfile and run that repository's verification gate.
 
 When every version is already on npm, packing and publication succeed without
-publishing anything. `bun run release` runs verification, packing and
-publication in sequence. Use the individual commands when npm needs a one-time
-password or the archives need review.
+publishing anything. Packing and publication stay separate commands: packing
+outlasts an npm one-time password, and the archives can be reviewed before upload.
 
 ## CI publication
 

@@ -9,6 +9,8 @@ export default defineConfig({
       "docs/.output/**",
       "docs/.source/**",
       "docs/src/routeTree.gen.ts",
+      // Probes compile against packed archives in disposable consumers.
+      "scripts/package-checks/fixtures/**",
     ],
     jsPlugins: [{ name: "vite-plus", specifier: "vite-plus/oxlint-plugin" }],
     options: { typeAware: true, typeCheck: true },

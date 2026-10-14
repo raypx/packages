@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { readFile } from "node:fs/promises";
+import { readdir, readFile } from "node:fs/promises";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -32,7 +32,12 @@ export interface ConsumerContext extends ArchiveContext {
   consumer: string;
 }
 
-/** A public package's checks beyond the shared archive rules in check-packages.ts. */
+/**
+ * A public package's checks beyond the shared archive rules in check-packages.ts.
+ * Probe programs live in `fixtures/<package directory>/` and are copied into its
+ * consumer: top-level `.ts` files compile against the installed archive and
+ * top-level `.mjs` files run with Bun and Node.
+ */
 export interface PackageCheck {
   assertArchive?(context: ArchiveContext): void | Promise<void>;
   /** Packages whose exports are not JavaScript replace the shared consumer check. */
@@ -40,10 +45,6 @@ export interface PackageCheck {
   /** Consumer dependencies beyond the archive and its peers. */
   consumerDependencies?(context: ArchiveContext): Dependencies;
   consumerDevDependencies?(context: ArchiveContext): Dependencies;
-  /** Type-checked after imports of every export, against the installed archive. */
-  typeProbe?: string;
-  /** Run with Bun and Node after imports of every export. */
-  runtimeProbe?: string;
   afterRuntime?(context: ConsumerContext): Promise<void>;
 }
 
@@ -52,6 +53,7 @@ export const rootManifest = JSON.parse(await readFile(join(root, "package.json")
   devDependencies: Dependencies;
 };
 export const node = process.env.TOOLKIT_NODE_BINARY || "node";
+export const fixtures = join(root, "scripts/package-checks/fixtures");
 
 export function run(binary: string, args: string[], cwd: string): string {
   return execFileSync(binary, args, { cwd, encoding: "utf8", stdio: "pipe" });
@@ -62,3 +64,12 @@ export function readArchived(archive: string, path: string): string {
 }
 
 export const byText = (left: string, right: string) => left.localeCompare(right);
+
+/** Runs every top-level `.mjs` file in a directory with Bun and Node. */
+export async function runModules(directory: string): Promise<void> {
+  const modules = (await readdir(directory)).filter((file) => file.endsWith(".mjs"));
+  for (const file of modules.sort(byText)) {
+    run(process.execPath, [file], directory);
+    run(node, [file], directory);
+  }
+}
