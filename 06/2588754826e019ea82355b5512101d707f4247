@@ -1,0 +1,77 @@
+README.md
+  s_de2d79b0b75518::t_0b013f73c0187c 177-178,195-199
+docs/development/publishing.md
+  s_de2d79b0b75518::t_3282f5de3e4f06 61-62
+package.json
+  s_de2d79b0b75518::t_9df1a726a4b2d3 14-16,20
+scripts/check-packages.ts
+  s_6036953c7012dd::t_01045ccb9f3209 2-3,9,15,115-117,156-162,168
+scripts/package-checks/env.ts
+  s_6036953c7012dd::t_dc983f8ead98fd 5,15-17,19,25,29,33,40,45
+scripts/package-checks/fixtures/consumer.tsconfig.json
+  s_6036953c7012dd::t_28199da7fd4b90 1-13
+scripts/package-checks/fixtures/drizzle/runtime.mjs
+  s_6036953c7012dd::t_3b3584c80e8b09 1-44
+scripts/package-checks/fixtures/drizzle/types.ts
+  s_6036953c7012dd::t_56031dc49fb511 1-27
+scripts/package-checks/fixtures/env/browser/browser.ts
+  s_6036953c7012dd::t_3304cb29cf5291 1-24
+scripts/package-checks/fixtures/env/browser/consumer.mjs
+  s_6036953c7012dd::t_c6790f8e8151b8 1-18
+scripts/package-checks/fixtures/env/runtime.mjs
+  s_6036953c7012dd::t_71d5d7c3d1aaa7 1-58
+scripts/package-checks/fixtures/env/types.ts
+  s_6036953c7012dd::t_3b6fa34b37bdec 1-48
+scripts/package-checks/fixtures/intl/runtime.mjs
+  s_6036953c7012dd::t_e057d615260425 1-139
+scripts/package-checks/fixtures/intl/types.ts
+  s_6036953c7012dd::t_5170169eb603ef 1-46
+scripts/package-checks/fixtures/tsconfig/presets/base.ts
+  s_6036953c7012dd::t_3163241c5a3913 1-2
+scripts/package-checks/fixtures/tsconfig/presets/browser.ts
+  s_6036953c7012dd::t_5834947ab903b5 1-5
+scripts/package-checks/fixtures/tsconfig/presets/library.ts
+  s_6036953c7012dd::t_1a5707113c66ae 1-5
+scripts/package-checks/fixtures/tsconfig/presets/node.ts
+  s_6036953c7012dd::t_e11ed3cd141adc 1-5
+scripts/package-checks/fixtures/tsconfig/presets/react-library.ts
+  s_6036953c7012dd::t_040982851985a9 1-3
+scripts/package-checks/fixtures/tsconfig/resolve.mjs
+  s_6036953c7012dd::t_0ade84ef5a4b5b 1-11
+scripts/package-checks/fixtures/tsconfig/shape.ts
+  s_6036953c7012dd::t_a94312f90ad690 1-3
+scripts/package-checks/fixtures/tsconfig/strict.ts
+  s_6036953c7012dd::t_aa52b959e16956 1-27
+scripts/package-checks/shared.ts
+  s_6036953c7012dd::t_d730f4edcc9677 2,35-40,56,67-75
+scripts/package-checks/tsconfig.ts
+  s_6036953c7012dd::t_63093c8e2a67da 2,9,22-27,69-72,74,79
+tsconfig.json
+  s_6036953c7012dd::t_5799f456c73936 3-4
+vite.config.ts
+  s_6036953c7012dd::t_5a954d7f0f8395 12-13
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "062588754826e019ea82355b5512101d707f4247",
+  "prompts": {},
+  "sessions": {
+    "s_6036953c7012dd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d879ce-be54-4eb6-9b1a-d04c926345c1",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_de2d79b0b75518": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a124a7-0652-7013-8865-d328de672376",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
