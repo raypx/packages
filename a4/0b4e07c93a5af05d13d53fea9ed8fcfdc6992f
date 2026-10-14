@@ -1,0 +1,47 @@
+AGENTS.md
+  s_de2d79b0b75518::t_47e00ad2b0f7f5 19-20
+README.md
+  s_de2d79b0b75518::t_ffc0d521199e4f 55-58,194-196
+packages/drizzle/src/columns.test.ts
+  s_de2d79b0b75518::t_0bea50ba36c092 28-29
+packages/drizzle/src/errors.test.ts
+  s_de2d79b0b75518::t_04d00e387d8fb8 19-21
+packages/env/src/index.test.ts
+  s_de2d79b0b75518::t_06686941e456a0 184-196
+packages/intl/src/locale.test.ts
+  s_de2d79b0b75518::t_8ed573c0e349df 70-71
+packages/intl/src/server.test.ts
+  s_de2d79b0b75518::t_dd9273f5ede17b 38-39
+packages/intl/src/testing.test.ts
+  s_de2d79b0b75518::t_382cae726079ef 3-7,26-34
+packages/tsconfig/AGENTS.md
+  s_de2d79b0b75518::t_b40dbb1cf7f920 35-36
+scripts/check-packages.ts
+  s_6036953c7012dd::t_e8717dd0e66b20 2-3,6,8-20,28-30,43-50,58-65,68-71,73,75-77,80-81,89,95-147,151,154,169-171
+tsconfig.json
+  s_6036953c7012dd::t_c82acf3d9aaf09 3
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "a40b4e07c93a5af05d13d53fea9ed8fcfdc6992f",
+  "prompts": {},
+  "sessions": {
+    "s_6036953c7012dd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d879ce-be54-4eb6-9b1a-d04c926345c1",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_de2d79b0b75518": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a124a7-0652-7013-8865-d328de672376",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
