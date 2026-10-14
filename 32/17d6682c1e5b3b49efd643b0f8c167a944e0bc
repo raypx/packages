@@ -1,0 +1,23 @@
+.changeset/pre/fix-env-type-inference.md
+  s_6036953c7012dd::t_ca3a57d29374be 1-5
+packages/env/src/index.ts
+  s_6036953c7012dd::t_b9ef72caaacdd5 9,243
+packages/env/src/types.ts
+  s_6036953c7012dd::t_78f0ae4be8a65f 87-105
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "3217d6682c1e5b3b49efd643b0f8c167a944e0bc",
+  "prompts": {},
+  "sessions": {
+    "s_6036953c7012dd": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "55d879ce-be54-4eb6-9b1a-d04c926345c1",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
