@@ -215,9 +215,12 @@ bun run release:publish   # publishes the packed commit; append --otp <code> if 
 
 The equivalent CLI commands are `bun run voidmix-dev release plan`,
 `bun run voidmix-dev release pack` and `bun run voidmix-dev release publish`.
+Place options after the final subcommand, such as `release pack --stable`.
 Use `--stable` directly for an approved stable release and `--otp <code>` directly
 for an npm one-time password; OTP values remain strings, including leading zeros.
-Pass other Changesets arguments after `--`.
+Pass other Changesets arguments after `--` using the full CLI command, such as
+`bun run voidmix-dev release publish -- --help`. With the `release:publish` alias,
+Bun consumes a leading separator; use `bun run release:publish -- -- --help`.
 
 Changesets uses npm for registry queries and publication. npm otherwise rejects
 the repository's strict Bun `devEngines` configuration with `EBADDEVENGINES`.

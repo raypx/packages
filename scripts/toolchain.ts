@@ -80,12 +80,16 @@ function checkMise(root: string): string[] {
 }
 
 function checkSetupStep(file: string, location: string, step: Record<string, unknown>): string[] {
+  if (typeof step.uses !== "string") return [];
+  const refSeparator = step.uses.indexOf("@");
+  if (refSeparator < 0) return [];
+  const repository = step.uses.slice(0, refSeparator).toLowerCase();
   const setup = (
     [
-      ["node", "actions/setup-node@", ".nvmrc"],
-      ["bun", "oven-sh/setup-bun@", "package.json"],
+      ["node", "actions/setup-node", ".nvmrc"],
+      ["bun", "oven-sh/setup-bun", "package.json"],
     ] as const
-  ).find(([, action]) => typeof step.uses === "string" && step.uses.startsWith(action));
+  ).find(([, action]) => repository === action);
   if (!setup) return [];
   const [tool, , source] = setup;
   const findings: string[] = [];

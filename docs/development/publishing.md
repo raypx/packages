@@ -42,6 +42,7 @@ bun run voidmix-dev release publish
 
 The existing `release:plan`, `release:pack` and `release:publish` scripts remain
 aliases. `doctor` and `toolchain:check` also remain available as aliases.
+Place options after the final subcommand, such as `release pack --stable`.
 The CLI uses citty; toolchain checks parse TOML and YAML with confbox. Both are
 private repository tools and do not change the published libraries.
 
@@ -70,7 +71,10 @@ private repository tools and do not change the published libraries.
    `--otp <code>` directly when npm asks for a one-time password, or set
    `NPM_CONFIG_OTP`. The CLI treats OTP codes as strings and preserves leading
    zeros. Pass additional Changesets arguments after `--`, as in
-   `bun run voidmix-dev release publish -- <Changesets args>`.
+   `bun run voidmix-dev release publish -- <Changesets args>`. This also forwards
+   `--help` to Changesets. With the `release:publish` alias and no preceding
+   wrapper options, Bun consumes the leading separator; use
+   `bun run release:publish -- -- <Changesets args>`.
 6. **Push.** Run the `git push origin main <tags>` command the script prints for
    the tags it found locally, so each tag such as `@voidmix/env@0.0.0-alpha.0`
    reaches GitHub.

@@ -255,6 +255,66 @@ describe("development toolchain declarations", () => {
     expect(checkToolchain(root)).toEqual([]);
   });
 
+  it("recognizes mixed-case setup repositories with case-sensitive refs", () => {
+    const source = workflow
+      .replace("actions/setup-node@v7", "AcTiOnS/SeTuP-NoDe@Refs/Heads/KeepCase")
+      .replace("oven-sh/setup-bun@v2", "OvEn-Sh/SeTuP-BuN@KeepCase");
+    const root = repository({ ".github/workflows/ci.yml": source });
+    expect(checkToolchain(root)).toEqual([]);
+    expect(readFileSync(join(root, ".github/workflows/ci.yml"), "utf8")).toBe(source);
+  });
+
+  it.each([
+    ["node", "AcTiOnS/SeTuP-NoDe@KeepCase", ".nvmrc", nodeVersion],
+    ["bun", "OvEn-Sh/SeTuP-BuN@KeepCase", "package.json", bunVersion],
+  ])(
+    "rejects literal %s versions in mixed-case setup repositories",
+    (tool, action, file, version) => {
+      const source = `jobs:
+  verify:
+    steps:
+      - uses: ${action}
+        with:
+          ${tool}-version-file: ${file}
+          ${tool}-version: '${version}'
+`;
+      expect(checkToolchain(repository({ ".github/workflows/ci.yml": source }))).toContain(
+        `.github/workflows/ci.yml: read ${tool}-version-file: ${file} instead of a literal version`,
+      );
+    },
+  );
+
+  it.each([
+    ["node", "AcTiOnS/SeTuP-NoDe@KeepCase", ".NVMRC", ".nvmrc"],
+    ["bun", "OvEn-Sh/SeTuP-BuN@KeepCase", "PACKAGE.JSON", "package.json"],
+  ])("keeps %s version-file values case-sensitive", (tool, action, actual, expected) => {
+    const source = `jobs:
+  verify:
+    steps:
+      - uses: ${action}
+        with: { ${tool}-version-file: ${actual} }
+`;
+    expect(checkToolchain(repository({ ".github/workflows/ci.yml": source }))).toContain(
+      `.github/workflows/ci.yml: ${tool}-version-file must be ${expected}`,
+    );
+  });
+
+  it.each([
+    "AcTiOnS/SeTuP-NoDe-Extra@v1",
+    "Other-AcTiOnS/SeTuP-NoDe@v1",
+    "AcTiOnS/SeTuP-NoDe/Subdirectory@v1",
+    "OvEn-Sh/SeTuP-BuN-Extra@v1",
+    "Other-OvEn-Sh/SeTuP-BuN@v1",
+  ])("does not apply setup rules to a different repository or action path: %s", (action) => {
+    const source = `jobs:
+  verify:
+    steps:
+      - uses: ${action}
+        with: { node-version: 26, bun-version: latest }
+`;
+    expect(checkToolchain(repository({ ".github/workflows/ci.yml": source }))).toEqual([]);
+  });
+
   it("ignores setup-like text in comments, scripts and unrelated actions", () => {
     const root = repository({
       ".github/workflows/ci.yml": `${workflow}

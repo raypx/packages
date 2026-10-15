@@ -14,6 +14,11 @@ function assertArguments(args: { _: string[] }, allowed: string[]) {
   if (args._.length) throw new Error("Unexpected positional arguments.");
 }
 
+/** Citty discards arguments before a selected subcommand; reject options there. */
+function assertSubcommandPosition({ rawArgs }: { rawArgs: string[] }) {
+  if (rawArgs[0]?.startsWith("-")) throw new Error("Options must follow the final subcommand.");
+}
+
 /** Remove only our wrapper option; Changesets receives its original argument tokens. */
 function publishArguments(rawArgs: string[]): string[] {
   const separator = rawArgs.indexOf("--");
@@ -26,6 +31,7 @@ function publishArguments(rawArgs: string[]): string[] {
 
 export const command = defineCommand({
   meta: { name: "voidmix-dev", description: "Voidmix repository development and release tools" },
+  setup: assertSubcommandPosition,
   subCommands: {
     doctor: defineCommand({
       meta: { name: "doctor", description: "Check the active Node and Bun executables" },
@@ -40,6 +46,7 @@ export const command = defineCommand({
     }),
     toolchain: defineCommand({
       meta: { name: "toolchain", description: "Inspect development toolchain configuration" },
+      setup: assertSubcommandPosition,
       subCommands: {
         check: defineCommand({
           meta: {
@@ -64,6 +71,7 @@ export const command = defineCommand({
         name: "release",
         description: "Plan, pack or publish independently versioned libraries",
       },
+      setup: assertSubcommandPosition,
       subCommands: {
         plan: defineCommand({
           meta: {
@@ -105,4 +113,18 @@ export const command = defineCommand({
   },
 });
 
-if (import.meta.main) await runMain(command);
+export async function main(rawArgs = process.argv.slice(2)): Promise<void> {
+  const separator = rawArgs.indexOf("--");
+  const wrapperArgs = separator < 0 ? rawArgs : rawArgs.slice(0, separator);
+  const help = wrapperArgs.some((arg) => arg === "--help" || arg === "-h");
+  // Declaring help disables citty's global scan, so forwarded help reaches Changesets.
+  const entry: typeof command = help
+    ? command
+    : {
+        ...command,
+        args: { help: { type: "boolean", alias: "h", description: "Show command help" } },
+      };
+  await runMain(entry, { rawArgs });
+}
+
+if (import.meta.main) await main();

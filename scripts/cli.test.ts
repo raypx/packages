@@ -1,9 +1,11 @@
 import { spawnSync } from "node:child_process";
+import { mkdtempSync, rmSync, writeFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { runCommand } from "citty";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
-import { command } from "./cli.js";
+import { command, main } from "./cli.js";
 
 const actions = vi.hoisted(() => ({
   plan: vi.fn(),
@@ -30,6 +32,32 @@ function expectNoRelease() {
   expect(actions.publish).not.toHaveBeenCalled();
 }
 
+/** Exercise the executable entry without ever loading real release operations. */
+function runCli(rawArgs: string[], env: NodeJS.ProcessEnv = {}) {
+  const fixture = mkdtempSync(join(tmpdir(), "voidmix-cli-"));
+  const preload = join(fixture, "preload.ts");
+  try {
+    writeFileSync(
+      preload,
+      `import { mock } from "bun:test";
+mock.module(${JSON.stringify(join(root, "scripts/release.ts"))}, () =>
+  Object.fromEntries(["plan", "pack", "publish"].map(name => [name,
+    (...args) => console.log(JSON.stringify({ release: name, args }))
+  ]))
+);
+`,
+    );
+    return spawnSync(process.execPath, ["--preload", preload, "scripts/cli.ts", ...rawArgs], {
+      cwd: root,
+      encoding: "utf8",
+      timeout: 10_000,
+      env: { ...process.env, NO_COLOR: "1", ...env },
+    });
+  } finally {
+    rmSync(fixture, { recursive: true, force: true });
+  }
+}
+
 beforeEach(() => {
   for (const action of Object.values(actions)) action.mockReset();
   actions.checkToolchain.mockReturnValue([]);
@@ -46,6 +74,21 @@ afterEach(() => {
 });
 
 describe("development CLI routes", () => {
+  it.each([
+    ["--dry-run", "release", "publish"],
+    ["release", "--unexpected", "pack"],
+    ["release", "--stable", "publish"],
+    ["--stable", "release", "pack"],
+    ["toolchain", "--unexpected", "check"],
+  ])("rejects misplaced parent options before dispatch: %j", async (...rawArgs) => {
+    await expect(runCommand(command, { rawArgs })).rejects.toThrow(
+      "Options must follow the final subcommand",
+    );
+    expectNoRelease();
+    expect(actions.assertToolchainRuntime).not.toHaveBeenCalled();
+    expect(actions.checkToolchain).not.toHaveBeenCalled();
+  });
+
   it("runs the doctor without invoking configuration or release checks", async () => {
     await runCommand(command, { rawArgs: ["doctor"] });
     expect(actions.assertToolchainRuntime).toHaveBeenCalledExactlyOnceWith(root);
@@ -181,23 +224,59 @@ describe("release CLI arguments", () => {
 });
 
 describe("real CLI help", () => {
+  it.each(["--help", "-h"])(
+    "forwards %s after -- through the actual main handler",
+    async (help) => {
+      const exit = vi.spyOn(process, "exit").mockImplementation(() => {
+        throw new Error("Unexpected process exit");
+      });
+      await main(["release", "publish", "--stable", "--otp", "012345", "--", help]);
+      expect(exit).not.toHaveBeenCalled();
+      expect(actions.publish).toHaveBeenCalledExactlyOnceWith(true, ["--otp", "012345", help]);
+      expect(console.log).not.toHaveBeenCalled();
+    },
+  );
+
+  it("does not let forwarded help bypass misplaced-option validation", async () => {
+    const exit = vi.spyOn(process, "exit").mockImplementation(() => {
+      throw new Error("Expected failure exit");
+    });
+    vi.spyOn(console, "error").mockImplementation(() => {});
+    await expect(main(["--dry-run", "release", "publish", "--", "--help"])).rejects.toThrow(
+      "Expected failure exit",
+    );
+    expect(exit).toHaveBeenCalledExactlyOnceWith(1);
+    expectNoRelease();
+  });
+
+  it.each([
+    ["--dry-run", "release", "publish"],
+    ["release", "--stable", "publish"],
+  ])("fails at the executable entry for misplaced options: %j", (...args) => {
+    const result = runCli(args);
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(1);
+    expect(result.stderr).toContain("Options must follow the final subcommand");
+    expect(result.stdout).not.toContain('"release":');
+  });
+
+  it.each(["--help", "-h"])("forwards %s after -- at the executable entry", (help) => {
+    const result = runCli(["release", "publish", "--", help]);
+    expect(result.error).toBeUndefined();
+    expect(result.status).toBe(0);
+    expect(JSON.parse(result.stdout)).toEqual({ release: "publish", args: [false, [help]] });
+  });
+
   it.each(["--help", "doctor --help", "release publish --help"])(
     "shows %s successfully even when the selected Node does not exist",
     (input) => {
-      const result = spawnSync(process.execPath, ["scripts/cli.ts", ...input.split(" ")], {
-        cwd: root,
-        encoding: "utf8",
-        timeout: 10_000,
-        env: {
-          ...process.env,
-          NO_COLOR: "1",
-          TOOLKIT_NODE_BINARY: join(root, ".missing-node-for-cli-help"),
-        },
+      const result = runCli(input.split(" "), {
+        TOOLKIT_NODE_BINARY: join(root, ".missing-node-for-cli-help"),
       });
       expect(result.error).toBeUndefined();
       expect(result.status).toBe(0);
       expect(result.stdout).toMatch(/usage/i);
-      expect(result.stdout).not.toContain("Publishing:");
+      expect(result.stdout).not.toContain('"release":');
       expect(result.stderr).not.toMatch(
         /Node is unavailable|Expected Node|Toolchain configuration failed/,
       );

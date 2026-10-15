@@ -101,9 +101,13 @@ Do not publish to npm without direct authorization. `pack:check` builds local
 tarballs and installs them in a disposable directory; it does not publish.
 `release:plan` is read-only, `release:pack` replaces only `.changeset/pack/release/`,
 and `release:publish` publishes; follow `docs/development/publishing.md`.
-The CLI accepts release `--stable` and string `--otp <code>` flags directly.
+The CLI accepts release `--stable` and string `--otp <code>` flags directly,
+after the final subcommand. Reject options before a subcommand rather than losing them.
 Prefer `--` for additional Changesets arguments; retain direct forwarding for
-existing publish invocations and preserve OTP leading zeros.
+existing publish invocations and preserve OTP leading zeros. Help after `--`
+belongs to Changesets. Prefer the full `voidmix-dev release publish` command for
+forwarding; Bun consumes a leading separator on the `release:publish` alias,
+which needs `-- -- <Changesets args>` when no wrapper options precede it.
 Automatic version PRs and npm publication are disabled independently in CI until
 maintainers configure `VERSION_PR_ENABLED` and `NPM_PUBLISH_ENABLED`, respectively.
 Version PRs also require the repository's Actions PR-creation permission.
