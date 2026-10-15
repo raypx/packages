@@ -1,0 +1,58 @@
+scripts/release.ts
+  s_3e641cc9e413f1::t_18efcc9470682e 72,127-128,159,162
+  s_3e641cc9e413f1::t_cc53afe8fbbd3d 163-165,174,183,240,245
+scripts/toolchain.test.ts
+  s_3e641cc9e413f1::t_899ad34bdb82dd 149-192,243-362
+  s_5722ecc24d1fe3::t_f5abe965bad8d3 363
+package.json
+  s_3e641cc9e413f1::t_4e5e24fb3c4d7e 11-13,25-27,37-38
+AGENTS.md
+  s_3e641cc9e413f1::t_87646a6c3c15e4 50,52,54-56,104
+  s_3e641cc9e413f1::t_4969be0cb82efa 51,53,105-106
+scripts/cli.ts
+  s_3e641cc9e413f1::t_0464b5e19543ca 2,5-9,11,36-38,51-53,81,83-84
+  s_3e641cc9e413f1::t_4e5e24fb3c4d7e 10,12-24,26-30,32-35,39-41,43-44,46-50,54-59,61-62,64-71,73-80,85-99
+  s_3e641cc9e413f1::t_a1ef7f20581be8 31,42,45,60,63,72,82
+  s_3e641cc9e413f1::t_7bdbe0d678c975 100-108
+docs/development/publishing.md
+  s_3e641cc9e413f1::t_72e998e7d7d0e0 25-27
+  s_3e641cc9e413f1::t_87646a6c3c15e4 23-24,35-47,70-73,117-118
+README.md
+  s_3e641cc9e413f1::t_4969be0cb82efa 72
+  s_3e641cc9e413f1::t_72e998e7d7d0e0 92-93
+  s_3e641cc9e413f1::t_87646a6c3c15e4 61,67-71,75-78,216-220
+  s_3e641cc9e413f1::t_7d9a6d5d8ad28b 73-74
+  s_3e641cc9e413f1::t_063787e6f0fb97 221
+scripts/toolchain.ts
+  s_3e641cc9e413f1::t_0575fbef328de0 4-5,52-86,88-89,91-140
+  s_3e641cc9e413f1::t_d26953b3e2d6b2 87,90
+  s_3e641cc9e413f1::t_59f7361b0a0f0e 169,183
+scripts/cli.test.ts
+  s_3e641cc9e413f1::t_db8808b3bdddf3 1-206
+bun.lock
+  s_3e641cc9e413f1::t_4b576b551f33aa 11-12,842-843,856-857
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "5477b518b6930d52fb09a7b43fabd00b2f998c16",
+  "prompts": {},
+  "sessions": {
+    "s_3e641cc9e413f1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13fd4-0d2b-7ab3-b592-1d5ff67887e9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_5722ecc24d1fe3": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13eed-0d56-73d1-bfa0-ddde7cacea50",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
