@@ -1,0 +1,65 @@
+.nvmrc
+  s_3e641cc9e413f1::t_932f4d239e373c 1
+docs/AGENTS.md
+  s_3e641cc9e413f1::t_d295818763030d 25-30
+turbo.json
+  s_3e641cc9e413f1::t_932f4d239e373c 22-24
+scripts/toolchain.test.ts
+  s_3e641cc9e413f1::t_9e72aa0e5c0b3d 1-292
+  s_3e641cc9e413f1::t_2f4b944d6046f8 293-295
+vitest.config.ts
+  s_3e641cc9e413f1::t_932f4d239e373c 1,3-8
+  s_3e641cc9e413f1::t_fa74c0d2333a15 2
+scripts/doctor.ts
+  s_3e641cc9e413f1::t_932f4d239e373c 1-11
+mise.toml
+  s_3e641cc9e413f1::t_932f4d239e373c 1-3
+.github/workflows/release.yml
+  s_3e641cc9e413f1::t_d295818763030d 28,32,68,72,97,102
+scripts/toolchain.ts
+  s_3e641cc9e413f1::t_932f4d239e373c 1-119
+  s_3e641cc9e413f1::t_23648850a40f7a 120-138
+scripts/check-releases.ts
+  s_3e641cc9e413f1::t_6f6a9e629a41b8 10-12,39
+scripts/check-toolchain.ts
+  s_3e641cc9e413f1::t_932f4d239e373c 1-8
+  s_3e641cc9e413f1::t_39ce9451a24129 9-10
+package.json
+  s_3e641cc9e413f1::t_932f4d239e373c 11-12,15-16,19,34
+  s_3e641cc9e413f1::t_16ab3311823462 55-57
+AGENTS.md
+  s_3e641cc9e413f1::t_d295818763030d 39-54,104-105,107-108
+docs/package.json
+  s_3e641cc9e413f1::t_932f4d239e373c 26
+scripts/check-packages.ts
+  s_3e641cc9e413f1::t_6f6a9e629a41b8 7,30
+docs/development/publishing.md
+  s_3e641cc9e413f1::t_879a0c5c6c3e17 38-39
+  s_3e641cc9e413f1::t_d295818763030d 19-27,36-37
+tsconfig.json
+  s_3e641cc9e413f1::t_932f4d239e373c 3
+README.md
+  s_3e641cc9e413f1::t_879a0c5c6c3e17 79-80,88-89
+  s_3e641cc9e413f1::t_d295818763030d 43-49,52-62,67-71,78,87,118-120
+  s_3e641cc9e413f1::t_40bcde3cc8e888 121
+.github/workflows/ci.yml
+  s_3e641cc9e413f1::t_d295818763030d 25,29
+bun.lock
+  s_3e641cc9e413f1::t_53ad2f916df737 9,33,618,1360
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "e482052c2a5132cc4d8c6a4730937726f6c047ba",
+  "prompts": {},
+  "sessions": {
+    "s_3e641cc9e413f1": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a13fd4-0d2b-7ab3-b592-1d5ff67887e9",
+        "model": "gpt-6.1-sol"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
