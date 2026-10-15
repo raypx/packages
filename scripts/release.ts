@@ -51,10 +51,6 @@ const changesets = join(root, "node_modules/@changesets/cli/bin.js");
 const npmEnvironment = { ...process.env, NPM_CONFIG_FORCE: "true" };
 const localProtocol = /^(?:workspace:|catalog:|file:|link:)/;
 
-const [command, ...options] = process.argv.slice(2);
-const stable = options.includes("--stable");
-const passthrough = options.filter((option) => option !== "--stable");
-
 function readJson<T>(path: string): Promise<T> {
   return readFile(path, "utf8").then((content) => JSON.parse(content) as T);
 }
@@ -73,7 +69,7 @@ function changeset(args: string[]): void {
 }
 
 /** Pre mode selects the dist-tag; leaving it requires an explicit stable release. */
-async function expectedTag(): Promise<string> {
+async function expectedTag(stable: boolean): Promise<string> {
   const preFile = join(root, ".changeset/pre.json");
   if (!existsSync(preFile)) {
     assert.ok(stable, "Pre mode was exited. Pass --stable only for an approved stable release.");
@@ -128,8 +124,8 @@ async function integrityOf(archive: string): Promise<string> {
     .digest("base64")}`;
 }
 
-async function createPlan(file: string): Promise<PlanEntry[]> {
-  const tag = await expectedTag();
+async function createPlan(file: string, stable: boolean): Promise<PlanEntry[]> {
+  const tag = await expectedTag(stable);
   changeset(["publish-plan", "-o", file]);
   const entries = await publications(file);
   for (const entry of entries) {
@@ -160,10 +156,13 @@ async function workspaceDirectories(): Promise<Map<string, string>> {
 }
 
 /** Read-only preview; it never replaces a packed release plan. */
-async function plan(): Promise<void> {
+export async function plan(stable = false): Promise<void> {
   const directory = await mkdtemp(join(tmpdir(), "voidmix-plan-"));
   try {
-    describe("Planned publications:", await createPlan(join(directory, "publish-plan.json")));
+    describe(
+      "Planned publications:",
+      await createPlan(join(directory, "publish-plan.json"), stable),
+    );
   } finally {
     await rm(directory, { recursive: true, force: true });
   }
@@ -172,7 +171,7 @@ async function plan(): Promise<void> {
     console.log(`\nUnreleased changesets: ${pending.join(", ")}. Run bun run version-packages.`);
 }
 
-async function pack(): Promise<void> {
+export async function pack(stable = false): Promise<void> {
   assertReleaseSource();
   const pending = await pendingChangesets();
   assert.deepEqual(
@@ -181,7 +180,7 @@ async function pack(): Promise<void> {
     `Unreleased changesets: ${pending.join(", ")}. Run bun run version-packages and commit first.`,
   );
   await rm(packDirectory, { recursive: true, force: true });
-  const planned = await createPlan(planFile);
+  const planned = await createPlan(planFile, stable);
   const recordCommit = () =>
     writeFile(releaseFile, `${JSON.stringify({ commit: git("rev-parse", "HEAD") }, null, 2)}\n`);
   // Pushes without new versions reach CI's publish step too; they succeed as no-ops.
@@ -238,12 +237,12 @@ async function pack(): Promise<void> {
   console.log("\nInspect .changeset/pack/release, then run: bun run release:publish");
 }
 
-async function publish(): Promise<void> {
+export async function publish(stable = false, passthrough: string[] = []): Promise<void> {
   assertReleaseSource();
   assert.ok(existsSync(releaseFile), "Run bun run release:pack before publishing.");
   const { commit } = await readJson<{ commit: string }>(releaseFile);
   assert.equal(git("rev-parse", "HEAD"), commit, "HEAD changed after packing; pack again.");
-  const tag = await expectedTag();
+  const tag = await expectedTag(stable);
   const entries = await publications();
   const [first] = entries;
   if (!first) {
@@ -271,17 +270,3 @@ async function publish(): Promise<void> {
     console.log(`\nPush main and the release tags:\n  git push origin main ${tags.join(" ")}`);
   console.log(`Confirm each dist-tag, for example:\n  npm view ${first.name} dist-tags`);
 }
-
-const commands = { plan, pack, publish };
-const isCommand = (value: string | undefined): value is keyof typeof commands =>
-  value !== undefined && Object.hasOwn(commands, value);
-
-assert.ok(
-  isCommand(command),
-  "Usage: bun scripts/release.ts <plan|pack|publish> [--stable] [--otp <code>]",
-);
-assert.ok(
-  command === "publish" || passthrough.length === 0,
-  `Unexpected options for ${command}: ${passthrough.join(" ")}`,
-);
-await commands[command]();

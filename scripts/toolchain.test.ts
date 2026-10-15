@@ -146,6 +146,50 @@ describe("development toolchain declarations", () => {
     );
   });
 
+  it.each([
+    "[settings]\nidiomatic_version_file_enable_tools = ['bun', 'node']\n",
+    '[settings]\nidiomatic_version_file_enable_tools = [\n  "node", # Node pin\n  "bun",\n]\n',
+    'settings = { idiomatic_version_file_enable_tools = ["bun", "node"] }\n',
+  ])("accepts equivalent TOML settings regardless of formatting: %s", (mise) => {
+    expect(checkToolchain(repository({ "mise.toml": mise }))).toEqual([]);
+  });
+
+  it.each([
+    `[tools.node]\nversion = '${nodeVersion}'\n`,
+    `tools.node = '${nodeVersion}'\n`,
+    `tools = { node = '${nodeVersion}' }\n`,
+  ])("rejects equivalent TOML tool declarations: %s", (tools) => {
+    const mise = `${tools}\n[settings]\nidiomatic_version_file_enable_tools = ['node', 'bun']\n`;
+    expect(checkToolchain(repository({ "mise.toml": mise }))).toContain(
+      "mise.toml: read existing pins instead of declaring [tools] versions",
+    );
+  });
+
+  it.each([
+    "idiomatic_version_file_enable_tools = ['node', 'bun']\n",
+    "[unrelated]\nidiomatic_version_file_enable_tools = ['node', 'bun']\n",
+    "[settings]\nidiomatic_version_file_enable_tools = 'node,bun'\n",
+  ])("requires the enabled tool list in the settings table: %s", (mise) => {
+    expect(checkToolchain(repository({ "mise.toml": mise }))).toContain(
+      "mise.toml: enable idiomatic version files for node and bun",
+    );
+  });
+
+  it("reports invalid TOML while continuing to check other declarations", () => {
+    const findings = checkToolchain(
+      repository({
+        "mise.toml": "[settings\n",
+        "README.md": "Develop with Node 26.0.0.\n",
+      }),
+    );
+    expect(findings).toEqual(
+      expect.arrayContaining([
+        "mise.toml: invalid TOML configuration",
+        `README.md: documented Node is 26.0.0, expected ${nodeVersion}`,
+      ]),
+    );
+  });
+
   it("reports root engine drift and an install guard that no longer enforces Bun", () => {
     const root = repository();
     changeManifest(root, (manifest) => {
@@ -193,6 +237,127 @@ describe("development toolchain declarations", () => {
     });
     expect(checkToolchain(root)).toContain(
       ".github/workflows/ci.yml: node-version-file must be .nvmrc",
+    );
+  });
+
+  it("accepts quoted actions and source files, inline mappings and YAML comments", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": `jobs:
+  verify:
+    steps:
+      - uses: 'actions/setup-node@v7' # Select Node
+        with: { node-version-file: ".nvmrc" }
+      - uses: "oven-sh/setup-bun@v2"
+        with:
+          bun-version-file: 'package.json' # Select Bun
+`,
+    });
+    expect(checkToolchain(root)).toEqual([]);
+  });
+
+  it("ignores setup-like text in comments, scripts and unrelated actions", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": `${workflow}
+      # uses: actions/setup-node@v7
+      - run: |
+          uses: oven-sh/setup-bun@v2
+          node-version: 26
+          bun-version-file: .bun-version
+      - uses: example/unrelated@v1
+        with:
+          node-version: 26
+          bun-version-file: .bun-version
+`,
+    });
+    expect(checkToolchain(root)).toEqual([]);
+  });
+
+  it.each([
+    `jobs:
+  verify:
+    steps:
+      - uses: actions/setup-node@v7
+      - uses: example/unrelated@v1
+        with: { node-version-file: .nvmrc }
+`,
+    `jobs:
+  verify:
+    steps:
+      - uses: actions/setup-node@v7
+  other:
+    steps:
+      - uses: example/unrelated@v1
+        with: { node-version-file: .nvmrc }
+`,
+  ])("requires each setup step to own its version-file input: %s", (workflow) => {
+    expect(checkToolchain(repository({ ".github/workflows/ci.yml": workflow }))).toContain(
+      ".github/workflows/ci.yml: every node setup must read .nvmrc",
+    );
+  });
+
+  it("does not treat environment variables as setup inputs", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": workflow.replace(
+        "with:\n          node-version-file: .nvmrc",
+        "env:\n          node-version-file: .nvmrc",
+      ),
+    });
+    expect(checkToolchain(root)).toContain(
+      ".github/workflows/ci.yml: every node setup must read .nvmrc",
+    );
+  });
+
+  it("rejects a literal version even alongside the correct version-file", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": workflow.replace(
+        "node-version-file: .nvmrc",
+        `node-version-file: .nvmrc\n          node-version: '${nodeVersion}'`,
+      ),
+    });
+    expect(checkToolchain(root)).toContain(
+      ".github/workflows/ci.yml: read node-version-file: .nvmrc instead of a literal version",
+    );
+  });
+
+  it("allows reusable workflow jobs without steps", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": `${workflow}
+  reusable:
+    uses: example/workflows/.github/workflows/shared.yml@v1
+`,
+    });
+    expect(checkToolchain(root)).toEqual([]);
+  });
+
+  it.each([
+    ["- item\n", "workflow jobs must be a mapping"],
+    ["jobs: []\n", "workflow jobs must be a mapping"],
+    ["jobs: { verify: null }\n", "jobs.verify must be a mapping"],
+    ["jobs: { verify: { steps: {} } }\n", "jobs.verify.steps must be an array"],
+    ["jobs: { verify: { steps: [null] } }\n", "jobs.verify.steps[0] must be a mapping"],
+    [
+      "jobs: { verify: { steps: [{ uses: 'actions/setup-node@v7', with: [] }] } }\n",
+      "jobs.verify.steps[0].with must be a mapping",
+    ],
+  ])("reports malformed workflow structure for %s", (workflow, message) => {
+    expect(checkToolchain(repository({ ".github/workflows/ci.yml": workflow }))).toContain(
+      `.github/workflows/ci.yml: ${message}`,
+    );
+  });
+
+  it("reports invalid YAML while continuing to inspect other workflow files", () => {
+    const root = repository({
+      ".github/workflows/ci.yml": "jobs: [\n",
+      ".github/workflows/release.yaml": workflow.replace(
+        "bun-version-file: package.json",
+        "bun-version-file: .bun-version",
+      ),
+    });
+    expect(checkToolchain(root)).toEqual(
+      expect.arrayContaining([
+        ".github/workflows/ci.yml: invalid YAML configuration",
+        ".github/workflows/release.yaml: bun-version-file must be package.json",
+      ]),
     );
   });
 

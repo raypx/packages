@@ -58,11 +58,23 @@ Without activation, use `mise exec -- <command>`. nvm, fnm and direct installs
 also work when they select the same pinned versions.
 
 ```sh
+bun install --frozen-lockfile --ignore-scripts
 bun run doctor
 bun run toolchain:check
-bun install --frozen-lockfile --ignore-scripts
 bun run verify
 ```
+
+Repository maintenance commands share the `voidmix-dev` CLI:
+
+```sh
+bun run voidmix-dev --help
+bun run voidmix-dev doctor
+bun run voidmix-dev toolchain check
+```
+
+Install dependencies before using the CLI. The existing `doctor`,
+`toolchain:check` and `release:plan`, `release:pack`, `release:publish` scripts
+remain aliases for its commands.
 
 `doctor` checks the active Bun and Node executables. `toolchain:check` checks the
 committed pins, CI setup and documented versions for drift. To upgrade a runtime,
@@ -77,8 +89,8 @@ TypeScript `tsc` check against the published declarations and NodeNext resolutio
 
 `verify` starts with `doctor` and `toolchain:check`, then checks formatting, lint,
 strict types, package tests, builds and actual tarball consumers, plus independent
-versioning and pre-mode prerelease rules in
-disposable Changesets fixtures. It also checks and builds the documentation
+versioning and pre-mode prerelease rules in disposable Changesets fixtures.
+It also checks and builds the documentation
 site. `build` runs workspace type checks first through Turbo. The tarball check
 verifies archive contents, licenses and dependency resolution, then installs each
 package outside the workspace, loads every export with both Bun and Node and
@@ -200,6 +212,12 @@ bun run release:plan      # read-only: versions missing from npm and their dist-
 bun run release:pack      # clean main only: builds, packs with Bun, checks the archives
 bun run release:publish   # publishes the packed commit; append --otp <code> if asked
 ```
+
+The equivalent CLI commands are `bun run voidmix-dev release plan`,
+`bun run voidmix-dev release pack` and `bun run voidmix-dev release publish`.
+Use `--stable` directly for an approved stable release and `--otp <code>` directly
+for an npm one-time password; OTP values remain strings, including leading zeros.
+Pass other Changesets arguments after `--`.
 
 Changesets uses npm for registry queries and publication. npm otherwise rejects
 the repository's strict Bun `devEngines` configuration with `EBADDEVENGINES`.

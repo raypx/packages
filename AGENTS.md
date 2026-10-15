@@ -47,6 +47,13 @@ the two pins and must not add `[tools]` versions. Run `mise trust && mise instal
 then activate mise in the shell or use `mise exec -- <command>`. Other version
 managers may select the same pins. `bun run doctor` checks the active executables.
 
+Install dependencies before invoking the repository CLI. The root `voidmix-dev`
+script runs `bun scripts/cli.ts` using citty. Keep `doctor`,
+`toolchain:check` and `release:plan`, `release:pack`, `release:publish` as aliases.
+Use confbox for structured TOML and YAML toolchain configuration parsing;
+retain the existing process and output helpers. These are private maintenance
+tools and do not change published package APIs.
+
 Bun owns installation and repository scripts. Turbo owns task orchestration;
 Vite+ owns packing, formatting, linting and tests. JavaScript tool CLIs run with
 `bun --bun`. Node and npm 10.9+ are also needed for packaged consumer checks and
@@ -94,6 +101,9 @@ Do not publish to npm without direct authorization. `pack:check` builds local
 tarballs and installs them in a disposable directory; it does not publish.
 `release:plan` is read-only, `release:pack` replaces only `.changeset/pack/release/`,
 and `release:publish` publishes; follow `docs/development/publishing.md`.
+The CLI accepts release `--stable` and string `--otp <code>` flags directly.
+Prefer `--` for additional Changesets arguments; retain direct forwarding for
+existing publish invocations and preserve OTP leading zeros.
 Automatic version PRs and npm publication are disabled independently in CI until
 maintainers configure `VERSION_PR_ENABLED` and `NPM_PUBLISH_ENABLED`, respectively.
 Version PRs also require the repository's Actions PR-creation permission.

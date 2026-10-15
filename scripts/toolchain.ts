@@ -1,6 +1,8 @@
 import { execFileSync } from "node:child_process";
 import { existsSync, globSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { parseTOML } from "confbox/toml";
+import { parseYAML } from "confbox/yaml";
 
 export interface Toolchain {
   node: string;
@@ -47,6 +49,95 @@ export function assertToolchainRuntime(root: string): Toolchain & { nodeBinary: 
   return { ...pins, nodeBinary };
 }
 
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+function checkMise(root: string): string[] {
+  const file = "mise.toml";
+  const path = join(root, file);
+  if (!existsSync(path)) return [`${file}: missing runtime manager configuration`];
+  let mise: unknown;
+  try {
+    mise = parseTOML(readFileSync(path, "utf8"));
+  } catch {
+    return [`${file}: invalid TOML configuration`];
+  }
+  if (!isRecord(mise)) return [`${file}: configuration must be a table`];
+  const findings: string[] = [];
+  if (Object.hasOwn(mise, "tools"))
+    findings.push(`${file}: read existing pins instead of declaring [tools] versions`);
+  const tools = isRecord(mise.settings)
+    ? mise.settings.idiomatic_version_file_enable_tools
+    : undefined;
+  if (
+    !Array.isArray(tools) ||
+    tools.length !== 2 ||
+    !["node", "bun"].every((tool) => tools.includes(tool))
+  )
+    findings.push(`${file}: enable idiomatic version files for node and bun`);
+  return findings;
+}
+
+function checkSetupStep(file: string, location: string, step: Record<string, unknown>): string[] {
+  const setup = (
+    [
+      ["node", "actions/setup-node@", ".nvmrc"],
+      ["bun", "oven-sh/setup-bun@", "package.json"],
+    ] as const
+  ).find(([, action]) => typeof step.uses === "string" && step.uses.startsWith(action));
+  if (!setup) return [];
+  const [tool, , source] = setup;
+  const findings: string[] = [];
+  if (step.with !== undefined && !isRecord(step.with))
+    findings.push(`${file}: ${location}.with must be a mapping`);
+  const inputs = isRecord(step.with) ? step.with : {};
+  if (Object.hasOwn(inputs, `${tool}-version`))
+    findings.push(`${file}: read ${tool}-version-file: ${source} instead of a literal version`);
+  const versionFile = inputs[`${tool}-version-file`];
+  if (versionFile === undefined) findings.push(`${file}: every ${tool} setup must read ${source}`);
+  else if (versionFile !== source) findings.push(`${file}: ${tool}-version-file must be ${source}`);
+  return findings;
+}
+
+function checkWorkflows(root: string): string[] {
+  const findings: string[] = [];
+  for (const file of globSync(".github/workflows/*.{yml,yaml}", { cwd: root })) {
+    let workflow: unknown;
+    try {
+      workflow = parseYAML(readFileSync(join(root, file), "utf8"), { filename: file });
+    } catch {
+      findings.push(`${file}: invalid YAML configuration`);
+      continue;
+    }
+    if (!isRecord(workflow) || !isRecord(workflow.jobs)) {
+      findings.push(`${file}: workflow jobs must be a mapping`);
+      continue;
+    }
+    for (const [name, job] of Object.entries(workflow.jobs)) {
+      const location = `jobs.${name}`;
+      if (!isRecord(job)) {
+        findings.push(`${file}: ${location} must be a mapping`);
+        continue;
+      }
+      if (job.steps === undefined) continue;
+      if (!Array.isArray(job.steps)) {
+        findings.push(`${file}: ${location}.steps must be an array`);
+        continue;
+      }
+      for (const [index, step] of job.steps.entries()) {
+        const stepLocation = `${location}.steps[${index}]`;
+        if (!isRecord(step)) {
+          findings.push(`${file}: ${stepLocation} must be a mapping`);
+          continue;
+        }
+        findings.push(...checkSetupStep(file, stepLocation, step));
+      }
+    }
+  }
+  return findings;
+}
+
 /** Check duplicated declarations without installing tools or running application code. */
 export function checkToolchain(root: string): string[] {
   let pins: Toolchain;
@@ -75,15 +166,7 @@ export function checkToolchain(root: string): string[] {
   for (const file of [".node-version", ".bun-version", ".tool-versions"])
     if (existsSync(join(root, file)))
       findings.push(`${file}: use .nvmrc and package.json instead of a second version source`);
-  const miseFile = join(root, "mise.toml");
-  if (!existsSync(miseFile)) findings.push("mise.toml: missing runtime manager configuration");
-  else {
-    const mise = readFileSync(miseFile, "utf8");
-    if (/^\s*\[tools(?:\]|\.)/m.test(mise))
-      findings.push("mise.toml: read existing pins instead of declaring [tools] versions");
-    if (!/^\s*idiomatic_version_file_enable_tools\s*=\s*\[\s*"node"\s*,\s*"bun"\s*\]/m.test(mise))
-      findings.push("mise.toml: enable idiomatic version files for node and bun");
-  }
+  findings.push(...checkMise(root));
   const manifests = [
     "package.json",
     ...globSync(
@@ -97,25 +180,7 @@ export function checkToolchain(root: string): string[] {
     if (types && types.split(".")[0] !== pins.node.split(".")[0])
       findings.push(`${file}: @types/node must match the Node ${pins.node.split(".")[0]} major`);
   }
-  for (const file of globSync(".github/workflows/*.{yml,yaml}", { cwd: root })) {
-    const workflow = readFileSync(join(root, file), "utf8");
-    for (const [tool, source] of [
-      ["node", ".nvmrc"],
-      ["bun", "package.json"],
-    ] as const) {
-      if (new RegExp(`^\\s*${tool}-version:`, "m").test(workflow))
-        findings.push(`${file}: read ${tool}-version-file: ${source} instead of a literal version`);
-      const versions = [
-        ...workflow.matchAll(new RegExp(`^\\s*${tool}-version-file:\\s*(\\S+)`, "gm")),
-      ];
-      if (versions.some((match) => match[1] !== source))
-        findings.push(`${file}: ${tool}-version-file must be ${source}`);
-      const setup =
-        tool === "node" ? /uses:\s*actions\/setup-node@/g : /uses:\s*oven-sh\/setup-bun@/g;
-      if ([...workflow.matchAll(setup)].length !== versions.length)
-        findings.push(`${file}: every ${tool} setup must read ${source}`);
-    }
-  }
+  findings.push(...checkWorkflows(root));
   for (const file of [
     "README.md",
     "AGENTS.md",

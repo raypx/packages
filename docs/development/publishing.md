@@ -20,15 +20,30 @@ and tag those exact archives. Never run plain `changeset publish`.
    `packageManager` and `.nvmrc`, respectively. With mise, run
    `mise trust && mise install`, then activate it in the shell or use
    `mise exec -- <command>`. `mise.toml` only enables those sources and must not
-   add `[tools]` versions. Run `bun run doctor` and `bun run toolchain:check`
-   before `npm login --force`. npm normally requires a one-time password for
-   publication. `TOOLKIT_NODE_BINARY` may select a Node executable outside PATH,
+   add `[tools]` versions. Install dependencies with
+   `bun install --frozen-lockfile --ignore-scripts`, then run `bun run doctor`
+   and `bun run toolchain:check` before `npm login --force`. npm normally requires
+   a one-time password for publication. `TOOLKIT_NODE_BINARY` may select a Node
+   executable outside PATH,
    but it must match `.nvmrc`. Public package compatibility ranges stay separate
    from these development pins.
 
 ## Manual alpha release
 
 Run every step on an up-to-date `main` with a clean working tree.
+
+The `voidmix-dev` CLI groups maintenance commands under one entry point:
+
+```sh
+bun run voidmix-dev release plan
+bun run voidmix-dev release pack
+bun run voidmix-dev release publish
+```
+
+The existing `release:plan`, `release:pack` and `release:publish` scripts remain
+aliases. `doctor` and `toolchain:check` also remain available as aliases.
+The CLI uses citty; toolchain checks parse TOML and YAML with confbox. Both are
+private repository tools and do not change the published libraries.
 
 1. **Version.** Skip this step for a package's first publication. Otherwise run
    `bun run version-packages`, review the versions and changelogs, and commit
@@ -52,8 +67,10 @@ Run every step on an up-to-date `main` with a clean working tree.
 5. **Publish.** `bun run release:publish` refuses a dirty tree, a branch other
    than `main`, a commit other than the packed one or a changed tarball, then
    publishes exactly the packed tarballs and creates local git tags. Append
-   `--otp <code>` when npm asks for a one-time password, or set
-   `NPM_CONFIG_OTP`.
+   `--otp <code>` directly when npm asks for a one-time password, or set
+   `NPM_CONFIG_OTP`. The CLI treats OTP codes as strings and preserves leading
+   zeros. Pass additional Changesets arguments after `--`, as in
+   `bun run voidmix-dev release publish -- <Changesets args>`.
 6. **Push.** Run the `git push origin main <tags>` command the script prints for
    the tags it found locally, so each tag such as `@voidmix/env@0.0.0-alpha.0`
    reaches GitHub.
@@ -97,6 +114,8 @@ bun run release:pack --stable
 bun run release:publish --stable
 ```
 
+`--stable` is a direct CLI flag, as in
+`bun run voidmix-dev release pack --stable`; it does not belong after `--`.
 Without `--stable`, the release commands refuse to plan, pack or publish after
 pre mode ends. Further prereleases require `bun run changeset pre enter <tag>`.
 
