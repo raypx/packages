@@ -36,10 +36,22 @@ examples in their intended languages and preserve code identifiers and source li
 
 ## Toolchain
 
-Use Bun 1.4.3 for installation and repository scripts. Turbo owns task
-orchestration; Vite+ owns packing, formatting, linting and tests. JavaScript tool
-CLIs run with `bun --bun`. Node 24 and npm 10.9+ are also needed for packaged
-consumer checks and registry publication; source tooling runs on Bun.
+Use Bun 1.4.3 and Node 24.15.0 for repository development. `.nvmrc` is the
+authoritative Node pin; the root `packageManager` is the authoritative Bun pin.
+Keep `engines`, `devEngines`, CI setup and documented versions consistent with
+those sources through `bun run toolchain:check`. Public package Node compatibility
+ranges are independent of the repository development pin.
+
+mise is the recommended version manager. Its configuration only enables reading
+the two pins and must not add `[tools]` versions. Run `mise trust && mise install`,
+then activate mise in the shell or use `mise exec -- <command>`. Other version
+managers may select the same pins. `bun run doctor` checks the active executables.
+
+Bun owns installation and repository scripts. Turbo owns task orchestration;
+Vite+ owns packing, formatting, linting and tests. JavaScript tool CLIs run with
+`bun --bun`. Node and npm 10.9+ are also needed for packaged consumer checks and
+registry publication; source tooling runs on Bun. The private documentation site
+uses Nitro's `bun` preset and retains its Bun development/build/preview commands.
 
 Use `bun --check --tsconfig-override tsconfig.json` for workspace type checks.
 The flag invokes Bun's native checker without resolving the `check` package script;
@@ -89,9 +101,11 @@ Version PRs also require the repository's Actions PR-creation permission.
 ## Verification
 
 Run a changed package's narrow test first, then `bun run verify`. The root gate
-checks formatting, lint, strict types, tests, the documentation build, library tarball contents and
+starts with `doctor` and `toolchain:check`, then checks formatting, lint, strict
+types, tests, the documentation build, library tarball contents and
 isolated Bun/Node consumers. `build` runs package `check` first through Turbo.
-Set `TOOLKIT_NODE_BINARY` if Node is not on PATH. Real database tests require an
+Set `TOOLKIT_NODE_BINARY` to a Node executable matching `.nvmrc` if Node is not on
+PATH; it does not bypass the development pin. Real database tests require an
 explicit disposable database and remain separate from unit verification.
 
 Preserve unrelated user changes. Never reset files or rewrite Git history as

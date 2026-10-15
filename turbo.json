@@ -19,6 +19,9 @@
     }
   },
   "globalDependencies": [
+    ".nvmrc",
+    "mise.toml",
+    "scripts/toolchain.ts",
     "scripts/testing/**",
     "docs/**",
     "README.md",

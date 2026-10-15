@@ -40,13 +40,34 @@ layout, path aliases, project references and runtime-specific ambient types.
 
 ## Development
 
-Use Bun **1.4.3**. Node **24** is also required for isolated consumer checks and
-npm transport. Neither runtime is bundled in published libraries.
+Use Bun **1.4.3** and Node **24.15.0** for repository development, isolated
+consumer checks and npm transport. `.nvmrc` is the authoritative Node pin and
+the root `packageManager` is the authoritative Bun pin. Published libraries keep
+their own Node compatibility ranges; neither runtime is bundled in them.
+
+mise is the recommended version manager on macOS, Linux and Windows. The committed
+`mise.toml` only enables reading those two pins; do not add `[tools]` versions.
 
 ```sh
+mise trust && mise install
+eval "$(mise activate zsh)" # add to ~/.zshrc; use the matching command for your shell
+```
+
+Activated shells select the repository versions when entering this directory.
+Without activation, use `mise exec -- <command>`. nvm, fnm and direct installs
+also work when they select the same pinned versions.
+
+```sh
+bun run doctor
+bun run toolchain:check
 bun install --frozen-lockfile --ignore-scripts
 bun run verify
 ```
+
+`doctor` checks the active Bun and Node executables. `toolchain:check` checks the
+committed pins, CI setup and documented versions for drift. To upgrade a runtime,
+change `.nvmrc` or `packageManager`, then update the dependent declarations reported
+by `toolchain:check`. CI reads the same two files.
 
 Workspace `check` scripts use Bun's native TypeScript checker through
 `bun --check --tsconfig-override tsconfig.json`. With no source entrypoint, this
@@ -54,16 +75,18 @@ only checks types; `--check` also avoids resolving the same-named package script
 Vite+ still generates library declarations, and tarball consumers keep a separate
 TypeScript `tsc` check against the published declarations and NodeNext resolution.
 
-`verify` checks formatting, lint, strict types, package tests, builds and actual
-tarball consumers, plus independent versioning and pre-mode prerelease rules in
+`verify` starts with `doctor` and `toolchain:check`, then checks formatting, lint,
+strict types, package tests, builds and actual tarball consumers, plus independent
+versioning and pre-mode prerelease rules in
 disposable Changesets fixtures. It also checks and builds the documentation
 site. `build` runs workspace type checks first through Turbo. The tarball check
 verifies archive contents, licenses and dependency resolution, then installs each
 package outside the workspace, loads every export with both Bun and Node and
 resolves declarations for every JavaScript export. Behavior and public types are
 covered by each package's unit tests. Set `TOOLKIT_NODE_BINARY`
-to a Node executable when it is not on PATH. `TOOLKIT_KEEP_PACK_CHECK=1` retains
-disposable consumer directories for diagnosis.
+to a Node **24.15.0** executable when it is not on PATH; the override must match
+the repository pin. `TOOLKIT_KEEP_PACK_CHECK=1` retains disposable consumer
+directories for diagnosis.
 
 Use `bun run --cwd packages/drizzle test` to iterate on its narrow test suite.
 Vite+ owns leaf tools and Turbo owns task orchestration. No Raypx product scripts
@@ -91,6 +114,10 @@ Markdown shown by each page's source link. Page routes and navigation live in
 `docs/src/lib/pages.ts`. Markdown compilation converts registered documentation
 links to site routes; other repository files, including complete license texts,
 link to GitHub.
+
+The documentation site's Nitro preset is `bun`; its development, build and preview
+commands continue to use `bun --bun vp`. Node provides the isolated package
+consumer checks and npm transport.
 
 The development server watches the source Markdown. The build prerenders
 documentation and search for static hosting; the private `docs` workspace has

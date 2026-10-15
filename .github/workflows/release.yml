@@ -25,11 +25,11 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           package-manager-cache: false
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.4.3
+          bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
       - uses: changesets/action/select-mode@v2.0.0
         id: mode
@@ -65,11 +65,11 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           package-manager-cache: false
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.4.3
+          bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
       - uses: changesets/action/version@v2.0.0
         with:
@@ -94,12 +94,12 @@ jobs:
           fetch-depth: 0
       - uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version-file: .nvmrc
           registry-url: https://registry.npmjs.org/
           package-manager-cache: false
       - uses: oven-sh/setup-bun@v2
         with:
-          bun-version: 1.4.3
+          bun-version-file: package.json
       - run: bun install --frozen-lockfile --ignore-scripts
       - name: Verify before publication
         run: bun run verify

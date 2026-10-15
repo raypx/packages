@@ -16,8 +16,15 @@ and tag those exact archives. Never run plain `changeset publish`.
    reviewers if desired.
 2. Create the npm organization `voidmix` and give maintainers publish access to
    the `@voidmix` scope. GitHub organization access does not grant npm access.
-3. On the publishing machine, use Bun 1.4.3 and Node 24, then run `npm login`.
-   npm normally requires a one-time password for publication.
+3. On the publishing machine, select Bun 1.4.3 and Node 24.15.0 from the root
+   `packageManager` and `.nvmrc`, respectively. With mise, run
+   `mise trust && mise install`, then activate it in the shell or use
+   `mise exec -- <command>`. `mise.toml` only enables those sources and must not
+   add `[tools]` versions. Run `bun run doctor` and `bun run toolchain:check`
+   before `npm login --force`. npm normally requires a one-time password for
+   publication. `TOOLKIT_NODE_BINARY` may select a Node executable outside PATH,
+   but it must match `.nvmrc`. Public package compatibility ranges stay separate
+   from these development pins.
 
 ## Manual alpha release
 
@@ -26,8 +33,10 @@ Run every step on an up-to-date `main` with a clean working tree.
 1. **Version.** Skip this step for a package's first publication. Otherwise run
    `bun run version-packages`, review the versions and changelogs, and commit
    them, for example as `chore: version packages`.
-2. **Verify.** `bun run verify` formats, lints, type-checks, tests, builds and
-   installs every packed library in isolated Bun and Node consumers.
+2. **Verify.** `bun run verify` first checks active runtimes with `doctor` and
+   committed version consistency with `toolchain:check`, then formats, lints,
+   type-checks, tests, builds and installs every packed library in isolated Bun
+   and Node consumers.
 3. **Plan.** `bun run release:plan` is read-only and never replaces a packed
    plan. It lists every version missing from npm with its dist-tag, fails unless
    each is a `@voidmix/*` package at an `-alpha.N` version, and reports

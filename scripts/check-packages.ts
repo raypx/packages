@@ -4,6 +4,7 @@ import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promis
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { assertToolchainRuntime } from "./toolchain.js";
 
 type Dependencies = Record<string, string>;
 
@@ -26,7 +27,7 @@ interface PlanEntry {
 }
 
 const root = fileURLToPath(new URL("../", import.meta.url));
-const node = process.env.TOOLKIT_NODE_BINARY || "node";
+const { nodeBinary: node } = assertToolchainRuntime(root);
 const rootManifest = JSON.parse(await readFile(join(root, "package.json"), "utf8")) as Manifest;
 const temporary = await mkdtemp(join(tmpdir(), "voidmix-pack-"));
 // Release packing checks the exact archives it will publish instead of packing again.
@@ -148,8 +149,6 @@ async function checkConsumer(archive: string, packed: Manifest, consumer: string
 }
 
 try {
-  // Require the second runtime before doing network work.
-  run(node, ["--version"], temporary);
   let checked = 0;
   for (const directory of await readdir(join(root, "packages"), { withFileTypes: true })) {
     if (!directory.isDirectory()) continue;

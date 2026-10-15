@@ -7,6 +7,9 @@ import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
 const root = fileURLToPath(new URL("../", import.meta.url));
+const rootManifest = JSON.parse(await readFile(join(root, "package.json"), "utf8")) as {
+  packageManager: string;
+};
 const changesets = join(root, "node_modules/@changesets/cli/bin.js");
 const config = JSON.parse(await readFile(join(root, ".changeset/config.json"), "utf8"));
 const fixtures: string[] = [];
@@ -33,7 +36,7 @@ async function fixture(versions: Readonly<Record<string, string>>, pre?: { tag: 
     JSON.stringify({
       name: "toolkit-release-fixture",
       private: true,
-      packageManager: "bun@1.4.3",
+      packageManager: rootManifest.packageManager,
       workspaces: { packages: ["docs", "packages/*"] },
     }),
   );

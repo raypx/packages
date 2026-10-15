@@ -8,12 +8,15 @@
   ],
   "type": "module",
   "scripts": {
+    "doctor": "bun scripts/doctor.ts",
+    "toolchain:check": "bun scripts/check-toolchain.ts",
     "build": "bun --bun turbo run build",
     "check": "bun --check --tsconfig-override tsconfig.json && bun --bun turbo run check",
-    "test": "bun --bun turbo run test",
+    "test": "bun run test:toolchain && bun --bun turbo run test",
+    "test:toolchain": "bun --bun vp test --run --config vitest.config.ts",
     "lint": "bun --bun vp check",
     "format": "bun --bun vp fmt",
-    "verify": "bun run lint && bun run check && bun --bun turbo run test build && bun run pack:check && bun run release:check",
+    "verify": "bun run doctor && bun run toolchain:check && bun run lint && bun run check && bun run test:toolchain && bun --bun turbo run test build && bun run pack:check && bun run release:check",
     "pack:check": "bun scripts/check-packages.ts",
     "release:check": "bun scripts/check-releases.ts",
     "changeset": "bun --bun ./node_modules/@changesets/cli/bin.js",
@@ -28,7 +31,7 @@
   },
   "devDependencies": {
     "@changesets/cli": "3.0.3",
-    "@types/node": "26.6.5",
+    "@types/node": "24.19.2",
     "@voidmix/tsconfig": "workspace:*",
     "turbo": "2.11.7",
     "typescript": "7.0.2",
@@ -48,6 +51,9 @@
       "version": "1.4.3",
       "onFail": "error"
     }
+  },
+  "engines": {
+    "node": "24.15.0"
   },
   "packageManager": "bun@1.4.3"
 }
