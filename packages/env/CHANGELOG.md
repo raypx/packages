@@ -1,5 +1,11 @@
 # @voidmix/env
 
+## 0.0.0-alpha.3
+
+### Patch Changes
+
+- 34bf76b: Accept any Zod 4 release as the peer dependency instead of requiring exactly 4.6.7, so applications keep a single shared Zod runtime without matching the development pin.
+
 ## 0.0.0-alpha.2
 
 ### Patch Changes

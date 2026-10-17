@@ -1,5 +1,11 @@
 # @voidmix/drizzle
 
+## 0.0.0-alpha.1
+
+### Patch Changes
+
+- 34bf76b: Remove the optional `postgres` peer dependency. Published entries never import postgres.js; it remains a development dependency for integration tests.
+
 ## 0.0.0-alpha.0
 
 Initial prerelease.
