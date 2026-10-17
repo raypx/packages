@@ -14,7 +14,17 @@ export default defineConfig({
     format: ["esm"],
     sourcemap: true,
     deps: {
-      neverBundle: [/^react(?:\/|$)/, /^use-intl(?:\/|$)/, /^@formatjs\//],
+      // React stays a peer so the application owns the only renderer and context.
+      neverBundle: [/^react(?:\/|$)/],
+      // Inlined third-party code.
+      onlyBundle: [
+        "use-intl",
+        "intl-messageformat",
+        "@formatjs/icu-messageformat-parser",
+        "@formatjs/icu-skeleton-parser",
+        "@formatjs/fast-memoize",
+        "@schummar/icu-type-parser",
+      ],
     },
   },
 });

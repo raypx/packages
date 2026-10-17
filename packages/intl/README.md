@@ -4,13 +4,15 @@ Typed ICU translation and controlled React integration built on `use-intl`, with
 application-owned locale configuration and catalogs.
 
 ```sh
-bun add @voidmix/intl use-intl@4.14.9 react@19
+bun add @voidmix/intl react@19
 ```
 
-ESM and declarations support Node 20+ and Bun. React 19 and `use-intl` 4.14.9+
-are external peers, including for synchronous root/server usage. This release
-uses the public `use-intl/core` and `use-intl/react` APIs; no upstream contexts,
-formatter caches or message compiler implementations are copied.
+ESM and declarations support Node 20+ and Bun. React 19 is the only external
+peer, including for synchronous root/server usage. `use-intl` 4.14.9 and its
+FormatJS dependencies are bundled into `dist/`, declarations included, through
+their public `use-intl/core` and `use-intl/react` APIs. Import translation, formatting and
+provider APIs from `@voidmix/intl` only. Installing `use-intl` or `next-intl`
+next to it creates a second, unconnected React context.
 
 ## Configure locales and device preferences
 

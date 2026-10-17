@@ -2,9 +2,6 @@
   "name": "intl-declaration-contract",
   "private": true,
   "type": "module",
-  "dependencies": {
-    "use-intl": "4.14.9"
-  },
   "devDependencies": {
     "@types/react": "19.3.0"
   }

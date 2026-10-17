@@ -23,9 +23,11 @@ controlled React facade without product dependencies.
 - Locale runtimes copy/freeze supported locales. `system` is reserved;
   parsePreference accepts exact supported values, and resolvePreference tries
   every system candidate in order through the same lookup matcher.
-- `use-intl` 4.14.9+ owns compilation, Intl caches, React context and native
+- `use-intl` 4.14.9 owns compilation, Intl caches, React context and native
   hooks. Use public entrypoints, never upstream private contexts/cache APIs.
-  React 19 remains required for every entry, including root/server.
+  It and its FormatJS dependencies are dev dependencies bundled by `deps.onlyBundle`.
+  Keep the third-party section of `LICENSE` in sync with every bundled package and version.
+  React 19 is the only peer and remains required for every entry, including root/server.
 - Client factories bind types/static defaults only. The provider requires
   locale and the current full catalog or null. No provider-owned locale state,
   loaders, storage, callbacks or context isolation. Hooks read nearest provider.

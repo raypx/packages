@@ -23,8 +23,8 @@ and each package's current API guide. A private Fumadocs application lives in
 that same directory, with package navigation, table of contents, code highlighting,
 light and dark themes, and local full-text search.
 
-`@voidmix/intl` uses `use-intl` 4.14.9 for translation, formatting and `IntlProvider`.
-React is a required peer, including for root and server consumers. The package
+`@voidmix/intl` bundles `use-intl` 4.14.9 for translation, formatting and `IntlProvider`,
+so consumers install only React, a required peer including for root and server consumers. The package
 adds configurable locale negotiation, typed controlled providers and catalog
 validation. Applications own preference state, persistence and message loading.
 See the [controlled provider migration](docs/intl/migration.md).

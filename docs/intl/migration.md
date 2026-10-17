@@ -13,8 +13,9 @@ previously owned by `@voidmix/intl`.
 | Application     | Messages, loading, preference state, storage, SSR data and platform initialization           |
 
 The core and server entry points have no DOM ambient type requirement. React 19
-remains a required peer, including for core and server imports. The minimum
-supported `use-intl` is 4.14.9.
+remains a required peer, including for core and server imports. `use-intl`
+4.14.9 is bundled into the package; remove any direct `use-intl` dependency and
+import its APIs through `@voidmix/intl`.
 
 ## React migration
 
