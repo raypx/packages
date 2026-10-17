@@ -1,5 +1,11 @@
 # @voidmix/intl
 
+## 0.0.0-alpha.3
+
+### Patch Changes
+
+- f8e34e5: Add a controlled `LanguageProvider` and `useLanguagePreference` to bound clients, a `@voidmix/intl/browser` entry with `createBrowserLanguage` and browser preference and cookie adapters, and error-code translation helpers (`readErrorDetails`, `translateErrorCode`, `translateKnownErrorCode`).
+
 ## 0.0.0-alpha.2
 
 ### Patch Changes
