@@ -1,0 +1,18 @@
+.github/workflows/release.yml
+  h_f0766e80fd3864 110-111
+docs/development/publishing.md
+  h_f0766e80fd3864 135-137
+package.json
+  h_f0766e80fd3864 29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "699e9584aaa9e8955c71e79646692dd2cffb546e",
+  "prompts": {},
+  "humans": {
+    "h_f0766e80fd3864": {
+      "author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
