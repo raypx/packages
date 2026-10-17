@@ -1,0 +1,30 @@
+.changeset/bundle-use-intl.md
+  h_f0766e80fd3864 1-5
+README.md
+  h_f0766e80fd3864 26-27
+bun.lock
+  h_f0766e80fd3864 74
+docs/intl/migration.md
+  h_f0766e80fd3864 16-18
+packages/intl/AGENTS.md
+  h_f0766e80fd3864 26,28-30
+packages/intl/NOTICE.md
+  h_f0766e80fd3864 1-121
+packages/intl/README.md
+  h_f0766e80fd3864 7,10-16
+packages/intl/package.json
+  h_f0766e80fd3864 15,58,69
+packages/intl/vite.config.ts
+  h_f0766e80fd3864 17-27
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "30e23d3117cddc51a6aaa55f87b4508554e8962d",
+  "prompts": {},
+  "humans": {
+    "h_f0766e80fd3864": {
+      "author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
