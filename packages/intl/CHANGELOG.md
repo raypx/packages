@@ -1,5 +1,11 @@
 # @voidmix/intl
 
+## 0.0.0-alpha.2
+
+### Patch Changes
+
+- bfffc6e: Bundle `use-intl` 4.14.9 and its FormatJS dependencies, including declarations, so React is the only peer. Applications no longer declare `use-intl`.
+
 ## 0.0.0-alpha.1
 
 ### Patch Changes
