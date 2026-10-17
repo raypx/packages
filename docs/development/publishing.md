@@ -132,8 +132,9 @@ package:
    registry requiring tokens, set the `NPM_TOKEN` secret instead.
 2. Set the repository variable `NPM_PUBLISH_ENABLED` to `true`.
 
-On `main`, the workflow verifies, then runs the same `release:pack` and
-`release:publish` commands for versions absent from npm, requesting provenance.
+On `main`, the workflow verifies, then runs `release:ci`, which chains the same
+`release:pack` and `release:publish` commands for versions absent from npm,
+requesting provenance. The action runs its script without a shell.
 Pushes without new versions pass as no-ops. Optional version PRs are described
 in the [repository README](../../README.md#independent-releases).
 

@@ -107,7 +107,8 @@ jobs:
         with:
           # Bun packs the archives so workspace: and catalog: dependencies resolve;
           # plain changeset publish would pack this Bun workspace with npm.
-          script: bun run release:pack && bun run release:publish
+          # The action runs the script without a shell, so `&&` lives in package.json.
+          script: bun run release:ci
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
           NPM_CONFIG_PROVENANCE: "true"
