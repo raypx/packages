@@ -1,0 +1,75 @@
+{
+  "name": "@voidmix/devkit",
+  "version": "0.0.0-alpha.0",
+  "description": "Monorepo maintenance checks: workspace boundaries, toolchain pins, static catalogs, artifacts and task helpers.",
+  "homepage": "https://github.com/raypx/voidmix/tree/main/packages/devkit",
+  "license": "Apache-2.0",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/raypx/voidmix.git",
+    "directory": "packages/devkit"
+  },
+  "files": [
+    "dist",
+    "LICENSE",
+    "README.md",
+    "CHANGELOG.md"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    "./workspaces": {
+      "types": "./dist/workspaces.d.mts",
+      "import": "./dist/workspaces.mjs"
+    },
+    "./architecture": {
+      "types": "./dist/architecture.d.mts",
+      "import": "./dist/architecture.mjs"
+    },
+    "./toolchain": {
+      "types": "./dist/toolchain.d.mts",
+      "import": "./dist/toolchain.mjs"
+    },
+    "./process": {
+      "types": "./dist/process.d.mts",
+      "import": "./dist/process.mjs"
+    },
+    "./artifact": {
+      "types": "./dist/artifact.d.mts",
+      "import": "./dist/artifact.mjs"
+    },
+    "./catalogs": {
+      "types": "./dist/catalogs.d.mts",
+      "import": "./dist/catalogs.mjs"
+    },
+    "./docs": {
+      "types": "./dist/docs.d.mts",
+      "import": "./dist/docs.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "check": "bun --check --tsconfig-override tsconfig.json",
+    "test": "bun --bun vp test --run",
+    "test:unit": "bun --bun vp test --run --passWithNoTests --exclude '**/component.test.{ts,tsx}' --exclude '**/*.component.test.{ts,tsx}' --exclude '**/*.integration.test.{ts,tsx}'",
+    "test:integration": "bun --bun vp test --run --passWithNoTests integration.test",
+    "test:component": "bun --bun vp test --run --passWithNoTests component.test",
+    "test:coverage": "bun --bun vp test --run --passWithNoTests --coverage --coverage.reporter=text --coverage.reporter=json --coverage.reporter=lcov",
+    "build": "bun --bun vp pack",
+    "dev": "bun --bun vp pack --watch",
+    "pack:check": "bun pm pack --dry-run --ignore-scripts"
+  },
+  "dependencies": {
+    "@dotenvx/dotenvx": "2.36.0",
+    "confbox": "0.3.1",
+    "oxc-parser": "0.154.0"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "5.0.3"
+  },
+  "engines": {
+    "node": ">=22.14"
+  }
+}

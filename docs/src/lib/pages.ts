@@ -6,6 +6,13 @@ export const documentationPages = [
     description: "Reusable Voidmix libraries, their current APIs and extension designs.",
   },
   {
+    slug: "devkit/index",
+    sourcePath: "packages/devkit/README.md",
+    title: "Devkit",
+    description:
+      "Workspace boundaries, toolchain pins, static catalogs, artifact probes and task helpers.",
+  },
+  {
     slug: "drizzle/index",
     sourcePath: "packages/drizzle/README.md",
     title: "Drizzle",
@@ -86,12 +93,13 @@ export const documentationPages = [
 export const navigationMetadata = {
   "meta.json": {
     title: "Voidmix",
-    pages: ["index", "drizzle", "env", "intl", "tsconfig", "development"],
+    pages: ["index", "devkit", "drizzle", "env", "intl", "tsconfig", "development"],
   },
   "drizzle/meta.json": {
     title: "Drizzle",
     pages: ["index", "drizzle-plus", "better-drizzle", "merge-plan", "provenance"],
   },
+  "devkit/meta.json": { title: "Devkit", pages: ["index"] },
   "env/meta.json": { title: "Env", pages: ["index"] },
   "intl/meta.json": { title: "Intl", pages: ["index", "migration"] },
   "tsconfig/meta.json": { title: "TSConfig", pages: ["index"] },

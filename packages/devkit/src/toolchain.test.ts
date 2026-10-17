@@ -2,7 +2,7 @@ import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "nod
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
-import { assertToolchainRuntime, checkToolchain, readToolchain } from "./toolchain.js";
+import { assertToolchainRuntime, checkToolchain, pinnedNode, readToolchain } from "./toolchain.js";
 
 const { execFileSync } = vi.hoisted(() => ({ execFileSync: vi.fn() }));
 vi.mock("node:child_process", () => ({ execFileSync }));
@@ -79,7 +79,7 @@ function manifestAt(root: string) {
 
 beforeEach(() => {
   execFileSync.mockReset();
-  vi.stubEnv("TOOLKIT_NODE_BINARY", undefined);
+  vi.stubEnv("DEVKIT_NODE_BINARY", undefined);
 });
 
 afterEach(() => {
@@ -457,9 +457,57 @@ describe("development toolchain declarations", () => {
       expect.arrayContaining([
         "turbo.json: include .nvmrc in globalDependencies",
         "turbo.json: include mise.toml in globalDependencies",
-        "turbo.json: include scripts/toolchain.ts in globalDependencies",
       ]),
     );
+    expect(checkToolchain(root, { turboGlobalDependencies: ["scripts/toolchain.ts"] })).toEqual([
+      "turbo.json: include scripts/toolchain.ts in globalDependencies",
+    ]);
+  });
+
+  it("checks only the configured documents", () => {
+    const root = repository({
+      "README.md": "Develop with Node 24.16.0.\n",
+      "docs/guide.md": "Install Bun 1.4.2.\n",
+    });
+    expect(checkToolchain(root, { documents: ["docs/guide.md"] })).toEqual([
+      `docs/guide.md: documented Bun is 1.4.2, expected ${bunVersion}`,
+    ]);
+  });
+
+  it("checks runtime types in object-form workspaces and Bun catalogs", () => {
+    const root = repository({ "apps/web/package.json": JSON.stringify({ name: "web" }) });
+    changeManifest(root, (manifest) => {
+      Object.assign(manifest, {
+        workspaces: {
+          packages: ["apps/*"],
+          catalogs: { dev: { "@types/node": "^26.0.0", "@types/bun": "1.4.2" } },
+        },
+      });
+    });
+    expect(checkToolchain(root)).toEqual([
+      "package.json catalog: @types/node must match the Node 24 major",
+      `package.json catalog: @types/bun is 1.4.2, expected ${bunVersion}`,
+    ]);
+  });
+
+  it("leaves catalog and workspace protocol ranges to the catalog they resolve from", () => {
+    const root = repository({
+      "packages/library/package.json": JSON.stringify({
+        name: "@voidmix/library",
+        devDependencies: { "@types/node": "catalog:dev", "@types/bun": "catalog:" },
+      }),
+    });
+    expect(checkToolchain(root)).toEqual([]);
+  });
+
+  it("checks pinned runtime images in Dockerfiles", () => {
+    const root = repository({
+      "apps/api/Dockerfile": "FROM node:24.16.0-slim AS run\nFROM oven/bun:1.4.2 AS build\n",
+    });
+    expect(checkToolchain(root)).toEqual([
+      `apps/api/Dockerfile: node image is 24.16.0, expected ${nodeVersion}`,
+      `apps/api/Dockerfile: bun image is 1.4.2, expected ${bunVersion}`,
+    ]);
   });
 });
 
@@ -486,14 +534,14 @@ describe("active development runtimes", () => {
   });
 
   it("allows a binary override when it provides the pinned Node", () => {
-    vi.stubEnv("TOOLKIT_NODE_BINARY", "/custom/node");
+    vi.stubEnv("DEVKIT_NODE_BINARY", "/custom/node");
     execFileSync.mockReturnValue(`v${nodeVersion}\n`);
     expect(assertToolchainRuntime(runtimeRepository()).nodeBinary).toBe("/custom/node");
     expect(execFileSync).toHaveBeenCalledWith("/custom/node", ["--version"], expect.any(Object));
   });
 
   it("does not let a binary override bypass the required Node version", () => {
-    vi.stubEnv("TOOLKIT_NODE_BINARY", "/custom/node");
+    vi.stubEnv("DEVKIT_NODE_BINARY", "/custom/node");
     execFileSync.mockReturnValue("v26.0.0\n");
     expect(() => assertToolchainRuntime(runtimeRepository())).toThrow(
       `Expected Node ${nodeVersion}, got v26.0.0`,
@@ -501,12 +549,20 @@ describe("active development runtimes", () => {
   });
 
   it("reports an unavailable binary override without depending on the host Node", () => {
-    vi.stubEnv("TOOLKIT_NODE_BINARY", "/missing/node");
+    vi.stubEnv("DEVKIT_NODE_BINARY", "/missing/node");
     execFileSync.mockImplementation(() => {
       throw new Error("ENOENT");
     });
     expect(() => assertToolchainRuntime(runtimeRepository())).toThrow("Node is unavailable");
     expect(execFileSync).toHaveBeenCalledWith("/missing/node", ["--version"], expect.any(Object));
+  });
+
+  it("reads the binary override from a configured variable", () => {
+    vi.stubEnv("PRODUCT_NODE_BINARY", "/product/node");
+    execFileSync.mockReturnValue(`v${nodeVersion}\n`);
+    expect(pinnedNode(runtimeRepository(), { nodeBinaryEnv: "PRODUCT_NODE_BINARY" })).toBe(
+      "/product/node",
+    );
   });
 
   it("rejects a Bun mismatch before probing Node", () => {

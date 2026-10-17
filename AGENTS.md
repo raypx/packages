@@ -54,8 +54,9 @@ Install dependencies before invoking the repository CLI. The root `voidmix-dev`
 script runs `bun scripts/cli.ts` using citty. Keep `doctor`,
 `toolchain:check` and `release:plan`, `release:pack`, `release:publish`,
 `release:snapshot` as aliases.
-Use confbox for structured TOML and YAML toolchain configuration parsing;
-retain the existing process and output helpers. These are private maintenance
+Toolchain checks come from `packages/devkit` (which parses TOML and YAML with
+confbox); `scripts/toolchain.ts` only supplies this repository's options. Retain
+the existing process and output helpers. These are private maintenance
 tools and do not change published package APIs.
 
 Bun owns installation and repository scripts. Turbo owns task orchestration;

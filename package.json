@@ -37,7 +37,6 @@
     "@types/node": "24.19.2",
     "@voidmix/tsconfig": "workspace:*",
     "citty": "0.2.2",
-    "confbox": "0.3.1",
     "turbo": "2.11.7",
     "typescript": "7.0.2",
     "vite-plus": "1.1.0"

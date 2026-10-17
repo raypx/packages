@@ -43,8 +43,8 @@ bun run voidmix-dev release publish
 The existing `release:plan`, `release:pack` and `release:publish` scripts remain
 aliases. `doctor` and `toolchain:check` also remain available as aliases.
 Place options after the final subcommand, such as `release pack --stable`.
-The CLI uses citty; toolchain checks parse TOML and YAML with confbox. Both are
-private repository tools and do not change the published libraries.
+The CLI uses citty; toolchain checks come from `@voidmix/devkit` source, which
+parses TOML and YAML with confbox. Neither changes the published libraries.
 
 1. **Version.** Skip this step for a package's first publication. Otherwise run
    `bun run version-packages`, review the versions and changelogs, and commit

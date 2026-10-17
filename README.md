@@ -5,12 +5,13 @@ repository follows the multi-package structure of
 [TanStack Config](https://github.com/TanStack/config), with an independent version
 and release history for every public package.
 
-| Package                                          | Purpose                                                                               |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------- |
-| [@voidmix/drizzle](packages/drizzle/README.md)   | PostgreSQL extensions for postgres.js, JSON helpers and query diagnostics             |
-| [@voidmix/env](packages/env/README.md)           | Typed environment validation, nested presets, defaults and guarded client access      |
-| [@voidmix/intl](packages/intl/README.md)         | Configurable locale negotiation, ICU translation, Intl formatting and React providers |
-| [@voidmix/tsconfig](packages/tsconfig/README.md) | Strict TypeScript presets for ESM libraries, browser applications and Node runtimes   |
+| Package                                          | Purpose                                                                                 |
+| ------------------------------------------------ | --------------------------------------------------------------------------------------- |
+| [@voidmix/devkit](packages/devkit/README.md)     | Workspace boundaries, toolchain pins, static catalogs, artifact probes and task helpers |
+| [@voidmix/drizzle](packages/drizzle/README.md)   | PostgreSQL extensions for postgres.js, JSON helpers and query diagnostics               |
+| [@voidmix/env](packages/env/README.md)           | Typed environment validation, nested presets, defaults and guarded client access        |
+| [@voidmix/intl](packages/intl/README.md)         | Configurable locale negotiation, ICU translation, Intl formatting and React providers   |
+| [@voidmix/tsconfig](packages/tsconfig/README.md) | Strict TypeScript presets for ESM libraries, browser applications and Node runtimes     |
 
 The Drizzle package includes a complete upstream capability inventory and a
 staged merge plan for drizzle-plus and better-drizzle. Its documented shipping
@@ -34,6 +35,11 @@ presets and guards server-only variables in client mode. Its `/runtime` entry
 provides the reusable `NODE_ENV` preset; application variables and secrets stay
 with their owning product. Zod is a required peer and remains external so consumers
 and presets use the same schema classes.
+
+`@voidmix/devkit` holds the maintenance checks this repository and Raypx share:
+workspace boundaries, toolchain pins, static message catalogs, documentation
+links, guarded Turbo runs and relocated artifact probes. Repositories compose
+their own policy from its entries; this repository's scripts import its source.
 
 `@voidmix/tsconfig` publishes the strict compiler presets every workspace in this
 repository extends. Presets set compiler behavior only; consumers own file
