@@ -1,0 +1,93 @@
+docs/src/lib/pages.ts
+  s_7a36ff2e16c14c::t_876df0ffa10edd 51-57,96
+packages/intl/fixtures/consumer/client.ts
+  s_7a36ff2e16c14c::t_d1e846673574bf 1-36
+packages/intl/src/server.ts
+  s_7a36ff2e16c14c::t_c643f5eaed6983 2,8,11-13,17-20
+vite.config.ts
+  s_7a36ff2e16c14c::t_2d9703c7c89baf 8-10
+packages/intl/src/server.test.ts
+  s_7a36ff2e16c14c::t_2d442fb773d13d 55-72
+docs/README.md
+  s_7a36ff2e16c14c::t_876df0ffa10edd 33
+AGENTS.md
+  s_7a36ff2e16c14c::t_2d9703c7c89baf 21-23
+packages/intl/fixtures/consumer/tsconfig.json
+  s_7a36ff2e16c14c::t_d1e846673574bf 1-14
+packages/intl/src/locale.ts
+  s_7a36ff2e16c14c::t_c643f5eaed6983 23,61-80,118,131-133
+docs/src/lib/source.ts
+  s_7a36ff2e16c14c::t_dac34fee258d14 16
+README.md
+  s_7a36ff2e16c14c::t_281090cfc2bc84 28-30
+docs/intl/migration.md
+  s_7a36ff2e16c14c::t_7793fb95cd073c 9-11,13,72
+  s_7a36ff2e16c14c::t_876df0ffa10edd 1-8,12,14-36,39-44,46-71,73-123
+packages/intl/fixtures/consumer/package.json
+  s_7a36ff2e16c14c::t_d1e846673574bf 1-11
+packages/intl/fixtures/consumer/server.ts
+  s_7a36ff2e16c14c::t_7793fb95cd073c 6,51
+  s_7a36ff2e16c14c::t_d1e846673574bf 1-5,7-50,52-55
+scripts/check-packages.ts
+  s_7a36ff2e16c14c::t_d1e846673574bf 3-4,101-112,120-124,128,166-173,194
+bun.lock
+  s_7a36ff2e16c14c::t_2d00906f187cc4 67,84,88
+packages/intl/AGENTS.md
+  s_7a36ff2e16c14c::t_1c912a9bfde175 5-6,12-15,20-42,46-50
+packages/intl/README.md
+  s_7a36ff2e16c14c::t_74512002bd9246 3-4,6-13,15,29-31,34-74,76-87,89-116,121,124,126,128-129,133-136,139-155,163,167-171,173,176-185,188-211
+packages/intl/package.json
+  s_7a36ff2e16c14c::t_4ce9d4d1b331f9 4,57,66-67,70-71
+packages/intl/src/client.ts
+  s_7a36ff2e16c14c::t_5dddd2ba321f38 1,3-11,13-15,17-22,25-83,86
+packages/intl/src/client/client.test.tsx
+  s_7a36ff2e16c14c::t_68652dc9f5b95f 1-2,4,6,8-26,28-29,34,37-50,53-62,64,66-74,76-79,82-83,85-89,91-92,95-96,98-100,103-106,108-113,115-116,118,121-124,127-131,133
+packages/intl/src/formats.ts
+  s_7a36ff2e16c14c::t_56839f00e8ae2b 3,13,54-67
+packages/intl/src/formatter.test.ts
+  s_7a36ff2e16c14c::t_b9ea2d2d289927 5-6,8-11,20-25,28-31,34,37-38,47,62,65-66,72-73
+packages/intl/src/formatter.ts
+  s_7a36ff2e16c14c::t_dc6f7df0a8e122 1,3,5-9,11-12
+packages/intl/src/locale.test.ts
+  s_7a36ff2e16c14c::t_87c858a887369c 59,89-111
+packages/intl/src/testing.test.ts
+  s_7a36ff2e16c14c::t_5aef1f547e9953 7,62-124
+packages/intl/src/testing.ts
+  s_7a36ff2e16c14c::t_b550cf88d491dd 4-11,16,20,27-30,35-37,42,49,52,55-68,70-86,92-101,103-109,111-128
+packages/intl/src/translator.test.ts
+  s_7a36ff2e16c14c::t_d38ff0bc266eb7 6,15-16,20,22,24-34,41-45,51-53,56,60-61,65,67,72-73,75-79,82,85,97-98,101-102,105-107,115,120,122-131
+packages/intl/src/translator.ts
+  s_7a36ff2e16c14c::t_eacf916ac9f0ba 2,4-5,7-16,18-23
+packages/intl/src/types.test.ts
+  s_7a36ff2e16c14c::t_a923bbb8265fd2 1-77
+packages/intl/src/types.ts
+  s_7a36ff2e16c14c::t_b8a57eed5e00b4 2,4-8,11,13-33,42-43,45-51,59,69-71,79-81
+packages/drizzle/package.json
+  s_97092a0768c64f::t_b1e815668524d7 63
+packages/env/package.json
+  s_97092a0768c64f::t_6b54b19338dde1 49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.5",
+  "base_commit_sha": "34bf76bd1bc866c7d8bf959732a379818e35b6c5",
+  "prompts": {},
+  "sessions": {
+    "s_7a36ff2e16c14c": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "01a14349-e934-7a81-914e-1111a7218798",
+        "model": "gpt-6-astra"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    },
+    "s_97092a0768c64f": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "6e2c6bc9-d9af-4087-bbd6-4ae28bd42493",
+        "model": "unknown"
+      },
+      "human_author": "Zack <heyloyep@gmail.com>"
+    }
+  }
+}
