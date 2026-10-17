@@ -1,11 +1,11 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, describe, expect, it } from "vite-plus/test";
-import { StrictMode } from "react";
+import { StrictMode, useState } from "react";
 import { useTranslations as useNativeTranslations } from "use-intl/react";
 
 import { createIntlClient } from "../client.js";
 import { createLocaleRuntime } from "../locale.js";
-import type { CatalogShape } from "../types.js";
+import type { CatalogShape, LocalePreference } from "../types.js";
 
 const runtime = createLocaleRuntime({ locales: ["en", "de"], defaultLocale: "en" });
 const en = {
@@ -131,5 +131,47 @@ describe("controlled native IntlProvider", () => {
       </IntlProvider>,
     );
     expect(screen.getByRole("status").textContent).toBe("home.greeting");
+  });
+
+  it("resolves a controlled preference against system languages and records explicit choices", () => {
+    const { LanguageProvider, useLanguagePreference } = client;
+    function Choice() {
+      const { preference, setPreference, hydrated } = useLanguagePreference();
+      return (
+        <>
+          <span data-testid="preference">{`${preference}:${hydrated}`}</span>
+          <button onClick={() => setPreference("en")}>English</button>
+          <Probe />
+        </>
+      );
+    }
+    function Host() {
+      const [preference, setPreference] = useState<LocalePreference<"en" | "de">>("system");
+      return (
+        <LanguageProvider
+          preference={preference}
+          onPreferenceChange={setPreference}
+          systemLocales={["fr", "de-AT", "en-US"]}
+          messages={{ en, de }}
+          hydrated={false}
+        >
+          <Choice />
+        </LanguageProvider>
+      );
+    }
+    render(<Host />);
+    expect(screen.getByTestId("preference").textContent).toBe("system:false");
+    expect(screen.getByTestId("locale").textContent).toBe("de");
+    fireEvent.click(screen.getByRole("button", { name: "English" }));
+    expect(screen.getByTestId("preference").textContent).toBe("en:false");
+    expect(screen.getByTestId("message").textContent).toBe("Hello Ada");
+  });
+
+  it("requires a LanguageProvider for preference hooks", () => {
+    function Orphan() {
+      client.useLanguagePreference();
+      return null;
+    }
+    expect(() => render(<Orphan />)).toThrow("LanguageProvider is required");
   });
 });

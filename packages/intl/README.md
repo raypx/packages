@@ -43,7 +43,9 @@ for missing, malformed or unsupported values. It never normalizes a persisted
 regional hint into an explicit preference. `resolvePreference(preference,
 locales)` uses an explicit supported preference first, then the first matching
 system candidate in order, then the configured default. Applications own
-preference state, storage, migrations, system-language subscriptions and writes.
+preference state, or use the optional controlled
+[LanguageProvider](#control-the-language-preference) and
+[browser adapters](#persist-browser-preferences).
 
 `resolveLocale` prioritizes a supported explicit cookie value, weighted
 `Accept-Language`, an optional validated fallback, then the configured default.
@@ -114,6 +116,86 @@ interval option; `useFormatter` takes no hook-level configuration argument.
 For lazy catalogs, the application loader must load the selected catalog and
 publish a consistent locale/catalog snapshot before rendering this provider.
 Request-selected locale/messages must never be stored in mutable module globals.
+
+## Control the language preference
+
+The bound client also returns a controlled `LanguageProvider` and
+`useLanguagePreference`. The application passes the stored preference, the
+device languages and every locale's catalog; the provider resolves the locale
+with `resolvePreference` and mounts that catalog.
+
+```tsx
+const { LanguageProvider, useLanguagePreference } = createIntlClient<typeof en>()(localeRuntime);
+
+function Root({ preference, setPreference }: Props) {
+  return (
+    <LanguageProvider
+      preference={preference}
+      systemLocales={deviceLanguages}
+      messages={{ en, zh }}
+      onPreferenceChange={setPreference}
+    >
+      <App />
+    </LanguageProvider>
+  );
+}
+function Picker() {
+  const { preference, setPreference, hydrated } = useLanguagePreference();
+  // ...
+}
+```
+
+It owns no state: `onPreferenceChange` receives choices and the application
+stores them. `hydrated` (default `true`) reports whether device preferences were
+restored. Remaining props such as `timeZone` and `formats` reach `IntlProvider`.
+`useLanguagePreference` throws outside a `LanguageProvider`.
+
+## Persist browser preferences
+
+```tsx
+import { createBrowserLanguage } from "@voidmix/intl/browser";
+
+export const { BrowserLanguageProvider, preferences, getBrowserSystemLocales } =
+  createBrowserLanguage(client, localeRuntime, {
+    messages: { en, zh },
+    storageKey: "site_locale",
+    legacyStorageKeys: ["old_locale"],
+  });
+
+<BrowserLanguageProvider
+  initialPreference={cookiePreference}
+  initialSystemLocales={requestLanguages}
+>
+  <App />
+</BrowserLanguageProvider>;
+```
+
+The server and the first client render use only the initial snapshot, so
+hydration matches. After mount the provider restores `localStorage` (migrating
+the first valid legacy key only after the new write succeeds, and otherwise
+keeping a cookie-only choice), reads `navigator.languages`, follows
+`languagechange` and `storage` events from other windows and sets
+`<html lang>`. Explicit choices are mirrored into the runtime's locale cookie;
+`system` deletes it so servers follow `Accept-Language`. Blocked storage or
+cookies never throw. Pass `restorePreference={false}` when a native shell owns
+the stored value. `preferences` exposes the same `read`, `restore`, `write` and
+`storeCookie` adapters, and the entry touches no DOM global at import.
+
+## Translate error codes
+
+```ts
+import { translateErrorCode, translateKnownErrorCode } from "@voidmix/intl";
+
+const message = translateErrorCode(error, t, { NOT_FOUND: "errors.missing" }, "errors.unknown");
+```
+
+`readErrorDetails` reads a `code` and optional ICU `values` from an error or an
+RPC payload (`data.error`) without trusting its shape: only own properties are
+read, non-finite numbers, invalid dates, objects and prototype keys are dropped,
+and throwing accessors return `undefined`. `translateErrorCode` maps the code
+through an own-property table to a translator key, falling back for unknown
+codes; `translateKnownErrorCode` returns `null` instead. Keys are checked
+against the translator's message keys.
 
 ## Translate and format outside React
 

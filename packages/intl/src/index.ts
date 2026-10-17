@@ -5,3 +5,11 @@ export { formats } from "./formats.js";
 export { createTranslator, type CreateTranslatorOptions, type Translator } from "./translator.js";
 export type * from "./types.js";
 export { IntlError, IntlErrorCode } from "use-intl/core";
+export {
+  readErrorCode,
+  readErrorDetails,
+  translateErrorCode,
+  translateKnownErrorCode,
+  type ErrorCodeMap,
+  type LocalizedErrorDetails,
+} from "./errors.js";

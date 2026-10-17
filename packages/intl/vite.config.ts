@@ -6,6 +6,7 @@ export default defineConfig({
     entry: {
       index: "src/index.ts",
       client: "src/client.ts",
+      browser: "src/browser.ts",
       server: "src/server.ts",
       "types-entry": "src/types-entry.ts",
       testing: "src/testing.ts",

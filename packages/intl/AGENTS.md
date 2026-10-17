@@ -9,7 +9,9 @@ controlled React facade without product dependencies.
 
 ```text
 @voidmix/intl         createLocaleRuntime, formatter, translator, presets and types
-@voidmix/intl/client  createIntlClient<Messages>()(runtime, defaults), controlled IntlProvider/hooks
+@voidmix/intl/client  createIntlClient<Messages>()(runtime, defaults), controlled IntlProvider,
+                      LanguageProvider and hooks
+@voidmix/intl/browser createBrowserLanguage and browser preference/cookie adapters
 @voidmix/intl/server  createIntlServer and synchronous translator
 @voidmix/intl/types   type-only public contracts
 @voidmix/intl/testing catalog shape, ICU arguments/tags and syntax checks
@@ -17,9 +19,12 @@ controlled React facade without product dependencies.
 
 ## Ownership
 
-- Applications own locale choices, catalogs, preference state/storage, system
-  subscriptions, loading and request snapshots. Never add Raypx schemas, keys,
-  migrations, framework loaders or product errors here.
+- Applications own locale choices, catalogs, loading and request snapshots. The
+  optional LanguageProvider stays controlled; /browser adapters take storage keys,
+  legacy keys and catalogs from the application. Never hard-code Raypx keys,
+  catalogs, framework loaders or product error codes here.
+- Browser adapters touch DOM globals only inside functions and effects, tolerate
+  blocked storage and cookies, and keep server and first client renders equal.
 - Locale runtimes copy/freeze supported locales. `system` is reserved;
   parsePreference accepts exact supported values, and resolvePreference tries
   every system candidate in order through the same lookup matcher.

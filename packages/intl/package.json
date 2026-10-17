@@ -26,6 +26,10 @@
       "types": "./dist/client.d.mts",
       "import": "./dist/client.mjs"
     },
+    "./browser": {
+      "types": "./dist/browser.d.mts",
+      "import": "./dist/browser.mjs"
+    },
     "./server": {
       "types": "./dist/server.d.mts",
       "import": "./dist/server.mjs"
