@@ -13,6 +13,7 @@ export const docs = defineDocs({
     files: [
       "docs/README.md",
       "docs/drizzle/*.md",
+      "docs/intl/*.md",
       "docs/development/*.md",
       "packages/drizzle/README.md",
       "packages/drizzle/NOTICE.md",

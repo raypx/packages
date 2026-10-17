@@ -56,6 +56,7 @@ describe("configurable locale runtime", () => {
 
   it.each([
     { locales: [], defaultLocale: "en" },
+    { locales: ["system"], defaultLocale: "system" },
     { locales: ["en"], defaultLocale: "zh" },
     { locales: ["en", "EN"], defaultLocale: "en" },
     { locales: ["invalid locale"], defaultLocale: "invalid locale" },
@@ -83,5 +84,28 @@ describe("configurable locale runtime", () => {
       { locale: "zh", quality: 0.8 },
       { locale: "en", quality: 0.8 },
     ]);
+  });
+});
+
+describe("ordered locale candidates and device preferences", () => {
+  it("matches the first supported candidate after canonicalization", () => {
+    expect(runtime.matchLocale(["fr-FR", "pt_br", "zh-CN"])).toBe("pt-BR");
+    expect(runtime.matchLocale(["bad locale", "de-DE-u-ca-gregory", "en"])).toBe("de-DE");
+    expect(runtime.matchLocale([])).toBeUndefined();
+    expect(runtime.matchLocale(["fr", "es"])).toBeUndefined();
+  });
+  it("parses only exact preferences and reserves system for automatic selection", () => {
+    expect(runtime.parsePreference("zh")).toBe("zh");
+    expect(runtime.parsePreference("pt-BR")).toBe("pt-BR");
+    for (const value of ["system", "zh-CN", "PT_br", "ZH", "fr", "", null, undefined, 42, {}]) {
+      expect(runtime.parsePreference(value)).toBe("system");
+    }
+  });
+  it("uses explicit preferences before all system candidates and then default", () => {
+    expect(runtime.resolvePreference("zh", ["en", "pt-BR"])).toBe("zh");
+    expect(runtime.resolvePreference("system", ["fr-FR", "de-DE", "zh"])).toBe("de-DE");
+    expect(runtime.resolvePreference("system", ["fr"])).toBe("en");
+    // @ts-expect-error unsupported explicit preference
+    expect(() => runtime.resolvePreference("fr", ["zh"])).toThrow(TypeError);
   });
 });

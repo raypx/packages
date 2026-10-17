@@ -1,6 +1,7 @@
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
+import { existsSync } from "node:fs";
+import { cp, mkdir, mkdtemp, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -97,7 +98,18 @@ async function assertArchive(
 }
 
 /** Installs the archive outside the workspace and loads every export with Bun and Node. */
-async function checkConsumer(archive: string, packed: Manifest, consumer: string): Promise<void> {
+async function checkConsumer(
+  archive: string,
+  packed: Manifest,
+  consumer: string,
+  packageDirectory: string,
+): Promise<void> {
+  // Optional public declaration contracts run against the installed archive,
+  // independently of source paths and the workspace's ambient types.
+  const fixture = join(packageDirectory, "fixtures/consumer");
+  const fixtureManifest: Partial<Manifest> = existsSync(join(fixture, "package.json"))
+    ? JSON.parse(await readFile(join(fixture, "package.json"), "utf8"))
+    : {};
   await mkdir(consumer);
   await writeFile(
     join(consumer, "package.json"),
@@ -105,10 +117,15 @@ async function checkConsumer(archive: string, packed: Manifest, consumer: string
       name: "toolkit-artifact-consumer",
       private: true,
       type: "module",
-      dependencies: { [packed.name]: archive, ...packed.peerDependencies },
+      dependencies: {
+        ...packed.peerDependencies,
+        ...fixtureManifest.dependencies,
+        [packed.name]: archive,
+      },
       devDependencies: {
         typescript: rootManifest.devDependencies?.typescript,
         "@types/node": rootManifest.devDependencies?.["@types/node"],
+        ...fixtureManifest.devDependencies,
       },
     }),
   );
@@ -146,6 +163,14 @@ async function checkConsumer(archive: string, packed: Manifest, consumer: string
     }),
   );
   run(process.execPath, ["--bun", "./node_modules/typescript/bin/tsc"], consumer);
+  if (existsSync(join(fixture, "tsconfig.json"))) {
+    await cp(fixture, join(consumer, "contract"), { recursive: true });
+    run(
+      process.execPath,
+      ["--bun", "./node_modules/typescript/bin/tsc", "--project", "contract/tsconfig.json"],
+      consumer,
+    );
+  }
 }
 
 try {
@@ -166,7 +191,7 @@ try {
         packageDirectory,
       );
     const packed = await assertArchive(archive, manifest, packageDirectory);
-    await checkConsumer(archive, packed, join(temporary, directory.name));
+    await checkConsumer(archive, packed, join(temporary, directory.name), packageDirectory);
     console.log(`${packed.name}@${packed.version}: tarball, Bun and Node consumers passed`);
     checked += 1;
   }

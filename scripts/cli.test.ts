@@ -11,6 +11,7 @@ const actions = vi.hoisted(() => ({
   plan: vi.fn(),
   pack: vi.fn(),
   publish: vi.fn(),
+  snapshot: vi.fn(),
   checkToolchain: vi.fn(),
   assertToolchainRuntime: vi.fn(),
 }));
@@ -18,6 +19,7 @@ vi.mock("./release.js", () => ({
   plan: actions.plan,
   pack: actions.pack,
   publish: actions.publish,
+  snapshot: actions.snapshot,
 }));
 vi.mock("./toolchain.js", () => ({
   checkToolchain: actions.checkToolchain,
@@ -41,7 +43,7 @@ function runCli(rawArgs: string[], env: NodeJS.ProcessEnv = {}) {
       preload,
       `import { mock } from "bun:test";
 mock.module(${JSON.stringify(join(root, "scripts/release.ts"))}, () =>
-  Object.fromEntries(["plan", "pack", "publish"].map(name => [name,
+  Object.fromEntries(["plan", "pack", "publish", "snapshot"].map(name => [name,
     (...args) => console.log(JSON.stringify({ release: name, args }))
   ]))
 );
@@ -220,6 +222,32 @@ describe("release CLI arguments", () => {
       runCommand(command, { rawArgs: ["release", "plan", "unexpected"] }),
     ).rejects.toThrow("Unexpected positional arguments");
     expectNoRelease();
+  });
+
+  it("packs snapshots of changed packages without publishing by default", async () => {
+    await runCommand(command, { rawArgs: ["release", "snapshot"] });
+    expect(actions.snapshot).toHaveBeenCalledExactlyOnceWith([], { publish: false });
+    expectNoRelease();
+  });
+
+  it("passes named packages, --publish and a string OTP to snapshot", async () => {
+    await runCommand(command, {
+      rawArgs: ["release", "snapshot", "intl", "env", "--publish", "--otp", "012345"],
+    });
+    expect(actions.snapshot).toHaveBeenCalledExactlyOnceWith(["intl", "env"], {
+      publish: true,
+      otp: "012345",
+    });
+  });
+
+  it.each([
+    [["--unexpected"], "Unknown option --unexpected"],
+    [["--otp", "012345"], "--otp requires --publish."],
+  ])("rejects snapshot %j before packing", async (options, message) => {
+    await expect(
+      runCommand(command, { rawArgs: ["release", "snapshot", ...options] }),
+    ).rejects.toThrow(message);
+    expect(actions.snapshot).not.toHaveBeenCalled();
   });
 });
 

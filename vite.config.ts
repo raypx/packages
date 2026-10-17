@@ -5,6 +5,9 @@ export default defineConfig({
   lint: {
     ignorePatterns: [
       "packages/*/dist/**",
+      // Public consumer contracts resolve installed tarballs, not workspace source.
+      // check-packages.ts type-checks these in their isolated dependency environment.
+      "packages/*/fixtures/consumer/**",
       "docs/content/**",
       "docs/.output/**",
       "docs/.source/**",

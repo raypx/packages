@@ -18,6 +18,9 @@ and have explicit ESM exports, a README, license, independent version and tests.
 Configuration packages export their package-root files directly instead of `dist/`.
 `pack:check` installs every public archive in isolated Bun and Node consumers and
 loads each export; package behavior and public types belong in unit tests.
+Optional `packages/<name>/fixtures/consumer` declaration contracts are copied into
+the isolated archive consumer by `pack:check`. Their own tsconfig checks public
+types against the installed tarball; they are excluded from source lint resolution.
 Every workspace's TypeScript configuration extends an `@voidmix/tsconfig` preset,
 declared once by the private root through `workspace:*`; Turbo's global
 dependencies include the presets. Shared test configuration lives at the root; it
@@ -49,7 +52,8 @@ managers may select the same pins. `bun run doctor` checks the active executable
 
 Install dependencies before invoking the repository CLI. The root `voidmix-dev`
 script runs `bun scripts/cli.ts` using citty. Keep `doctor`,
-`toolchain:check` and `release:plan`, `release:pack`, `release:publish` as aliases.
+`toolchain:check` and `release:plan`, `release:pack`, `release:publish`,
+`release:snapshot` as aliases.
 Use confbox for structured TOML and YAML toolchain configuration parsing;
 retain the existing process and output helpers. These are private maintenance
 tools and do not change published package APIs.
@@ -101,6 +105,8 @@ Do not publish to npm without direct authorization. `pack:check` builds local
 tarballs and installs them in a disposable directory; it does not publish.
 `release:plan` is read-only, `release:pack` replaces only `.changeset/pack/release/`,
 and `release:publish` publishes; follow `docs/development/publishing.md`.
+`release:snapshot` packs `0.0.0-next-*` consumer previews into `.changeset/pack/snapshot/`
+and restores every manifest; only its `--publish` flag uploads them under `next`.
 The CLI accepts release `--stable` and string `--otp <code>` flags directly,
 after the final subcommand. Reject options before a subcommand rather than losing them.
 Prefer `--` for additional Changesets arguments; retain direct forwarding for

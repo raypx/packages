@@ -52,3 +52,21 @@ describe("server locale factory", () => {
     expect(other.resolveRequestLocale(headers)).toBe("es");
   });
 });
+
+it("accepts structural header readers without DOM types", () => {
+  const values: Record<string, string> = { cookie: "site_locale=en", "accept-language": "de-DE" };
+  expect(server.resolveRequestLocale({ get: (name) => values[name] ?? null })).toBe("en");
+});
+it("validates fallbacks before consuming valid request hints", () => {
+  const headers = { get: (name: string) => (name === "cookie" ? "site_locale=en" : "de-DE") };
+  // @ts-expect-error invalid values from untyped callers still fail with a cookie hint
+  expect(() => server.resolveRequestLocale(headers, "fr")).toThrow(TypeError);
+  expect(() =>
+    server.resolveRequestLocale(
+      { get: (name) => (name === "accept-language" ? "en" : null) },
+      // @ts-expect-error invalid values still fail with an accept-language hint
+      "fr",
+    ),
+  ).toThrow(TypeError);
+  expect(server.resolveRequestLocaleHint({ get: () => null })).toBeUndefined();
+});

@@ -4,6 +4,7 @@ import {
   assertMessageCatalogParity,
   compareMessageCatalogs,
   extractIcuArguments,
+  extractIcuSignature,
 } from "./testing.js";
 
 describe("message catalog testing helpers", () => {
@@ -57,4 +58,67 @@ describe("message catalog testing helpers", () => {
   ])("accepts %s", (_name, en, zh) => {
     expect(() => assertMessageCatalogParity(en, zh, "en", "zh")).not.toThrow();
   });
+});
+
+it("tracks rich-text callback names separately from ordinary values", () => {
+  expect(
+    extractIcuSignature("<strong>{name}</strong> {count, plural, other {<em># {name}</em>}}"),
+  ).toEqual({ arguments: ["count", "name"], tags: ["em", "strong"] });
+  expect(extractIcuArguments("<strong>{name}</strong>")).toEqual(["name"]);
+  expect(
+    compareMessageCatalogs({ value: "<strong>{name}</strong>" }, { value: "<em>{name}</em>" }),
+  ).toEqual([
+    expect.objectContaining({
+      kind: "parity",
+      path: "value",
+      message: expect.stringContaining("tags"),
+    }),
+  ]);
+  expect(compareMessageCatalogs({ value: "{name}" }, { value: "<name>Text</name>" })).toHaveLength(
+    2,
+  );
+});
+
+it("allows reordered values, different plural categories and tag nesting", () => {
+  const left = {
+    value: "<strong>{name} <em>{count, plural, one {# item} other {# items}}</em></strong>",
+  };
+  const right = {
+    value: "<em>{count, plural, few {#} many {#} other {#}}</em> <strong>{name}</strong>",
+  };
+  expect(compareMessageCatalogs(left, right)).toEqual([]);
+});
+
+it.each(["left", "right", "both"] as const)(
+  "identifies only invalid ICU sides: %s",
+  (invalidSide) => {
+    const left = { nested: { value: invalidSide === "right" ? "Hi {name}" : "Hi {" } };
+    const right = { nested: { value: invalidSide === "left" ? "Hallo {name}" : "Hallo {" } };
+    const issues = compareMessageCatalogs(left, right, "en", "de");
+    expect(issues.map(({ side, locale, path }) => ({ side, locale, path }))).toEqual(
+      invalidSide === "both"
+        ? [
+            { side: "left", locale: "en", path: "nested.value" },
+            { side: "right", locale: "de", path: "nested.value" },
+          ]
+        : [
+            {
+              side: invalidSide,
+              locale: invalidSide === "left" ? "en" : "de",
+              path: "nested.value",
+            },
+          ],
+    );
+    for (const issue of issues) {
+      expect(issue.kind).toBe("parse");
+      expect(issue.fix).toContain(issue.locale);
+    }
+  },
+);
+
+it("reports malformed catalog nodes rather than throwing", () => {
+  const invalid = { nested: null } as unknown as import("./types.js").MessageTree;
+  expect(compareMessageCatalogs(invalid, { nested: { value: "x" } }, "en", "de")).toEqual([
+    expect.objectContaining({ kind: "parity", side: "left", locale: "en", path: "nested" }),
+  ]);
 });

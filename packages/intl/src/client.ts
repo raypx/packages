@@ -1,188 +1,86 @@
+import { createElement, useMemo, type ComponentProps } from "react";
 import {
-  createElement,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type PropsWithChildren,
-} from "react";
+  IntlProvider as NativeIntlProvider,
+  useFormatter as useNativeFormatter,
+  useLocale as useNativeLocale,
+  useMessages as useNativeMessages,
+  useNow as useNativeNow,
+  useTimeZone as useNativeTimeZone,
+  useTranslations as useNativeTranslations,
+} from "use-intl/react";
+import type { NamespaceKeys, NestedKeyOf } from "use-intl/core";
 
-import { createAsyncProvider } from "./client/async-provider.js";
-import { createClientRuntime } from "./client/runtime.js";
-import { createFormatter, type Formatter } from "./formatter.js";
-import { createTranslator, type Translator } from "./translator.js";
-import type {
-  IntlRuntimeOptions,
-  LocaleRuntime,
-  LocaleStorage,
-  MessagesByLocale,
-} from "./types.js";
+import { mergeFormats, resolveIntlOptions } from "./formats.js";
+import type { Translator } from "./translator.js";
+import type { CatalogShape, DynamicMessages, IntlDefaults, LocaleRuntime } from "./types.js";
 
-export type LocaleProviderProps<L extends string = string> = PropsWithChildren<
-  IntlRuntimeOptions & {
-    locale: L;
-    storage?: LocaleStorage<L>;
-    onLocaleChange?: (locale: L) => void | Promise<void>;
-  }
->;
-
-export type I18nProviderProps<L extends string = string> = LocaleProviderProps<L> & {
-  messages: MessagesByLocale<L>;
+export type IntlProviderProps<
+  L extends string = string,
+  M extends DynamicMessages = DynamicMessages,
+> = Omit<ComponentProps<typeof NativeIntlProvider>, "locale" | "messages"> & {
+  locale: L;
+  messages: CatalogShape<M> | null;
 };
 
-/** Create providers and hooks once, outside React renders, for one locale configuration. */
-export function createIntlClient<L extends string>(runtime: LocaleRuntime<L>) {
-  const { LocaleContextProvider, IntlCatalogProvider, useLocaleContext, useCatalogContext } =
-    createClientRuntime<L>();
-
-  function LocaleProvider({
-    children,
-    locale: initialLocale,
-    storage,
-    onLocaleChange,
-    ...intlOptions
-  }: LocaleProviderProps<L>) {
-    const [locale, setActiveLocale] = useState(initialLocale);
-    const localeRef = useRef(initialLocale);
-    const mountedRef = useRef(true);
-    useEffect(() => {
-      if (localeRef.current === initialLocale) return;
-      localeRef.current = initialLocale;
-      setActiveLocale(initialLocale);
-    }, [initialLocale]);
-    useEffect(() => {
-      // StrictMode replays effect setup; the replay remains a live mount.
-      mountedRef.current = true;
-      return () => {
-        mountedRef.current = false;
-      };
-    }, []);
-
-    const setLocale = useCallback(
-      async (nextLocale: L) => {
-        if (!runtime.isLocale(nextLocale) || nextLocale === localeRef.current) return;
-        localeRef.current = nextLocale;
-        try {
-          storage?.write(nextLocale);
-        } catch {
-          // Persistence failures must not prevent an in-memory locale change.
-        }
-        if (mountedRef.current) setActiveLocale(nextLocale);
-        await onLocaleChange?.(nextLocale);
-      },
-      [onLocaleChange, storage],
-    );
-
-    return createElement(
-      LocaleContextProvider,
-      {
-        locale,
-        setLocale,
-        ...intlOptions,
-      },
-      children,
-    );
-  }
-
-  function IntlMessagesProvider({
-    children,
-    messages,
-    ...intlOptions
-  }: PropsWithChildren<{ messages: MessagesByLocale<L> } & IntlRuntimeOptions>) {
-    const locale = useLocale();
-    return createElement(
-      IntlCatalogProvider,
-      {
-        locale,
-        messages: messages[locale],
-        ...intlOptions,
-      },
-      children,
-    );
-  }
-
-  function I18nProvider({
-    messages,
-    children,
-    locale,
-    storage,
-    onLocaleChange,
-    ...intlOptions
-  }: I18nProviderProps<L>) {
-    return createElement(
-      LocaleProvider,
-      {
-        locale,
-        ...(storage !== undefined ? { storage } : {}),
-        ...(onLocaleChange !== undefined ? { onLocaleChange } : {}),
-        ...intlOptions,
-      },
-      createElement(
-        IntlMessagesProvider,
-        {
-          messages,
-          ...intlOptions,
-        },
-        children,
-      ),
-    );
-  }
-
-  function useLocale(): L {
-    return useLocaleContext().locale;
-  }
-
-  function useSetLocale() {
-    return useLocaleContext().setLocale;
-  }
-
-  function useTranslations(namespace?: string): Translator {
-    const { locale, messages, ...options } = useCatalogContext();
-    const { timeZone, formats, onError, getMessageFallback, now } = options;
-    return useMemo(
-      () =>
-        createTranslator({
-          locale,
-          messages,
-          ...options,
-          ...(namespace !== undefined ? { namespace } : {}),
-        }),
-      [locale, messages, timeZone, formats, onError, getMessageFallback, now, namespace],
-    );
-  }
-
-  function useFormatter(options: IntlRuntimeOptions = {}): Formatter {
-    const { locale, setLocale: _setLocale, ...contextOptions } = useLocaleContext();
-    const resolvedOptions = { ...contextOptions, ...options };
-    const { timeZone, formats, onError, getMessageFallback, now } = resolvedOptions;
-    return useMemo(
-      () => createFormatter(locale, resolvedOptions),
-      [locale, formats, timeZone, onError, getMessageFallback, now],
-    );
-  }
-
-  const AsyncI18nProvider = createAsyncProvider(runtime, {
-    LocaleContextProvider,
-    IntlCatalogProvider,
-  });
-  return {
-    LocaleProvider,
-    I18nProvider,
-    AsyncI18nProvider,
-    useLocale,
-    useSetLocale,
-    useTranslations,
-    useFormatter,
+/** Bind types and static defaults only. Locale, catalogs and loading belong to the application. */
+export function createIntlClient<M extends DynamicMessages = DynamicMessages>() {
+  return function bindLocale<L extends string>(
+    runtime: LocaleRuntime<L>,
+    defaults: IntlDefaults = {},
+  ) {
+    // Copy static configuration once; there is no mutable client state or private context.
+    const configuredDefaults = {
+      ...defaults,
+      formats: mergeFormats(defaults.formats),
+    };
+    function IntlProvider({ locale, messages, ...options }: IntlProviderProps<L, M>) {
+      if (!runtime.isLocale(locale)) throw new TypeError("Unsupported provider locale");
+      const resolved = useMemo(() => {
+        const formats =
+          options.formats === undefined
+            ? configuredDefaults.formats
+            : options.formats === null
+              ? null
+              : {
+                  dateTime: { ...configuredDefaults.formats.dateTime, ...options.formats.dateTime },
+                  number: { ...configuredDefaults.formats.number, ...options.formats.number },
+                  list: { ...configuredDefaults.formats.list, ...options.formats.list },
+                  displayName: {
+                    ...configuredDefaults.formats.displayName,
+                    ...options.formats.displayName,
+                  },
+                };
+        return resolveIntlOptions({ ...configuredDefaults, ...options, formats });
+      }, [
+        options.formats,
+        options.timeZone,
+        options.onError,
+        options.getMessageFallback,
+        options.now,
+      ]);
+      return createElement(NativeIntlProvider, { ...options, ...resolved, locale, messages });
+    }
+    function useTranslations<N extends NamespaceKeys<M, NestedKeyOf<M>> = never>(
+      namespace?: N,
+    ): Translator<M, N> {
+      // The mounted provider owns the runtime data. This bridge binds its declared catalog shape.
+      return useNativeTranslations(namespace as never) as unknown as Translator<M, N>;
+    }
+    function useLocale(): L {
+      return useNativeLocale() as L;
+    }
+    function useMessages(): CatalogShape<M> {
+      return useNativeMessages() as CatalogShape<M>;
+    }
+    return {
+      IntlProvider,
+      useLocale,
+      useTranslations,
+      useFormatter: useNativeFormatter,
+      useNow: useNativeNow,
+      useTimeZone: useNativeTimeZone,
+      useMessages,
+    };
   };
 }
-
-export { createBrowserLocaleStorage, createLocalStorageLocaleStorage } from "./client/storage.js";
-export type { AsyncI18nProviderProps } from "./client/async-provider.js";
-export type {
-  LocaleStorage,
-  MessageCatalog,
-  MessageTree,
-  MessagesByLocale,
-  LocaleCatalogLoader,
-} from "./types.js";
+export type { CatalogShape, DynamicMessages, IntlDefaults, MessagesByLocale } from "./types.js";

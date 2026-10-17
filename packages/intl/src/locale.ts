@@ -20,7 +20,7 @@ export function createLocaleRuntime<const L extends string>(
   const canonical = new Map<string, L>();
   for (const locale of locales) {
     const key = canonicalLocale(locale);
-    if (!key || locale !== locale.trim() || locale.includes("_")) {
+    if (!key || key === "system" || locale !== locale.trim() || locale.includes("_")) {
       throw new TypeError(`Invalid supported locale: ${locale}`);
     }
     if (canonical.has(key)) throw new TypeError(`Duplicate supported locale: ${locale}`);
@@ -56,6 +56,26 @@ export function createLocaleRuntime<const L extends string>(
       }
     }
     return undefined;
+  }
+
+  function matchLocale(candidates: readonly string[]): L | undefined {
+    for (const candidate of candidates) {
+      const locale = normalizeLocale(candidate);
+      if (locale !== undefined) return locale;
+    }
+    return undefined;
+  }
+
+  function parsePreference(value: unknown): L | "system" {
+    return typeof value === "string" && isLocale(value) ? value : "system";
+  }
+
+  function resolvePreference(preference: L | "system", candidates: readonly string[]): L {
+    if (preference !== "system") {
+      if (!isLocale(preference)) throw new TypeError("Unsupported locale preference");
+      return preference;
+    }
+    return matchLocale(candidates) ?? defaultLocale;
   }
 
   function getLocaleCookie(cookieHeader: string | null | undefined): L | undefined {
@@ -95,9 +115,7 @@ export function createLocaleRuntime<const L extends string>(
     }
     return (
       normalizeLocale(cookieLocale) ??
-      parseAcceptLanguage(acceptLanguage)
-        .map((preference) => normalizeLocale(preference.locale))
-        .find((locale): locale is L => locale !== undefined) ??
+      matchLocale(parseAcceptLanguage(acceptLanguage).map((preference) => preference.locale)) ??
       fallbackLocale ??
       defaultLocale
     );
@@ -110,6 +128,9 @@ export function createLocaleRuntime<const L extends string>(
     cookieMaxAgeSeconds,
     isLocale,
     normalizeLocale,
+    matchLocale,
+    parsePreference,
+    resolvePreference,
     getLocaleCookie,
     serializeLocaleCookie,
     resolveLocale,

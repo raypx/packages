@@ -108,6 +108,33 @@ export const command = defineCommand({
             await publish(args.stable, publishArguments(rawArgs));
           },
         }),
+        snapshot: defineCommand({
+          meta: {
+            name: "snapshot",
+            description: "Pack preview versions for consumers; upload them only with --publish",
+          },
+          args: {
+            publish: {
+              type: "boolean",
+              default: false,
+              description: "Publish the verified snapshots under the next dist-tag",
+            },
+            otp: { type: "string", description: "One-time password passed to npm" },
+          },
+          run: async ({ args }) => {
+            const unknown = Object.keys(args).find(
+              (key) => key !== "_" && key !== "publish" && key !== "otp",
+            );
+            if (unknown) throw new Error(`Unknown option --${unknown}`);
+            if (args.otp !== undefined && !args.publish)
+              throw new Error("--otp requires --publish.");
+            const { snapshot } = await import("./release.js");
+            await snapshot(args._, {
+              publish: args.publish,
+              ...(args.otp === undefined ? {} : { otp: String(args.otp) }),
+            });
+          },
+        }),
       },
     }),
   },

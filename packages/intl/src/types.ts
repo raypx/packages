@@ -1,60 +1,54 @@
 import type {
-  Formats as UseIntlFormats,
+  Formats,
   IntlConfig,
-  MarkupTagsFunction,
-  NumberFormatOptions as UseIntlNumberFormatOptions,
-  RichTagsFunction,
+  MessageKeys,
+  NamespaceKeys,
+  NestedKeyOf,
+  NestedValueOf,
+  createTranslator,
 } from "use-intl/core";
 
-export type MessageTree = {
-  readonly [key: string]: string | MessageTree;
-};
-
+export type MessageTree = { readonly [key: string]: string | MessageTree };
 export type MessageCatalog = MessageTree;
-export type MessagesByLocale<L extends string = string> = Readonly<Record<L, MessageCatalog>>;
+/** The upstream unconstrained catalog type keeps dynamic callers deliberately broad. */
+export type DynamicMessages = NonNullable<Parameters<typeof createTranslator>[0]["messages"]>;
+export type CatalogShape<M extends DynamicMessages> = string extends keyof M
+  ? MessageCatalog
+  : { readonly [K in keyof M]: M[K] extends string ? string : CatalogShape<M[K]> };
+export type MessagesByLocale<
+  L extends string = string,
+  M extends DynamicMessages = DynamicMessages,
+> = Readonly<Record<L, CatalogShape<M>>>;
+export type NamespaceOf<M extends DynamicMessages> = string extends keyof M
+  ? string
+  : NamespaceKeys<M, NestedKeyOf<M>>;
+export type MessageKey<
+  M extends DynamicMessages,
+  N extends NamespaceOf<M> = never,
+> = string extends keyof M
+  ? string
+  : [N] extends [never]
+    ? MessageKeys<M, NestedKeyOf<M>>
+    : MessageKeys<NestedValueOf<M, N>, NestedKeyOf<NestedValueOf<M, N>>>;
+
 export type TranslationValue = string | number | bigint | boolean | Date | null;
 export type TranslationValues = Record<string, TranslationValue>;
-export type RichTranslationValues = Record<string, TranslationValue | RichTagsFunction>;
-export type MarkupTranslationValues = Record<string, TranslationValue | MarkupTagsFunction>;
-
 export type {
   DateTimeFormatOptions,
   NumberFormatOptions,
   RelativeTimeFormatOptions,
   RichTagsFunction,
   MarkupTagsFunction,
+  RichTranslationValues,
+  MarkupTranslationValues,
 } from "use-intl/core";
-
-export interface IntlFormats {
-  dateTime?: Readonly<Record<string, Intl.DateTimeFormatOptions>>;
-  list?: Readonly<Record<string, Intl.ListFormatOptions>>;
-  number?: Readonly<Record<string, Intl.NumberFormatOptions | UseIntlNumberFormatOptions>>;
-  relativeTime?: Readonly<Record<string, Intl.RelativeTimeFormatOptions>>;
-  displayName?: UseIntlFormats["displayName"];
-}
-
-export interface ResolvedIntlFormats {
-  dateTime: Readonly<Record<string, Intl.DateTimeFormatOptions>>;
-  list: Readonly<Record<string, Intl.ListFormatOptions>>;
-  number: Readonly<Record<string, Intl.NumberFormatOptions | UseIntlNumberFormatOptions>>;
-  relativeTime: Readonly<Record<string, Intl.RelativeTimeFormatOptions>>;
-  displayName: NonNullable<UseIntlFormats["displayName"]>;
-}
-
-export interface IntlRuntimeOptions {
-  timeZone?: string;
-  formats?: IntlFormats;
-  now?: Date;
-  onError?: NonNullable<IntlConfig["onError"]>;
-  getMessageFallback?: NonNullable<IntlConfig["getMessageFallback"]>;
-}
-
-export type LocaleCatalogLoader<L extends string = string> = (locale: L) => Promise<MessageCatalog>;
-
-export interface LocaleStorage<L extends string = string> {
-  read(): L | undefined;
-  write(locale: L): void;
-}
+export type IntlFormats = Formats;
+export type ResolvedIntlFormats = { [K in keyof Formats]-?: NonNullable<Formats[K]> };
+export type IntlRuntimeOptions = Pick<
+  IntlConfig,
+  "timeZone" | "formats" | "now" | "onError" | "getMessageFallback"
+>;
+export type IntlDefaults = Omit<IntlRuntimeOptions, "now">;
 
 export interface LocaleConfig<L extends string> {
   locales: readonly L[];
@@ -62,18 +56,19 @@ export interface LocaleConfig<L extends string> {
   cookieName?: string;
   cookieMaxAgeSeconds?: number;
 }
-
+export type LocalePreference<L extends string = string> = L | "system";
 export interface LocaleSource<L extends string = string> {
   cookieLocale?: string | null;
   acceptLanguage?: string | null;
   fallbackLocale?: L;
 }
-
 export interface AcceptLanguagePreference {
   locale: string;
   quality: number;
 }
-
+export interface HeaderReader {
+  get(name: string): string | null;
+}
 export interface LocaleRuntime<L extends string = string> {
   readonly locales: readonly L[];
   readonly defaultLocale: L;
@@ -81,6 +76,9 @@ export interface LocaleRuntime<L extends string = string> {
   readonly cookieMaxAgeSeconds: number;
   isLocale(value: string): value is L;
   normalizeLocale(value: string | null | undefined): L | undefined;
+  matchLocale(candidates: readonly string[]): L | undefined;
+  parsePreference(value: unknown): LocalePreference<L>;
+  resolvePreference(preference: LocalePreference<L>, locales: readonly string[]): L;
   getLocaleCookie(cookieHeader: string | null | undefined): L | undefined;
   serializeLocaleCookie(locale: L, options?: { secure?: boolean }): string;
   resolveLocale(source?: LocaleSource<L>): L;

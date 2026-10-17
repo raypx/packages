@@ -91,6 +91,37 @@ When every version is already on npm, packing and publication succeed without
 publishing anything. Packing and publication stay separate commands: packing
 outlasts an npm one-time password, and the archives can be reviewed before upload.
 
+## Consumer previews
+
+Consumers such as Raypx try unreleased changes in two ways, neither of which
+versions packages or creates tags.
+
+**Local link.** Build once with `bun run build` (or keep `bun run dev` running in
+the package), run `bun link` in `packages/<name>`, then `bun link @voidmix/<name>`
+in the consumer. This changes only the consumer's `node_modules`; its next
+`bun install` restores the registry version. The link resolves to this checkout,
+so the consumer must dedupe singleton peers (`react`, `react-dom`, `use-intl`)
+through Vite's `resolve.dedupe`, or React reports invalid hook calls. Metro does
+not follow links outside its watch folders; preview native apps with a snapshot.
+
+**Snapshot.** On any branch with a clean working tree:
+
+```sh
+bun run release:snapshot                 # packages named by unreleased changesets
+bun run release:snapshot intl env        # or explicit packages
+bun run release:snapshot --publish --otp <code>
+```
+
+The command builds, temporarily sets each package version to
+`0.0.0-next-<UTC timestamp>-<commit>`, packs with `bun pm pack`, restores every
+manifest and runs the same archive and isolated consumer checks as a release.
+Archives stay in `.changeset/pack/snapshot/`. Only `--publish` uploads them, under
+the `next` dist-tag, so `latest` and `alpha` never move. Snapshot versions sort
+below every release. Consumers pin the exact printed version and replace it with
+the released alpha before merging. Publishing a snapshot is a maintainer action
+like any other publication. Packages that depend on sibling `@voidmix/*`
+packages are refused, because a snapshot rewrites only its own version.
+
 ## CI publication
 
 The release workflow publishes only after the first manual publication of each

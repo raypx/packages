@@ -25,6 +25,7 @@
     "release:plan": "bun run voidmix-dev release plan",
     "release:pack": "bun run voidmix-dev release pack",
     "release:publish": "bun run voidmix-dev release publish",
+    "release:snapshot": "bun run voidmix-dev release snapshot",
     "docs:dev": "bun --bun turbo run dev --filter=docs",
     "docs:build": "bun --bun turbo run build --filter=docs",
     "docs:preview": "bun run --cwd docs preview",

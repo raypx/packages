@@ -1,24 +1,23 @@
 import { parseAcceptLanguage } from "./accept-language.js";
-import type { LocaleRuntime } from "./types.js";
+import type { HeaderReader, LocaleRuntime } from "./types.js";
 
 export { createTranslator, type CreateTranslatorOptions, type Translator } from "./translator.js";
 
 /** Only the Headers contract is needed; no framework or request environment is imported. */
 export function createIntlServer<L extends string>(runtime: LocaleRuntime<L>) {
-  function resolveRequestLocaleHint(headers: Pick<Headers, "get">): L | undefined {
+  function resolveRequestLocaleHint(headers: HeaderReader): L | undefined {
     return (
       runtime.getLocaleCookie(headers.get("cookie")) ??
-      parseAcceptLanguage(headers.get("accept-language"))
-        .map((preference) => runtime.normalizeLocale(preference.locale))
-        .find((locale): locale is L => locale !== undefined)
+      runtime.matchLocale(
+        parseAcceptLanguage(headers.get("accept-language")).map((preference) => preference.locale),
+      )
     );
   }
 
-  function resolveRequestLocale(headers: Pick<Headers, "get">, fallbackLocale?: L): L {
-    return (
-      resolveRequestLocaleHint(headers) ??
-      runtime.resolveLocale(fallbackLocale === undefined ? {} : { fallbackLocale })
-    );
+  function resolveRequestLocale(headers: HeaderReader, fallbackLocale?: L): L {
+    // Validate explicit configuration even when a request contains a valid hint.
+    const fallback = runtime.resolveLocale(fallbackLocale === undefined ? {} : { fallbackLocale });
+    return resolveRequestLocaleHint(headers) ?? fallback;
   }
 
   function resolveConfiguredLocale(value: string | null | undefined, fallbackLocale?: L): L {

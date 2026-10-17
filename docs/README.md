@@ -30,6 +30,7 @@ package contains no product secrets, service configuration or application preset
 ## Intl
 
 - [Current API and locale integration](../packages/intl/README.md)
+- [Controlled provider architecture and migration](intl/migration.md)
 
 ## TSConfig
 

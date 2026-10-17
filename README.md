@@ -25,8 +25,9 @@ light and dark themes, and local full-text search.
 
 `@voidmix/intl` uses `use-intl` 4.14.9 for translation, formatting and `IntlProvider`.
 React is a required peer, including for root and server consumers. The package
-adds configurable locale negotiation, persistence, asynchronous catalog loading
-and isolated client factories around that runtime.
+adds configurable locale negotiation, typed controlled providers and catalog
+validation. Applications own preference state, persistence and message loading.
+See the [controlled provider migration](docs/intl/migration.md).
 
 `@voidmix/env` validates application-supplied schemas with Zod, combines nested
 presets and guards server-only variables in client mode. Its `/runtime` entry
@@ -73,8 +74,8 @@ bun run voidmix-dev toolchain check
 ```
 
 Install dependencies before using the CLI. The existing `doctor`,
-`toolchain:check` and `release:plan`, `release:pack`, `release:publish` scripts
-remain aliases for its commands.
+`toolchain:check` and `release:plan`, `release:pack`, `release:publish`,
+`release:snapshot` scripts remain aliases for its commands.
 
 `doctor` checks the active Bun and Node executables. `toolchain:check` checks the
 committed pins, CI setup and documented versions for drift. To upgrade a runtime,
@@ -212,6 +213,10 @@ bun run release:plan      # read-only: versions missing from npm and their dist-
 bun run release:pack      # clean main only: builds, packs with Bun, checks the archives
 bun run release:publish   # publishes the packed commit; append --otp <code> if asked
 ```
+
+To let a consumer try unreleased changes, `bun run release:snapshot` packs
+`0.0.0-next-*` previews from any clean branch; see
+[consumer previews](docs/development/publishing.md#consumer-previews).
 
 The equivalent CLI commands are `bun run voidmix-dev release plan`,
 `bun run voidmix-dev release pack` and `bun run voidmix-dev release publish`.

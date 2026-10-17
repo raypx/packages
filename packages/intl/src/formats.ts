@@ -1,23 +1,21 @@
 import type { Formats as UseIntlFormats } from "use-intl/core";
 
-import type { IntlFormats, ResolvedIntlFormats } from "./types.js";
+import type { IntlFormats, IntlRuntimeOptions, ResolvedIntlFormats } from "./types.js";
 
 export const formats = {
   dateTime: { short: { dateStyle: "medium" } },
   list: { conjunction: { type: "conjunction" } },
   number: { compact: { notation: "compact" } },
-  relativeTime: { numeric: { numeric: "auto" } },
   displayName: {},
 } as const satisfies ResolvedIntlFormats;
 
 /** Override individual presets while preserving the other default definitions. */
-export function mergeFormats(custom?: IntlFormats): ResolvedIntlFormats {
+export function mergeFormats(custom?: IntlFormats | null): ResolvedIntlFormats {
   if (!custom) return formats;
   return {
     dateTime: { ...formats.dateTime, ...custom.dateTime },
     list: { ...formats.list, ...custom.list },
     number: { ...formats.number, ...custom.number },
-    relativeTime: { ...formats.relativeTime, ...custom.relativeTime },
     displayName: { ...formats.displayName, ...custom.displayName },
   };
 }
@@ -52,4 +50,18 @@ export function toUseIntlFormats(custom: IntlFormats): UseIntlFormats {
       ),
     }),
   } as UseIntlFormats;
+}
+
+const ignoreIntlError: NonNullable<IntlRuntimeOptions["onError"]> = () => {};
+/** Shared pure configuration boundary for core factories and controlled React providers. */
+export function resolveIntlOptions(options: IntlRuntimeOptions = {}) {
+  return {
+    timeZone: options.timeZone ?? "UTC",
+    formats: toUseIntlFormats(mergeFormats(options.formats)),
+    onError: options.onError ?? ignoreIntlError,
+    ...(options.now !== undefined ? { now: options.now } : {}),
+    ...(options.getMessageFallback !== undefined
+      ? { getMessageFallback: options.getMessageFallback }
+      : {}),
+  };
 }

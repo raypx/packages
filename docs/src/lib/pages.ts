@@ -48,7 +48,13 @@ export const documentationPages = [
     sourcePath: "packages/intl/README.md",
     title: "Intl",
     description:
-      "Locale negotiation, ICU translation, Intl formatting and isolated React providers.",
+      "Locale negotiation, typed ICU translation, Intl formatting and controlled React providers.",
+  },
+  {
+    slug: "intl/migration",
+    sourcePath: "docs/intl/migration.md",
+    title: "Controlled provider migration",
+    description: "Runtime ownership, typed messages, platform preferences and alpha migration.",
   },
   {
     slug: "tsconfig/index",
@@ -87,7 +93,7 @@ export const navigationMetadata = {
     pages: ["index", "drizzle-plus", "better-drizzle", "merge-plan", "provenance"],
   },
   "env/meta.json": { title: "Env", pages: ["index"] },
-  "intl/meta.json": { title: "Intl", pages: ["index"] },
+  "intl/meta.json": { title: "Intl", pages: ["index", "migration"] },
   "tsconfig/meta.json": { title: "TSConfig", pages: ["index"] },
   "development/meta.json": { title: "Development", pages: ["index", "changesets", "publishing"] },
 };

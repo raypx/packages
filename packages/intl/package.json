@@ -1,7 +1,7 @@
 {
   "name": "@voidmix/intl",
   "version": "0.0.0-alpha.0",
-  "description": "Configurable locale negotiation, ICU translation, Intl formatting and isolated React providers.",
+  "description": "Configurable locale negotiation, ICU translation, Intl formatting and controlled typed React providers.",
   "homepage": "https://github.com/raypx/voidmix/tree/main/packages/intl",
   "license": "Apache-2.0",
   "repository": {
@@ -54,8 +54,7 @@
     "pack:check": "bun pm pack --dry-run --ignore-scripts"
   },
   "dependencies": {
-    "@formatjs/icu-messageformat-parser": "3.5.21",
-    "use-intl": "4.14.9"
+    "@formatjs/icu-messageformat-parser": "3.5.21"
   },
   "devDependencies": {
     "@testing-library/react": "16.3.3",
@@ -64,10 +63,12 @@
     "@vitest/coverage-v8": "5.0.3",
     "jsdom": "30.1.2",
     "react": "19.3.0",
-    "react-dom": "19.3.0"
+    "react-dom": "19.3.0",
+    "use-intl": "4.14.9"
   },
   "peerDependencies": {
-    "react": "^19.0.0"
+    "react": "^19.0.0",
+    "use-intl": "^4.14.9"
   },
   "engines": {
     "node": ">=20"

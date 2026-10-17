@@ -270,3 +270,113 @@ export async function publish(stable = false, passthrough: string[] = []): Promi
     console.log(`\nPush main and the release tags:\n  git push origin main ${tags.join(" ")}`);
   console.log(`Confirm each dist-tag, for example:\n  npm view ${first.name} dist-tags`);
 }
+
+const snapshotDirectory = join(root, ".changeset/pack/snapshot");
+const snapshotTag = "next";
+
+/** Package names from the frontmatter of changesets that are not versioned yet. */
+async function changedPackages(): Promise<string[]> {
+  const names = new Set<string>();
+  for (const file of await pendingChangesets()) {
+    const source = await readFile(join(root, ".changeset", file), "utf8");
+    const header = /^---\r?\n([\s\S]*?)\r?\n---/.exec(source)?.[1] ?? "";
+    for (const match of header.matchAll(/^\s*["']?(@[\w.-]+\/[\w.-]+)["']?\s*:/gm))
+      names.add(match[1]!);
+  }
+  return [...names].sort();
+}
+
+/** Like run(), but throws so callers can restore files in a finally block. */
+function runOrThrow(args: string[], env: NodeJS.ProcessEnv = process.env): void {
+  const result = spawnSync(process.execPath, args, { cwd: root, env, stdio: "inherit" });
+  if (result.status !== 0) throw new Error(`${args.join(" ")} exited with ${result.status}`);
+}
+
+export interface SnapshotOptions {
+  publish?: boolean;
+  otp?: string;
+}
+
+/**
+ * Preview archives for consumers before a versioned alpha exists. Snapshot versions sort
+ * below every release, never move `latest` or `alpha`, and leave no repository changes.
+ */
+export async function snapshot(
+  packages: string[] = [],
+  { publish = false, otp }: SnapshotOptions = {},
+): Promise<void> {
+  assert.equal(git("status", "--porcelain"), "", "Commit every change before a snapshot.");
+  const names = packages.length
+    ? [...new Set(packages.map((name) => (name.startsWith("@") ? name : `@voidmix/${name}`)))]
+    : await changedPackages();
+  assert.ok(names.length > 0, "No unreleased changesets; name the packages to snapshot.");
+  const directories = await workspaceDirectories();
+  const stamp = new Date().toISOString().replace(/\D/g, "").slice(0, 14);
+  const version = `0.0.0-${snapshotTag}-${stamp}-${git("rev-parse", "--short=7", "HEAD")}`;
+
+  run(["run", "build", "--filter=./packages/*"]);
+  await rm(snapshotDirectory, { recursive: true, force: true });
+  await mkdir(join(snapshotDirectory, "packages"), { recursive: true });
+  const originals = new Map<string, string>();
+  const entries: PlanEntry[] = [];
+  try {
+    for (const name of names) {
+      assert.ok(name.startsWith("@voidmix/"), `${name}: outside the @voidmix scope`);
+      const directory = directories.get(name);
+      assert.ok(directory, `${name}: no workspace under packages/`);
+      const file = join(directory, "package.json");
+      const source = await readFile(file, "utf8");
+      const manifest = JSON.parse(source) as Manifest & { private?: boolean };
+      assert.ok(!manifest.private, `${name}: private packages are not published`);
+      // Snapshots rewrite only their own version, so they cannot pin sibling snapshots.
+      for (const field of ["dependencies", "optionalDependencies", "peerDependencies"] as const) {
+        const sibling = Object.keys(manifest[field] ?? {}).find((dependency) =>
+          dependency.startsWith("@voidmix/"),
+        );
+        assert.ok(!sibling, `${name}: ${field} on ${sibling} is unsupported in snapshots`);
+      }
+      originals.set(file, source);
+      await writeFile(file, `${JSON.stringify({ ...manifest, version }, null, 2)}\n`);
+      const path = `packages/${name.slice(1).replace("/", "-")}-${version}.tgz`;
+      const archive = join(snapshotDirectory, path);
+      execFileSync(process.execPath, ["pm", "pack", "--ignore-scripts", "--filename", archive], {
+        cwd: directory,
+        stdio: "pipe",
+      });
+      entries.push({
+        kind: "publish",
+        name,
+        version,
+        tag: snapshotTag,
+        tarball: { path, integrity: await integrityOf(archive) },
+      });
+    }
+    const planPath = join(snapshotDirectory, "publish-plan.json");
+    await writeFile(planPath, `${JSON.stringify({ version: 1, plan: [entries] }, null, 2)}\n`);
+    // The same archive rules and isolated Bun/Node consumers as a real release.
+    runOrThrow(["scripts/check-packages.ts"], { ...process.env, TOOLKIT_RELEASE_PLAN: planPath });
+  } finally {
+    for (const [file, source] of originals) await writeFile(file, source);
+  }
+
+  describe(publish ? "Publishing snapshots:" : "Packed snapshots:", entries);
+  if (publish) {
+    for (const entry of entries) {
+      const args = [
+        "publish",
+        join(snapshotDirectory, entry.tarball!.path),
+        "--tag",
+        snapshotTag,
+        "--access",
+        "public",
+        ...(otp ? ["--otp", otp] : []),
+      ];
+      const result = spawnSync("npm", args, { cwd: root, env: npmEnvironment, stdio: "inherit" });
+      assert.equal(result.status, 0, `${entry.name}@${entry.version}: npm publish failed`);
+    }
+  } else {
+    console.log("\nInspect .changeset/pack/snapshot, then publish with --publish.");
+  }
+  console.log("\nConsumers pin the exact snapshot, for example:");
+  for (const entry of entries) console.log(`  "${entry.name}": "${entry.version}"`);
+}
